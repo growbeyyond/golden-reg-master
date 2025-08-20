@@ -26,31 +26,31 @@ const DEADLINES = {
 const CHIEF_GUESTS = [
   {
     name: "Sri. Damodar Rajanarasimha Garu",
-    designation: "Former Governor of Telangana",
-    image: "/lovable-uploads/07095247-9d5e-4433-aa60-1b2377dc2836.png",
+    designation: "Health Minister of Telangana",
+    image: "/lovable-uploads/632d5279-ccad-4a29-a60d-cfcea9b52d67.png",
     quote: "ISTA has consistently created a platform where the medical fraternity feels celebrated and recognized for their selfless service to humanity."
   },
   {
     name: "Sri. Jishnu Dev Varma Garu", 
-    designation: "Former Governor of Telangana",
-    image: "/lovable-uploads/632d5279-ccad-4a29-a60d-cfcea9b52d67.png",
+    designation: "Governor of Telangana",
+    image: "/lovable-uploads/07095247-9d5e-4433-aa60-1b2377dc2836.png",
     quote: "The noble work of ISTA in honoring our healthcare heroes deserves appreciation from every section of society."
   },
   {
     name: "Sri. V. V. Lakshminarayana Garu",
-    designation: "Former Governor of Telangana", 
+    designation: "Ex CBI Joint Director, Agriculturist, Social worker", 
     image: "/lovable-uploads/1c0d8019-a6fd-402d-9278-8fa452533b98.png",
     quote: "Through ISTA's initiatives, we witness the true spirit of recognizing those who dedicate their lives to healing others."
   },
   {
     name: "Sri. Madavaneni Raghunandan Rao Garu",
-    designation: "Former Governor of Telangana",
+    designation: "Member of Parliament Medak constituency",
     image: "/lovable-uploads/af60150e-f4be-4cc5-a06e-be8e25dd77c2.png", 
     quote: "ISTA's commitment to celebrating medical excellence sets a benchmark for honoring our healthcare professionals."
   },
   {
     name: "Smt. Nerella Sharada Garu",
-    designation: "Former Governor of Telangana",
+    designation: "Chairperson, Telangana State Commission for Women",
     image: "/lovable-uploads/8c22de2b-6c41-4d04-8a4e-a2692e4970f0.png",
     quote: "The recognition provided by ISTA to our medical community is both timely and necessary for society's wellbeing."
   }
@@ -59,43 +59,36 @@ const CHIEF_GUESTS = [
 const DOCTORS = [
   {
     name: "Dr Gopala Krishna Gokhale",
-    speciality: "Senior Physician",
     image: "/lovable-uploads/742f39e6-a38a-46f8-aa50-454ea741cecb.png",
     quote: "ISTA transforms our profession by celebrating the human stories behind medical excellence. Every doctor deserves recognition for their dedication and sacrifice. This platform beautifully captures our journey and inspires the next generation of healers."
   },
   {
     name: "Dr Seetharam Buddavarapu", 
-    speciality: "Consultant Physician",
     image: "/lovable-uploads/394f9d24-dbec-4251-9b86-ceeb9e6828b6.png",
     quote: "Through ISTA, I've witnessed doctors rediscover their passion for medicine. The organization doesn't just honor achievements—it honors the heart of healing. Every event reminds us why we chose this noble calling."
   },
   {
     name: "Dr Vani Veggalam",
-    speciality: "Medical Specialist", 
     image: "/lovable-uploads/2b9d7883-3862-4486-bce7-70db71356803.png",
     quote: "ISTA creates a sanctuary where doctors can share their vulnerabilities and victories. In a profession where we give so much, this platform gives back by amplifying our voices and celebrating our humanity."
   },
   {
     name: "Dr Samatha Tulla",
-    speciality: "Healthcare Professional",
     image: "/lovable-uploads/093f66d8-5797-4c86-84f0-0080686b193d.png",
     quote: "What sets ISTA apart is its genuine understanding of a doctor's journey. Beyond the clinical expertise, they recognize our emotional investment in every patient. This recognition fuels our commitment to excellence."
   },
   {
     name: "Dr Hari Cherukuri", 
-    speciality: "Medical Practitioner",
     image: "/lovable-uploads/a35c7add-a4ef-45c4-88ad-22365b3fb10b.png",
     quote: "ISTA doesn't just organize events—they create transformative experiences. Every gathering becomes a moment of reflection, growth, and renewed purpose. The impact extends far beyond the ceremony itself."
   },
   {
     name: "Dr Rajeswari",
-    speciality: "Senior Doctor",
     image: "/lovable-uploads/078624d0-1590-441b-a3e7-ce664db05e34.png",
     quote: "In my years of practice, I've rarely found a platform that truly understands doctors. ISTA bridges the gap between our professional achievements and personal stories, creating a legacy worth preserving."
   },
   {
     name: "Dr Manjula Anagani",
-    speciality: "Medical Professional", 
     image: "/lovable-uploads/b0f5d108-2c60-46d7-ba9c-7453ace41049.png",
     quote: "ISTA's approach to celebrating doctors is refreshingly authentic. They don't just showcase our degrees—they honor our dedication, our sleepless nights, and our unwavering commitment to saving lives."
   }
@@ -493,7 +486,7 @@ export default function LandingPage() {
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <h3 className="font-semibold mb-3">{doctor.name} — {doctor.speciality}</h3>
+                  <h3 className="font-semibold mb-3">{doctor.name}</h3>
                   <p className="text-muted-foreground italic text-sm leading-relaxed">
                     "{doctor.quote}"
                   </p>

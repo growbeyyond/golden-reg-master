@@ -186,7 +186,7 @@ export default function LandingPage() {
           {/* Centered Logo */}
           <div className="flex flex-col items-center mb-12">
             <img 
-              src="/lovable-uploads/194fa210-fce3-44f0-bd3d-d40dc04ab21c.png" 
+              src="/lovable-uploads/4a2d89c1-89fa-4016-9f29-00667be90c01.png" 
               alt="ISTA Media Logo" 
               className="h-28 md:h-40 w-auto mb-4 filter drop-shadow-lg"
               style={{ filter: 'drop-shadow(0 0 20px rgba(212, 175, 55, 0.4))' }}

@@ -106,12 +106,13 @@ const DOCTORS = [
 
 // Utility functions
 const formatTime = (ms: number): string => {
-  if (ms <= 0) return "00:00:00";
-  const s = Math.floor(ms / 1000);
-  const h = Math.floor(s / 3600);
-  const m = Math.floor((s % 3600) / 60);
-  const ss = s % 60;
-  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(ss).padStart(2, "0")}`;
+  if (ms <= 0) return "00:00:00:00";
+  const totalSeconds = Math.floor(ms / 1000);
+  const days = Math.floor(totalSeconds / (24 * 3600));
+  const hours = Math.floor((totalSeconds % (24 * 3600)) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return `${String(days).padStart(2, "0")}:${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 };
 
 const getActiveTier = (ts = Date.now()): TierInfo => {
@@ -476,7 +477,7 @@ export default function LandingPage() {
               <div>
                 Price: <span className="gold font-semibold">₹{tier.amount.toLocaleString('en-IN')}</span> • 
                 {tier.until ? (
-                  <>Ends in <span className="gold font-semibold">{formatTime(tier.until - Date.now())}</span> (IST)</>
+                  <>Ends in <span className="gold font-semibold">{formatTime(tier.until - Date.now())}</span> (DD:HH:MM:SS IST)</>
                 ) : (
                   <span className="gold font-semibold">Available now</span>
                 )}
@@ -898,7 +899,7 @@ export default function LandingPage() {
               <div>🎟️ <span className="gold font-semibold">{tier.label}</span> — ₹{tier.amount.toLocaleString('en-IN')}</div>
               <div className="text-xs text-muted-foreground">
                 {tier.until ? (
-                  <>Ends in <span className="gold font-semibold">{formatTime(tier.until - Date.now())}</span> (IST)</>
+                  <>Ends in <span className="gold font-semibold">{formatTime(tier.until - Date.now())}</span> (DD:HH:MM:SS IST)</>
                 ) : (
                   <>Available now</>
                 )}

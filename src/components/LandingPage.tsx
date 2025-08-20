@@ -14,7 +14,7 @@ interface TierInfo {
   until: number | null;
 }
 
-const WHATSAPP_NUMBER = "919603494999";
+const WHATSAPP_NUMBER = "994899001";
 const RZP_KEY = "YOUR_RAZORPAY_KEY_ID";
 
 const DEADLINES = {
@@ -145,32 +145,18 @@ export default function LandingPage() {
   return (
     <>
 
-      {/* Navigation */}
-      <header className="sticky top-0 z-40 border-b border-primary/25 bg-black/70 backdrop-blur">
-        <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="h-9 w-9 grid place-items-center rounded-lg gold-gradient text-primary-foreground font-black">I</div>
-            <div>
-              <div className="kicker">ISTA Digital Media</div>
-              <div className="font-semibold">Doctors' Souvenir — Anniversary</div>
-            </div>
-          </div>
-          <nav className="hidden md:flex items-center gap-5 text-sm">
-            {['About', 'Pricing', 'Chief Guests', 'Doctors', 'Souvenir', 'Register', 'FAQ', 'Contact'].map((item) => (
-              <a key={item} href={`#${item.toLowerCase().replace(' ', '-')}`} className="hover:text-primary transition-colors">
-                {item}
-              </a>
-            ))}
-          </nav>
-          <Button className="gold-gradient text-primary-foreground">Register</Button>
-        </div>
-      </header>
-
       {/* Hero Section */}
       <section className="section-padding backdrop-gold">
         <div className="mx-auto max-w-7xl px-4 grid md:grid-cols-2 gap-10 items-center">
           <div>
-            <div className="kicker">Anniversary Edition 2025</div>
+            <div className="flex items-center gap-3 mb-4">
+              <img 
+                src="/lovable-uploads/8b43851e-5291-4bd7-849f-7ec576eb7d86.png" 
+                alt="ISTA Media Logo" 
+                className="h-12 w-auto"
+              />
+              <div className="kicker">Anniversary Edition 2025</div>
+            </div>
             <h1 className="mt-3 text-4xl md:text-5xl font-extrabold gold-glow">
               Celebrating the Heroes in White Coats
             </h1>
@@ -380,8 +366,8 @@ export default function LandingPage() {
                 <h3 className="font-semibold gold">Need help?</h3>
                 <p className="text-muted-foreground mt-2">Message us on WhatsApp for instant assistance.</p>
                 <div className="mt-3 text-sm space-y-1">
-                  <div>📲 WhatsApp: <span className="gold font-semibold">+91 96034 94999</span></div>
-                  <div>✉️ Email: info@istadigitalmedia.com</div>
+                  <div>📲 WhatsApp: <span className="gold font-semibold">+91 994899001</span></div>
+                  <div>✉️ Email: istadigitalmedia@gmail.com</div>
                   <div>📍 Hyderabad, Telangana</div>
                 </div>
                 <Badge className="gold-pill mt-4 block">
@@ -421,7 +407,7 @@ export default function LandingPage() {
       {/* Doctors Section */}
       <section id="doctors" className="section-padding">
         <div className="mx-auto max-w-7xl px-4">
-          <h2 className="text-3xl font-bold gold-glow text-center mb-8">Eminent Doctors Participating</h2>
+          <h2 className="text-3xl font-bold gold-glow text-center mb-8">Doctors about ISTA</h2>
           <div className="grid md:grid-cols-3 gap-6">
             {DOCTORS.map((doctor, index) => (
               <Card key={index} className="gold-border">
@@ -529,13 +515,13 @@ export default function LandingPage() {
             <Card className="gold-border">
               <CardContent className="p-4">
                 <h4 className="font-semibold gold">Phone</h4>
-                <p className="text-muted-foreground mt-1">+91 96034 94999</p>
+                <p className="text-muted-foreground mt-1">+91 994899001</p>
               </CardContent>
             </Card>
             <Card className="gold-border">
               <CardContent className="p-4">
                 <h4 className="font-semibold gold">Email</h4>
-                <p className="text-muted-foreground mt-1">info@istadigitalmedia.com</p>
+                <p className="text-muted-foreground mt-1">istadigitalmedia@gmail.com</p>
               </CardContent>
             </Card>
             <Card className="gold-border">

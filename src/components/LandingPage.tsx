@@ -94,7 +94,7 @@ const DOCTORS = [
   },
   {
     name: "Dr Preeti Challa",
-    image: "/lovable-uploads/74242f09-0263-419c-bc80-ac7508e05126.png",
+    image: "/lovable-uploads/preeti-challa-adjusted.png",
     quote: "Being part of the ISTA community means being recognized not just as a medical professional, but as a human being dedicated to healing and caring for others with compassion and expertise."
   },
   {

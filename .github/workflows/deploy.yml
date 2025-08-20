@@ -1,19 +1,34 @@
-name: Deploy to Hostinger (FTPS)
+name: Deploy Vite app to Hostinger (FTPS)
 
 on:
   push:
-    branches: [ main ]   # Deploy when pushing to main branch
-  workflow_dispatch:      # Allow manual trigger in Actions tab
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Upload via FTPS
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install deps & build
+        run: |
+          npm ci
+          npm run build
+        env:
+          # Add your envs here if you use them during build
+          # Example: VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          # (Vite reads only vars that start with VITE_)
+          CI: true
+
+      - name: Upload dist/ via FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4
         with:
           server: ${{ secrets.FTP_HOST }}
@@ -21,7 +36,8 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           port: ${{ secrets.FTP_PORT }}
           protocol: ftps
-          local-dir: ./        # Change to dist/ or build/ if needed
+          local-dir: dist/
           server-dir: ${{ secrets.FTP_DIR }}
           dangerous-clean-slate: false
           state-name: .ftp-deploy-sync-state.json
+

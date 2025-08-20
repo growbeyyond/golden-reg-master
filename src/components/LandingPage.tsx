@@ -27,31 +27,31 @@ const CHIEF_GUESTS = [
   {
     name: "Sri. Damodar Rajanarasimha Garu",
     designation: "Former Governor of Telangana",
-    image: "/lovable-uploads/b0f5d108-2c60-46d7-ba9c-7453ace41049.png",
+    image: "/lovable-uploads/07095247-9d5e-4433-aa60-1b2377dc2836.png",
     quote: "ISTA has consistently created a platform where the medical fraternity feels celebrated and recognized for their selfless service to humanity."
   },
   {
     name: "Sri. Jishnu Dev Varma Garu", 
     designation: "Former Governor of Telangana",
-    image: "/lovable-uploads/b0f5d108-2c60-46d7-ba9c-7453ace41049.png",
+    image: "/lovable-uploads/632d5279-ccad-4a29-a60d-cfcea9b52d67.png",
     quote: "The noble work of ISTA in honoring our healthcare heroes deserves appreciation from every section of society."
   },
   {
     name: "Sri. V. V. Lakshminarayana Garu",
     designation: "Former Governor of Telangana", 
-    image: "/lovable-uploads/b0f5d108-2c60-46d7-ba9c-7453ace41049.png",
+    image: "/lovable-uploads/1c0d8019-a6fd-402d-9278-8fa452533b98.png",
     quote: "Through ISTA's initiatives, we witness the true spirit of recognizing those who dedicate their lives to healing others."
   },
   {
     name: "Sri. Madavaneni Raghunandan Rao Garu",
     designation: "Former Governor of Telangana",
-    image: "/lovable-uploads/b0f5d108-2c60-46d7-ba9c-7453ace41049.png", 
+    image: "/lovable-uploads/af60150e-f4be-4cc5-a06e-be8e25dd77c2.png", 
     quote: "ISTA's commitment to celebrating medical excellence sets a benchmark for honoring our healthcare professionals."
   },
   {
     name: "Smt. Nerella Sharada Garu",
     designation: "Former Governor of Telangana",
-    image: "/lovable-uploads/b0f5d108-2c60-46d7-ba9c-7453ace41049.png",
+    image: "/lovable-uploads/8c22de2b-6c41-4d04-8a4e-a2692e4970f0.png",
     quote: "The recognition provided by ISTA to our medical community is both timely and necessary for society's wellbeing."
   }
 ];
@@ -191,9 +191,9 @@ export default function LandingPage() {
           <div>
             <div className="flex flex-col items-center md:items-start mb-8">
               <img 
-                src="/lovable-uploads/8b43851e-5291-4bd7-849f-7ec576eb7d86.png" 
+                src="/lovable-uploads/194fa210-fce3-44f0-bd3d-d40dc04ab21c.png" 
                 alt="ISTA Media Logo" 
-                className="h-20 md:h-24 w-auto mb-4 logo-spotlight"
+                className="h-24 md:h-32 w-auto mb-4 logo-spotlight"
               />
               <div className="kicker text-center md:text-left">Anniversary Edition 2025</div>
             </div>
@@ -246,7 +246,7 @@ export default function LandingPage() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="section-padding">
+      <section id="about" className="section-padding section-bg">
         <div className="mx-auto max-w-4xl px-4 text-center">
           <h2 className="text-3xl font-bold gold-glow">About ISTA Digital Media</h2>
           <div className="mt-6 space-y-4 text-muted-foreground">
@@ -278,7 +278,7 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="section-padding">
+      <section id="pricing" className="section-padding section-bg">
         <div className="mx-auto max-w-6xl px-4">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold gold-glow">Limited-Time Offer Pricing</h2>
@@ -322,7 +322,7 @@ export default function LandingPage() {
       </section>
 
       {/* Registration Form */}
-      <section id="register" className="section-padding">
+      <section id="register" className="section-padding section-bg">
         <div className="mx-auto max-w-7xl px-4">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold gold-glow">Secure Your Spot</h2>
@@ -442,7 +442,7 @@ export default function LandingPage() {
       </section>
 
       {/* Chief Guests */}
-      <section id="chief-guests" className="section-padding">
+      <section id="chief-guests" className="section-padding section-bg">
         <div className="mx-auto max-w-6xl px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold gold-glow">Previous Chief Guests</h2>
@@ -479,7 +479,7 @@ export default function LandingPage() {
       </section>
 
       {/* Doctors Section */}
-      <section id="doctors" className="section-padding">
+      <section id="doctors" className="section-padding section-bg">
         <div className="mx-auto max-w-7xl px-4">
           <h2 className="text-3xl font-bold gold-glow text-center mb-8">Doctors about ISTA</h2>
           <div className="grid md:grid-cols-3 gap-8">

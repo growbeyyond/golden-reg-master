@@ -14,6 +14,66 @@ export type Database = {
   }
   public: {
     Tables: {
+      orders: {
+        Row: {
+          amount: number
+          city: string | null
+          created_at: string
+          currency: string
+          email: string
+          full_name: string
+          hospital: string | null
+          id: string
+          notes: string | null
+          phone: string
+          razorpay_order_id: string
+          razorpay_payment_id: string | null
+          speciality: string | null
+          status: string
+          tier_label: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          amount: number
+          city?: string | null
+          created_at?: string
+          currency?: string
+          email: string
+          full_name: string
+          hospital?: string | null
+          id?: string
+          notes?: string | null
+          phone: string
+          razorpay_order_id: string
+          razorpay_payment_id?: string | null
+          speciality?: string | null
+          status?: string
+          tier_label?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          amount?: number
+          city?: string | null
+          created_at?: string
+          currency?: string
+          email?: string
+          full_name?: string
+          hospital?: string | null
+          id?: string
+          notes?: string | null
+          phone?: string
+          razorpay_order_id?: string
+          razorpay_payment_id?: string | null
+          speciality?: string | null
+          status?: string
+          tier_label?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string

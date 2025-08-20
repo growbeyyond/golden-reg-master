@@ -63,7 +63,7 @@ const DOCTORS = [
     quote: "ISTA transforms our profession by celebrating the human stories behind medical excellence. Every doctor deserves recognition for their dedication and sacrifice. This platform beautifully captures our journey and inspires the next generation of healers."
   },
   {
-    name: "Dr Seetharam", 
+    name: "Dr Seetharam Buddavarapu", 
     image: "/lovable-uploads/afb48efd-93ea-4e54-a46b-3fd49aa5b4e0.png",
     quote: "Through ISTA, I've witnessed doctors rediscover their passion for medicine. The organization doesn't just honor achievements—it honors the heart of healing. Every event reminds us why we chose this noble calling."
   },
@@ -71,6 +71,11 @@ const DOCTORS = [
     name: "Dr Manjula",
     image: "/lovable-uploads/ac9f74f5-2c35-4213-a8f7-8b47e00b3b65.png",
     quote: "ISTA's approach to celebrating doctors is refreshingly authentic. They don't just showcase our degrees—they honor our dedication, our sleepless nights, and our unwavering commitment to saving lives."
+  },
+  {
+    name: "Dr KVNN Santosh Murthy",
+    image: "/lovable-uploads/5f6511ad-b869-47d1-ac4f-baa8aa3f2fa1.png",
+    quote: "ISTA provides a unique platform where medical professionals can connect, share experiences, and celebrate our collective commitment to healthcare excellence and patient care."
   },
   {
     name: "Dr Rajeswari Hari Chekuri",
@@ -81,6 +86,16 @@ const DOCTORS = [
     name: "Dr Samatha Tulla",
     image: "/lovable-uploads/8b105df3-8298-4a1c-8ecb-0f4b4bbe7ae9.png",
     quote: "What sets ISTA apart is its genuine understanding of a doctor's journey. Beyond the clinical expertise, they recognize our emotional investment in every patient. This recognition fuels our commitment to excellence."
+  },
+  {
+    name: "Dr Hari Chekuri",
+    image: "/lovable-uploads/742f39e6-a38a-46f8-aa50-454ea741cecb.png",
+    quote: "ISTA creates meaningful connections within the medical community, fostering an environment where doctors can share knowledge, experiences, and support each other in our noble profession."
+  },
+  {
+    name: "Dr Preeti Challa",
+    image: "/lovable-uploads/8b43851e-5291-4bd7-849f-7ec576eb7d86.png",
+    quote: "Being part of the ISTA community means being recognized not just as a medical professional, but as a human being dedicated to healing and caring for others with compassion and expertise."
   },
   {
     name: "Dr Vani",
@@ -705,7 +720,7 @@ export default function LandingPage() {
             <p className="text-muted-foreground">Celebrating our esteemed medical professionals</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
-            {DOCTORS.slice(0, 6).map((doctor, idx) => (
+            {DOCTORS.map((doctor, idx) => (
               <Card key={idx} className="gold-border bg-card/50 overflow-hidden">
                 <div className="aspect-square relative overflow-hidden">
                   <img 

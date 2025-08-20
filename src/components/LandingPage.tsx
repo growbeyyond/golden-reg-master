@@ -326,44 +326,60 @@ export default function LandingPage() {
             <div className="kicker text-center">Anniversary Edition 2025</div>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h1 className="mt-3 text-4xl md:text-5xl font-extrabold gold-glow text-center md:text-left">
-                Celebrating the Heroes in White Coats
-              </h1>
-              <p className="mt-4 text-lg text-muted-foreground text-center md:text-left">
-                Be featured in the prestigious Doctors' Souvenir by ISTA Digital Media. A black-and-gold cinematic edition that honors your journey and amplifies your impact.
-              </p>
-              <div className="mt-6 flex flex-wrap items-center justify-center md:justify-start gap-3">
-                <Badge variant="outline" className="gold-pill">📍 JRC Convention, Hyderabad</Badge>
-                <Badge variant="outline" className="gold-pill">🗓️ Sunday, 14 September 2025</Badge>
-                <Badge variant="outline" className="gold-pill">⏰ 6:00 PM onwards</Badge>
-              </div>
-              <div className="mt-8 flex flex-wrap justify-center md:justify-start gap-3">
-                <Button className="gold-gradient text-primary-foreground" size="lg" onClick={scrollToRegister}>Register Now</Button>
-                <Button variant="outline" size="lg" onClick={() => setShowModal(true)}>
-                  What's Included
-                </Button>
-              </div>
-              <p className="mt-3 text-sm text-muted-foreground text-center md:text-left">
-                Limited slots. Instant confirmation after payment.
-              </p>
+          <div className="text-center">
+            <h1 className="mt-3 text-4xl md:text-6xl font-extrabold gold-glow">
+              Celebrating the Heroes in White Coats
+            </h1>
+            <p className="mt-6 text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+              Be featured in the prestigious Doctors' Souvenir by ISTA Digital Media. A black-and-gold cinematic edition that honors your journey and amplifies your impact.
+            </p>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              <Badge variant="outline" className="gold-pill">📍 JRC Convention, Hyderabad</Badge>
+              <Badge variant="outline" className="gold-pill">🗓️ Sunday, 14 September 2025</Badge>
+              <Badge variant="outline" className="gold-pill">⏰ 6:00 PM onwards</Badge>
             </div>
-          <div className="relative">
+            <div className="mt-10 flex flex-wrap justify-center gap-4">
+              <Button className="gold-gradient text-primary-foreground" size="lg" onClick={scrollToRegister}>Register Now</Button>
+              <Button variant="outline" size="lg" onClick={() => setShowModal(true)}>
+                What's Included
+              </Button>
+            </div>
+            <p className="mt-4 text-sm text-muted-foreground">
+              Limited slots. Instant confirmation after payment.
+            </p>
+          </div>
+
+          {/* Hero Cards Section */}
+          <div className="mt-16 grid md:grid-cols-3 gap-6">
             <Card className="gold-border p-6 bg-gradient-to-br from-primary/10 to-black/60">
-              <CardContent className="p-0">
-                <p className="text-2xl font-semibold mb-2 gold-glow">Be immortalized in print</p>
-                <p className="text-muted-foreground">
-                  Your profile appears in the Anniversary Souvenir distributed across partner hospitals and digital channels — designed in a premium black & gold aesthetic.
+              <CardContent className="p-0 text-center">
+                <div className="text-3xl mb-3">📖</div>
+                <p className="text-xl font-semibold mb-2 gold-glow">Premium Publication</p>
+                <p className="text-muted-foreground text-sm">
+                  Your profile in the Anniversary Souvenir distributed across partner hospitals and digital channels.
                 </p>
-                <div className="mt-4 grid grid-cols-3 gap-3">
-                  <Badge className="gold-pill">Premium Profile</Badge>
-                  <Badge className="gold-pill">ISTA Recognition</Badge>
-                  <Badge className="gold-pill">Digital Feature</Badge>
-                </div>
               </CardContent>
             </Card>
-            </div>
+            
+            <Card className="gold-border p-6 bg-gradient-to-br from-primary/10 to-black/60">
+              <CardContent className="p-0 text-center">
+                <div className="text-3xl mb-3">🏆</div>
+                <p className="text-xl font-semibold mb-2 gold-glow">Recognition Awards</p>
+                <p className="text-muted-foreground text-sm">
+                  Official recognition ceremony with distinguished guests and healthcare leaders in attendance.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="gold-border p-6 bg-gradient-to-br from-primary/10 to-black/60">
+              <CardContent className="p-0 text-center">
+                <div className="text-3xl mb-3">🤝</div>
+                <p className="text-xl font-semibold mb-2 gold-glow">Elite Networking</p>
+                <p className="text-muted-foreground text-sm">
+                  Connect with 200+ distinguished medical professionals and healthcare leaders.
+                </p>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>

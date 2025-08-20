@@ -167,6 +167,16 @@ export default function LandingPage() {
 
   // Razorpay Integration
   const handlePayment = () => {
+    console.log('handlePayment called');
+    console.log('Razorpay available:', typeof (window as any).Razorpay);
+    console.log('RZP_KEY:', RZP_KEY);
+    console.log('Tier:', tier);
+    
+    if (!(window as any).Razorpay) {
+      alert('Razorpay script not loaded. Please refresh the page and try again.');
+      return;
+    }
+    
     const options = {
       key: RZP_KEY,
       amount: tier.amount * 100,
@@ -186,6 +196,7 @@ export default function LandingPage() {
       },
       theme: { color: "#d4af37" },
       handler: function (response: any) {
+        console.log('Payment successful:', response);
         alert("Payment successful! Reference: " + response.razorpay_payment_id);
       },
       modal: {
@@ -195,12 +206,20 @@ export default function LandingPage() {
       }
     };
     
-    const rzp = new (window as any).Razorpay(options);
-    rzp.on('payment.failed', function (response: any) {
-      alert('Payment failed: ' + response.error.description);
-      console.error('Payment failed:', response.error);
-    });
-    rzp.open();
+    console.log('Creating Razorpay instance with options:', options);
+    
+    try {
+      const rzp = new (window as any).Razorpay(options);
+      rzp.on('payment.failed', function (response: any) {
+        console.error('Payment failed:', response.error);
+        alert('Payment failed: ' + response.error.description);
+      });
+      console.log('Opening Razorpay modal...');
+      rzp.open();
+    } catch (error) {
+      console.error('Error creating Razorpay instance:', error);
+      alert('Error initializing payment. Please try again.');
+    }
   };
 
   const validatePhone = (phone: string) => {
@@ -218,17 +237,22 @@ export default function LandingPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Form submitted with data:', formData);
     
     const phoneError = validatePhone(formData.phone);
+    console.log('Phone validation result:', phoneError);
     if (phoneError) {
       setFormErrors({...formErrors, phone: phoneError});
+      console.log('Form stopped due to phone error');
       return;
     }
     
     if (!formData.agree) {
       alert("Please agree to the terms and conditions.");
+      console.log('Form stopped due to missing agreement');
       return;
     }
+    console.log('Calling handlePayment...');
     handlePayment();
   };
 

@@ -147,15 +147,15 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <section className="section-padding backdrop-gold">
-        <div className="mx-auto max-w-7xl px-4 grid md:grid-cols-2 gap-10 items-center">
+        <div className="mx-auto max-w-7xl px-4 grid md:grid-cols-2 gap-12 items-center">
           <div>
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex flex-col items-center md:items-start mb-6">
               <img 
                 src="/lovable-uploads/8b43851e-5291-4bd7-849f-7ec576eb7d86.png" 
                 alt="ISTA Media Logo" 
-                className="h-12 w-auto"
+                className="h-16 w-auto mb-3 gold-glow"
               />
-              <div className="kicker">Anniversary Edition 2025</div>
+              <div className="kicker text-center md:text-left">Anniversary Edition 2025</div>
             </div>
             <h1 className="mt-3 text-4xl md:text-5xl font-extrabold gold-glow">
               Celebrating the Heroes in White Coats
@@ -251,7 +251,7 @@ export default function LandingPage() {
               <div>🎟️ Current Tier: <span className="gold font-semibold">{tier.label}</span></div>
               <div>
                 Price: <span className="gold font-semibold">₹{tier.amount.toLocaleString('en-IN')}</span> • 
-                Ends in <span className="gold font-semibold">{tier.until ? formatTime(tier.until - Date.now()) : '—'}</span>
+                Ends in <span className="gold font-semibold">{tier.until ? `${Math.ceil((tier.until - Date.now()) / (1000 * 60 * 60 * 24))} days left` : 'Available now'}</span>
               </div>
             </div>
             <Button className="gold-gradient text-primary-foreground">Register at Current Price</Button>
@@ -408,24 +408,36 @@ export default function LandingPage() {
       <section id="doctors" className="section-padding">
         <div className="mx-auto max-w-7xl px-4">
           <h2 className="text-3xl font-bold gold-glow text-center mb-8">Doctors about ISTA</h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {DOCTORS.map((doctor, index) => (
-              <Card key={index} className="gold-border">
-                <CardContent className="p-6">
-                  <div className="aspect-[4/3] rounded-xl overflow-hidden bg-muted mb-3 gold-border">
-                    <img 
-                      src={`https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=600&h=450&fit=crop&crop=face`} 
-                      alt={doctor.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <h3 className="font-semibold">{doctor.name} — {doctor.speciality}</h3>
-                  <p className="mt-2 text-muted-foreground italic text-sm">
-                    "{doctor.quote}"
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
+          <div className="grid md:grid-cols-3 gap-8">
+            {DOCTORS.map((doctor, index) => {
+              const doctorImages = [
+                "/lovable-uploads/b0f5d108-2c60-46d7-ba9c-7453ace41049.png", // Dr Gopala Krishna Gokhale
+                "/lovable-uploads/742f39e6-a38a-46f8-aa50-454ea741cecb.png", // Dr Seetharam Buddavarapu
+                "/lovable-uploads/394f9d24-dbec-4251-9b86-ceeb9e6828b6.png", // Dr Vani Veggalam
+                "/lovable-uploads/2b9d7883-3862-4486-bce7-70db71356803.png", // Dr Samatha Tulla
+                "/lovable-uploads/093f66d8-5797-4c86-84f0-0080686b193d.png", // Dr Hari Cherukuri
+                "/lovable-uploads/a35c7add-a4ef-45c4-88ad-22365b3fb10b.png", // Dr Rajeswari
+                "/lovable-uploads/078624d0-1590-441b-a3e7-ce664db05e34.png", // Dr Manjula Anagani
+              ];
+              
+              return (
+                <Card key={index} className="gold-border">
+                  <CardContent className="p-6">
+                    <div className="aspect-[4/3] rounded-xl overflow-hidden bg-muted mb-4 gold-border">
+                      <img 
+                        src={doctorImages[index]} 
+                        alt={doctor.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <h3 className="font-semibold mb-3">{doctor.name} — {doctor.speciality}</h3>
+                    <p className="text-muted-foreground italic text-sm leading-relaxed">
+                      "{doctor.quote}"
+                    </p>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -542,7 +554,7 @@ export default function LandingPage() {
         <div className="text-sm">
           🎟️ <span className="gold font-semibold">{tier.label}</span> — 
           ₹<span className="gold font-semibold">{tier.amount.toLocaleString('en-IN')}</span> • 
-          ends in <span className="gold font-semibold">{tier.until ? formatTime(tier.until - Date.now()) : '—'}</span>
+          {tier.until ? `${Math.ceil((tier.until - Date.now()) / (1000 * 60 * 60 * 24))} days left` : 'Available now'}
         </div>
         <div className="flex gap-2">
           <Button className="gold-gradient text-primary-foreground">Register</Button>

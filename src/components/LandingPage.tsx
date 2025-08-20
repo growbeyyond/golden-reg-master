@@ -172,6 +172,13 @@ export default function LandingPage() {
     setIsProcessing(true);
     
     try {
+      console.log('Invoking create-razorpay-order with data:', {
+        amount: tier.amount,
+        currency: "INR",
+        formData,
+        tierLabel: tier.label,
+      });
+
       // Create order on server
       const { data: orderData, error } = await supabase.functions.invoke('create-razorpay-order', {
         body: {
@@ -182,12 +189,18 @@ export default function LandingPage() {
         }
       });
 
+      console.log('Supabase function response:', { data: orderData, error });
+
       if (error) {
         console.error('Order creation error:', error);
         throw new Error(error.message || 'Failed to create order');
       }
 
-      console.log('Order created:', orderData);
+      if (!orderData) {
+        throw new Error('No order data received from server');
+      }
+
+      console.log('Order created successfully:', orderData);
 
       if (!(window as any).Razorpay) {
         throw new Error('Razorpay script not loaded. Please refresh the page and try again.');
@@ -252,7 +265,7 @@ export default function LandingPage() {
     } catch (error: any) {
       console.error('Error in payment process:', error);
       toast({
-        title: "Error",
+        title: "Payment Error",
         description: error.message || 'Error initializing payment. Please try again.',
         variant: "destructive",
       });

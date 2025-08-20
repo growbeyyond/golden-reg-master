@@ -134,35 +134,30 @@ All colors MUST be HSL.
   
   .backdrop-gold {
     background: 
-      radial-gradient(circle at 20% 80%, hsl(43 74% 52% / 0.15) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, hsl(43 74% 52% / 0.15) 0%, transparent 50%),
-      radial-gradient(circle at 40% 40%, hsl(43 74% 52% / 0.1) 0%, transparent 50%),
-      linear-gradient(135deg, hsl(0 0% 0% / 0.95) 0%, hsl(0 0% 2% / 0.9) 100%);
+      radial-gradient(ellipse at 50% 0%, hsl(43 74% 52% / 0.25) 0%, transparent 45%),
+      radial-gradient(circle at 20% 80%, hsl(43 74% 52% / 0.18) 0%, transparent 55%),
+      radial-gradient(circle at 80% 20%, hsl(43 74% 52% / 0.15) 0%, transparent 55%),
+      radial-gradient(circle at 40% 40%, hsl(43 74% 52% / 0.12) 0%, transparent 50%),
+      linear-gradient(135deg, hsl(0 0% 0% / 0.98) 0%, hsl(0 0% 3% / 0.95) 50%, hsl(0 0% 1% / 0.98) 100%);
   }
   
   .section-bg {
     background: 
-      radial-gradient(circle at 70% 30%, hsl(43 74% 52% / 0.08) 0%, transparent 60%),
-      linear-gradient(180deg, hsl(0 0% 1%) 0%, hsl(0 0% 0%) 100%);
+      radial-gradient(ellipse at 30% 20%, hsl(43 74% 52% / 0.15) 0%, transparent 65%),
+      radial-gradient(circle at 70% 80%, hsl(43 74% 52% / 0.12) 0%, transparent 55%),
+      radial-gradient(circle at 90% 10%, hsl(43 74% 52% / 0.08) 0%, transparent 45%),
+      linear-gradient(160deg, hsl(0 0% 1% / 0.98) 0%, hsl(0 0% 0%) 40%, hsl(0 0% 2%) 100%);
   }
   
   .section-padding {
     @apply py-12 md:py-16;
   }
   
-  .logo-spotlight {
-    @apply ring-1 ring-primary/20 rounded-xl bg-black/30 p-3 drop-shadow-xl;
-    box-shadow: var(--gold-glow), 0 10px 30px -10px hsl(var(--gold) / 0.3);
-  }
   
   .kicker {
     @apply text-xs font-bold tracking-[0.2em] uppercase text-primary;
   }
   
-  /* WhatsApp styles */
-  .whatsapp-fab {
-    @apply fixed right-4 bottom-4 z-50 bg-[#25D366] text-black px-4 py-3 rounded-full font-bold shadow-2xl hover:scale-105 transition-transform;
-  }
   
   .sticky-cta {
     @apply fixed left-1/2 -translate-x-1/2 bottom-4 z-40 w-[min(940px,90%)] rounded-2xl bg-black/85 backdrop-blur-sm border border-primary/35 shadow-2xl;

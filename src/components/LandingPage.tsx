@@ -14,7 +14,7 @@ interface TierInfo {
   until: number | null;
 }
 
-const WHATSAPP_NUMBER = "994899001";
+const WHATSAPP_NUMBER = "+91994899001";
 const RZP_KEY = "YOUR_RAZORPAY_KEY_ID";
 
 const DEADLINES = {
@@ -182,37 +182,41 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <section className="section-padding backdrop-gold">
-        <div className="mx-auto max-w-7xl px-4 grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <div className="flex flex-col items-center md:items-start mb-8">
-              <img 
-                src="/lovable-uploads/194fa210-fce3-44f0-bd3d-d40dc04ab21c.png" 
-                alt="ISTA Media Logo" 
-                className="h-24 md:h-32 w-auto mb-4 logo-spotlight"
-              />
-              <div className="kicker text-center md:text-left">Anniversary Edition 2025</div>
-            </div>
-            <h1 className="mt-3 text-4xl md:text-5xl font-extrabold gold-glow">
-              Celebrating the Heroes in White Coats
-            </h1>
-            <p className="mt-4 text-lg text-muted-foreground">
-              Be featured in the prestigious Doctors' Souvenir by ISTA Digital Media. A black-and-gold cinematic edition that honors your journey and amplifies your impact.
-            </p>
-            <div className="mt-6 flex flex-wrap items-center gap-3">
-              <Badge variant="outline" className="gold-pill">📍 JRC Convention, Hyderabad</Badge>
-              <Badge variant="outline" className="gold-pill">🗓️ Sunday, 14 Sept 2025</Badge>
-              <Badge variant="outline" className="gold-pill">⏰ 6:00 PM onwards</Badge>
-            </div>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Button className="gold-gradient text-primary-foreground" size="lg">Register Now</Button>
-              <Button variant="outline" size="lg" onClick={() => setShowModal(true)}>
-                What's Included
-              </Button>
-            </div>
-            <p className="mt-3 text-sm text-muted-foreground">
-              Limited slots. Instant confirmation after payment.
-            </p>
+        <div className="mx-auto max-w-7xl px-4">
+          {/* Centered Logo */}
+          <div className="flex flex-col items-center mb-12">
+            <img 
+              src="/lovable-uploads/194fa210-fce3-44f0-bd3d-d40dc04ab21c.png" 
+              alt="ISTA Media Logo" 
+              className="h-28 md:h-40 w-auto mb-4 filter drop-shadow-lg"
+              style={{ filter: 'drop-shadow(0 0 20px rgba(212, 175, 55, 0.4))' }}
+            />
+            <div className="kicker text-center">Anniversary Edition 2025</div>
           </div>
+          
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h1 className="mt-3 text-4xl md:text-5xl font-extrabold gold-glow text-center md:text-left">
+                Celebrating the Heroes in White Coats
+              </h1>
+              <p className="mt-4 text-lg text-muted-foreground text-center md:text-left">
+                Be featured in the prestigious Doctors' Souvenir by ISTA Digital Media. A black-and-gold cinematic edition that honors your journey and amplifies your impact.
+              </p>
+              <div className="mt-6 flex flex-wrap items-center justify-center md:justify-start gap-3">
+                <Badge variant="outline" className="gold-pill">📍 JRC Convention, Hyderabad</Badge>
+                <Badge variant="outline" className="gold-pill">🗓️ Sunday, 14 Sept 2025</Badge>
+                <Badge variant="outline" className="gold-pill">⏰ 6:00 PM onwards</Badge>
+              </div>
+              <div className="mt-8 flex flex-wrap justify-center md:justify-start gap-3">
+                <Button className="gold-gradient text-primary-foreground" size="lg">Register Now</Button>
+                <Button variant="outline" size="lg" onClick={() => setShowModal(true)}>
+                  What's Included
+                </Button>
+              </div>
+              <p className="mt-3 text-sm text-muted-foreground text-center md:text-left">
+                Limited slots. Instant confirmation after payment.
+              </p>
+            </div>
           <div className="relative">
             <Card className="gold-border p-6 bg-gradient-to-br from-primary/10 to-black/60">
               <CardContent className="p-0">
@@ -227,6 +231,7 @@ export default function LandingPage() {
                 </div>
               </CardContent>
             </Card>
+            </div>
           </div>
         </div>
       </section>
@@ -621,10 +626,6 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* WhatsApp FAB */}
-      <button className="whatsapp-fab" onClick={openWhatsApp}>
-        WhatsApp
-      </button>
 
       {/* Modal */}
       {showModal && (

@@ -153,9 +153,7 @@ export default function LandingPage() {
     agree: false
   });
 
-  const [formErrors, setFormErrors] = useState({
-    phone: ''
-  });
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   const [isProcessing, setIsProcessing] = useState(false);
   const { toast } = useToast();
@@ -273,26 +271,69 @@ export default function LandingPage() {
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const phone = e.target.value.replace(/\D/g, '').slice(0, 10); // Only digits, max 10
     setFormData({...formData, phone});
-    setFormErrors({...formErrors, phone: validatePhone(phone)});
+    const phoneError = validatePhone(phone);
+    setFormErrors({...formErrors, phone: phoneError});
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Form submitted with data:', formData);
     
-    const phoneError = validatePhone(formData.phone);
-    console.log('Phone validation result:', phoneError);
-    if (phoneError) {
-      setFormErrors({...formErrors, phone: phoneError});
-      console.log('Form stopped due to phone error');
+    // Validate all required fields
+    const errors: Record<string, string> = {};
+    
+    if (!formData.fullName.trim()) {
+      errors.fullName = "Full name is required";
+    }
+    
+    if (!formData.email.trim()) {
+      errors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.email = "Please enter a valid email address";
+    }
+    
+    if (!formData.phone.trim()) {
+      errors.phone = "Phone number is required";
+    } else {
+      const phoneError = validatePhone(formData.phone);
+      if (phoneError) {
+        errors.phone = phoneError;
+      }
+    }
+    
+    if (!formData.speciality.trim()) {
+      errors.speciality = "Speciality is required";
+    }
+    
+    if (!formData.hospital.trim()) {
+      errors.hospital = "Hospital/Clinic name is required";
+    }
+    
+    if (!formData.city.trim()) {
+      errors.city = "City is required";
+    }
+    
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      toast({
+        title: "Please fix the errors",
+        description: "Fill all required fields correctly to proceed.",
+        variant: "destructive",
+      });
+      console.log('Form validation failed:', errors);
       return;
     }
     
     if (!formData.agree) {
-      alert("Please agree to the terms and conditions.");
+      toast({
+        title: "Agreement Required",
+        description: "Please agree to the terms and conditions to proceed.",
+        variant: "destructive",
+      });
       console.log('Form stopped due to missing agreement');
       return;
     }
+    
     console.log('Calling handlePayment...');
     await handlePayment();
   };
@@ -626,70 +667,87 @@ export default function LandingPage() {
             <Card className="gold-border">
               <CardContent className="p-6">
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-sm text-muted-foreground">Full Name (Doctor)</label>
-                      <Input 
-                        required 
-                        value={formData.fullName}
-                        onChange={(e) => setFormData({...formData, fullName: e.target.value})}
-                        className="mt-1 bg-black/40 border-primary/35"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm text-muted-foreground">Speciality</label>
-                      <Input 
-                        required 
-                        value={formData.speciality}
-                        onChange={(e) => setFormData({...formData, speciality: e.target.value})}
-                        className="mt-1 bg-black/40 border-primary/35"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm text-muted-foreground">Hospital / Clinic</label>
-                      <Input 
-                        value={formData.hospital}
-                        onChange={(e) => setFormData({...formData, hospital: e.target.value})}
-                        className="mt-1 bg-black/40 border-primary/35"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm text-muted-foreground">City</label>
-                      <Input 
-                        value={formData.city}
-                        onChange={(e) => setFormData({...formData, city: e.target.value})}
-                        className="mt-1 bg-black/40 border-primary/35"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm text-muted-foreground">Email</label>
-                      <Input 
-                        type="email" 
-                        required 
-                        value={formData.email}
-                        onChange={(e) => setFormData({...formData, email: e.target.value})}
-                        className="mt-1 bg-black/40 border-primary/35"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm text-muted-foreground">WhatsApp Number</label>
-                      <Input 
-                        type="tel" 
-                        required 
-                        placeholder="10-digit mobile number"
-                        value={formData.phone}
-                        onChange={handlePhoneChange}
-                        className={`mt-1 bg-black/40 border-primary/35 ${formErrors.phone ? 'border-destructive' : ''}`}
-                        aria-describedby="phone-help"
-                      />
-                      <div id="phone-help" className="text-xs text-muted-foreground mt-1">
-                        Enter a valid 10-digit Indian mobile number (6-9 followed by 9 digits)
-                      </div>
-                      {formErrors.phone && (
-                        <div className="text-xs text-destructive mt-1">{formErrors.phone}</div>
-                      )}
-                    </div>
-                  </div>
+                   <div className="grid md:grid-cols-2 gap-4">
+                     <div>
+                       <label className="text-sm text-muted-foreground">Full Name (Doctor) *</label>
+                       <Input 
+                         required 
+                         value={formData.fullName}
+                         onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+                         className={`mt-1 bg-black/40 border-primary/35 ${formErrors.fullName ? 'border-destructive' : ''}`}
+                       />
+                       {formErrors.fullName && (
+                         <div className="text-xs text-destructive mt-1">{formErrors.fullName}</div>
+                       )}
+                     </div>
+                     <div>
+                       <label className="text-sm text-muted-foreground">Speciality *</label>
+                       <Input 
+                         required 
+                         value={formData.speciality}
+                         onChange={(e) => setFormData({...formData, speciality: e.target.value})}
+                         className={`mt-1 bg-black/40 border-primary/35 ${formErrors.speciality ? 'border-destructive' : ''}`}
+                       />
+                       {formErrors.speciality && (
+                         <div className="text-xs text-destructive mt-1">{formErrors.speciality}</div>
+                       )}
+                     </div>
+                     <div>
+                       <label className="text-sm text-muted-foreground">Hospital / Clinic *</label>
+                       <Input 
+                         required
+                         value={formData.hospital}
+                         onChange={(e) => setFormData({...formData, hospital: e.target.value})}
+                         className={`mt-1 bg-black/40 border-primary/35 ${formErrors.hospital ? 'border-destructive' : ''}`}
+                       />
+                       {formErrors.hospital && (
+                         <div className="text-xs text-destructive mt-1">{formErrors.hospital}</div>
+                       )}
+                     </div>
+                     <div>
+                       <label className="text-sm text-muted-foreground">City *</label>
+                       <Input 
+                         required
+                         value={formData.city}
+                         onChange={(e) => setFormData({...formData, city: e.target.value})}
+                         className={`mt-1 bg-black/40 border-primary/35 ${formErrors.city ? 'border-destructive' : ''}`}
+                       />
+                       {formErrors.city && (
+                         <div className="text-xs text-destructive mt-1">{formErrors.city}</div>
+                       )}
+                     </div>
+                     <div>
+                       <label className="text-sm text-muted-foreground">Email *</label>
+                       <Input 
+                         type="email" 
+                         required 
+                         value={formData.email}
+                         onChange={(e) => setFormData({...formData, email: e.target.value})}
+                         className={`mt-1 bg-black/40 border-primary/35 ${formErrors.email ? 'border-destructive' : ''}`}
+                       />
+                       {formErrors.email && (
+                         <div className="text-xs text-destructive mt-1">{formErrors.email}</div>
+                       )}
+                     </div>
+                     <div>
+                       <label className="text-sm text-muted-foreground">WhatsApp Number *</label>
+                       <Input 
+                         type="tel" 
+                         required 
+                         placeholder="10-digit mobile number"
+                         value={formData.phone}
+                         onChange={handlePhoneChange}
+                         className={`mt-1 bg-black/40 border-primary/35 ${formErrors.phone ? 'border-destructive' : ''}`}
+                         aria-describedby="phone-help"
+                       />
+                       <div id="phone-help" className="text-xs text-muted-foreground mt-1">
+                         Enter a valid 10-digit Indian mobile number (6-9 followed by 9 digits)
+                       </div>
+                       {formErrors.phone && (
+                         <div className="text-xs text-destructive mt-1">{formErrors.phone}</div>
+                       )}
+                     </div>
+                   </div>
                   <div>
                     <label className="text-sm text-muted-foreground">Notes (optional)</label>
                     <Textarea 

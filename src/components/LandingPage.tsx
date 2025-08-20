@@ -1,5 +1,6 @@
-// Fixed Helmet issue - removed all references
 import React, { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -15,7 +16,6 @@ interface TierInfo {
 }
 
 const WHATSAPP_NUMBER = "919948999001"; // No + for wa.me links
-const RZP_KEY = "rzp_test_R7bubJ7VR6pDOp";
 
 const DEADLINES = {
   early: Date.parse("2025-08-31T18:29:59Z"), // 23:59:59 IST
@@ -157,6 +157,9 @@ export default function LandingPage() {
     phone: ''
   });
 
+  const [isProcessing, setIsProcessing] = useState(false);
+  const { toast } = useToast();
+
   // Timer update
   useEffect(() => {
     const interval = setInterval(() => {
@@ -165,60 +168,98 @@ export default function LandingPage() {
     return () => clearInterval(interval);
   }, []);
 
-  // Razorpay Integration
-  const handlePayment = () => {
+  // Razorpay Integration - Secure payment with server-side order creation
+  const handlePayment = async () => {
     console.log('handlePayment called');
-    console.log('Razorpay available:', typeof (window as any).Razorpay);
-    console.log('RZP_KEY:', RZP_KEY);
-    console.log('Tier:', tier);
-    
-    if (!(window as any).Razorpay) {
-      alert('Razorpay script not loaded. Please refresh the page and try again.');
-      return;
-    }
-    
-    const options = {
-      key: RZP_KEY,
-      amount: tier.amount * 100,
-      currency: "INR",
-      name: "ISTA Doctors' Souvenir",
-      description: tier.label,
-      prefill: {
-        name: formData.fullName,
-        email: formData.email,
-        contact: formData.phone
-      },
-      notes: {
-        Tier: tier.label,
-        City: formData.city,
-        Speciality: formData.speciality,
-        Timestamp: new Date().toISOString()
-      },
-      theme: { color: "#d4af37" },
-      handler: function (response: any) {
-        console.log('Payment successful:', response);
-        alert("Payment successful! Reference: " + response.razorpay_payment_id);
-      },
-      modal: {
-        ondismiss: function() {
-          console.log('Payment cancelled by user');
-        }
-      }
-    };
-    
-    console.log('Creating Razorpay instance with options:', options);
+    setIsProcessing(true);
     
     try {
+      // Create order on server
+      const { data: orderData, error } = await supabase.functions.invoke('create-razorpay-order', {
+        body: {
+          amount: tier.amount,
+          currency: "INR",
+          formData,
+          tierLabel: tier.label,
+        }
+      });
+
+      if (error) {
+        console.error('Order creation error:', error);
+        throw new Error(error.message || 'Failed to create order');
+      }
+
+      console.log('Order created:', orderData);
+
+      if (!(window as any).Razorpay) {
+        throw new Error('Razorpay script not loaded. Please refresh the page and try again.');
+      }
+      
+      const options = {
+        key: orderData.keyId,
+        order_id: orderData.orderId,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: "ISTA Doctors' Souvenir",
+        description: tier.label,
+        prefill: {
+          name: formData.fullName,
+          email: formData.email,
+          contact: formData.phone
+        },
+        theme: { color: "#d4af37" },
+        handler: function (response: any) {
+          console.log('Payment successful:', response);
+          toast({
+            title: "Payment Successful!",
+            description: `Reference: ${response.razorpay_payment_id}`,
+          });
+          // Reset form
+          setFormData({
+            fullName: '',
+            speciality: '',
+            hospital: '',
+            city: '',
+            email: '',
+            phone: '',
+            notes: '',
+            agree: false
+          });
+        },
+        modal: {
+          ondismiss: function() {
+            console.log('Payment cancelled by user');
+            toast({
+              title: "Payment Cancelled",
+              description: "You can try again anytime.",
+              variant: "destructive",
+            });
+          }
+        }
+      };
+      
+      console.log('Creating Razorpay instance with options:', options);
+      
       const rzp = new (window as any).Razorpay(options);
       rzp.on('payment.failed', function (response: any) {
         console.error('Payment failed:', response.error);
-        alert('Payment failed: ' + response.error.description);
+        toast({
+          title: "Payment Failed",
+          description: response.error.description,
+          variant: "destructive",
+        });
       });
       console.log('Opening Razorpay modal...');
       rzp.open();
-    } catch (error) {
-      console.error('Error creating Razorpay instance:', error);
-      alert('Error initializing payment. Please try again.');
+    } catch (error: any) {
+      console.error('Error in payment process:', error);
+      toast({
+        title: "Error",
+        description: error.message || 'Error initializing payment. Please try again.',
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -235,7 +276,7 @@ export default function LandingPage() {
     setFormErrors({...formErrors, phone: validatePhone(phone)});
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Form submitted with data:', formData);
     
@@ -253,7 +294,7 @@ export default function LandingPage() {
       return;
     }
     console.log('Calling handlePayment...');
-    handlePayment();
+    await handlePayment();
   };
 
   return (
@@ -264,12 +305,24 @@ export default function LandingPage() {
         <div className="mx-auto max-w-7xl px-4">
           {/* Centered Logo */}
           <div className="flex flex-col items-center mb-12">
-            <img 
-              src="/lovable-uploads/4a2d89c1-89fa-4016-9f29-00667be90c01.png" 
-              alt="ISTA Media Logo" 
-              className="h-28 md:h-40 w-auto mb-4 filter drop-shadow-lg"
-              style={{ filter: 'drop-shadow(0 0 20px rgba(212, 175, 55, 0.4))' }}
-            />
+            <div className="flex items-center justify-between w-full mb-8 md:mb-12">
+              <div className="flex-1"></div>
+              <img 
+                src="/lovable-uploads/4a2d89c1-89fa-4016-9f29-00667be90c01.png" 
+                alt="ISTA Media Logo" 
+                className="h-28 md:h-40 w-auto filter drop-shadow-lg"
+                style={{ filter: 'drop-shadow(0 0 20px rgba(212, 175, 55, 0.4))' }}
+              />
+              <div className="flex-1 flex justify-end">
+                <Button 
+                  variant="outline" 
+                  onClick={() => window.location.href = '/auth'}
+                  className="text-sm"
+                >
+                  Sign In
+                </Button>
+              </div>
+            </div>
             <div className="kicker text-center">Anniversary Edition 2025</div>
           </div>
           
@@ -640,8 +693,12 @@ export default function LandingPage() {
                     />
                     I agree to be contacted via WhatsApp/Email for confirmation and print proof.
                   </label>
-                  <Button type="submit" className="gold-gradient text-primary-foreground w-full">
-                    Proceed to Payment (₹{tier.amount.toLocaleString('en-IN')})
+                  <Button 
+                    type="submit" 
+                    className="gold-gradient text-primary-foreground w-full"
+                    disabled={isProcessing}
+                  >
+                    {isProcessing ? 'Processing...' : `Proceed to Payment (₹${tier.amount.toLocaleString('en-IN')})`}
                   </Button>
                 </form>
               </CardContent>

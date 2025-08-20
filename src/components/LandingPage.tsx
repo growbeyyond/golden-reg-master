@@ -319,37 +319,38 @@ export default function LandingPage() {
             <img 
               src="/lovable-uploads/4a2d89c1-89fa-4016-9f29-00667be90c01.png" 
               alt="ISTA Media Logo" 
-              className="h-28 md:h-40 w-auto filter drop-shadow-lg"
+              className="h-28 md:h-40 w-auto filter drop-shadow-lg cursor-pointer"
               style={{ filter: 'drop-shadow(0 0 20px rgba(212, 175, 55, 0.4))' }}
+              onClick={() => window.location.href = '/'}
             />
-            <div className="kicker text-center mt-4">Anniversary Edition 2025</div>
+            <div className="kicker text-center mt-1">Anniversary Edition 2025</div>
           </div>
           
-          <div className="text-center">
-            <h1 className="mt-3 text-4xl md:text-6xl font-extrabold gold-glow">
-              Celebrating the Heroes in White Coats
-            </h1>
-            <p className="mt-6 text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-              Be featured in the prestigious Doctors' Souvenir by ISTA Digital Media. A black-and-gold cinematic edition that honors your journey and amplifies your impact.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <Badge variant="outline" className="gold-pill">📍 JRC Convention, Hyderabad</Badge>
-              <Badge variant="outline" className="gold-pill">🗓️ Sunday, 14 September 2025</Badge>
-              <Badge variant="outline" className="gold-pill">⏰ 6:00 PM onwards</Badge>
-            </div>
-            <div className="mt-10 flex flex-wrap justify-center gap-4">
-              <Button className="gold-gradient text-primary-foreground" size="lg" onClick={scrollToRegister}>Register Now</Button>
-              <Button variant="outline" size="lg" onClick={() => setShowModal(true)}>
-                What's Included
-              </Button>
-            </div>
-            <p className="mt-4 text-sm text-muted-foreground">
-              Limited slots. Instant confirmation after payment.
-            </p>
-          </div>
+           <div className="text-center">
+             <h1 className="mt-2 text-4xl md:text-6xl font-extrabold gold-glow">
+               Celebrating the Heroes in White Coats
+             </h1>
+             <p className="mt-4 text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+               Be featured in the prestigious Doctors' Souvenir by ISTA Digital Media. A black-and-gold cinematic edition that honors your journey and amplifies your impact.
+             </p>
+             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+               <Badge variant="outline" className="gold-pill">📍 JRC Convention, Hyderabad</Badge>
+               <Badge variant="outline" className="gold-pill">🗓️ Sunday, 14 September 2025</Badge>
+               <Badge variant="outline" className="gold-pill">⏰ 6:00 PM onwards</Badge>
+             </div>
+             <div className="mt-8 flex flex-wrap justify-center gap-4">
+               <Button className="gold-gradient text-primary-foreground" size="lg" onClick={scrollToRegister}>Register Now</Button>
+               <Button variant="outline" size="lg" onClick={() => setShowModal(true)}>
+                 What's Included
+               </Button>
+             </div>
+             <p className="mt-3 text-sm text-muted-foreground">
+               Limited slots. Instant confirmation after payment.
+             </p>
+           </div>
 
-          {/* Hero Cards Section */}
-          <div className="mt-16 grid md:grid-cols-3 gap-6">
+           {/* Hero Cards Section */}
+           <div className="mt-8 grid md:grid-cols-3 gap-6">
             <Card className="gold-border p-6 bg-gradient-to-br from-primary/10 to-black/60">
               <CardContent className="p-0 text-center">
                 <div className="text-3xl mb-3">📖</div>

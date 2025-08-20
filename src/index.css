@@ -149,9 +149,9 @@ All colors MUST be HSL.
       linear-gradient(160deg, hsl(0 0% 1% / 0.98) 0%, hsl(0 0% 0%) 40%, hsl(0 0% 2%) 100%);
   }
   
-  .section-padding {
-    @apply py-12 md:py-16;
-  }
+.section-padding {
+  @apply py-8 md:py-12;
+}
   
   
   .kicker {

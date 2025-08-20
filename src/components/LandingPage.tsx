@@ -1,3 +1,4 @@
+// Fixed Helmet issue - removed all references
 import React, { useState, useEffect } from 'react';
 
 import { Button } from './ui/button';

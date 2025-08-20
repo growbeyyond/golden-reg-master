@@ -59,7 +59,7 @@ const CHIEF_GUESTS = [
 const DOCTORS = [
   // Female doctors first
   {
-    name: "Dr Vani Veggalam",
+    name: "Dr Vani",
     image: "/lovable-uploads/2592ccd1-42f2-4ac5-8e68-7de3b2422e65.png",
     quote: "ISTA creates a sanctuary where doctors can share their vulnerabilities and victories. In a profession where we give so much, this platform gives back by amplifying our voices and celebrating our humanity."
   },
@@ -74,18 +74,18 @@ const DOCTORS = [
     quote: "In my years of practice, I've rarely found a platform that truly understands doctors. ISTA bridges the gap between our professional achievements and personal stories, creating a legacy worth preserving."
   },
   {
-    name: "Dr Manjula Anagani",
+    name: "Dr Manjula",
     image: "/lovable-uploads/ac9f74f5-2c35-4213-a8f7-8b47e00b3b65.png",
     quote: "ISTA's approach to celebrating doctors is refreshingly authentic. They don't just showcase our degrees—they honor our dedication, our sleepless nights, and our unwavering commitment to saving lives."
   },
   // Male doctors follow
   {
-    name: "Dr Gopala Krishna Gokhale",
+    name: "Dr Gopala Krishna Gokule",
     image: "/lovable-uploads/a3a07d30-4e07-4ffe-bf02-0a8a5400aee5.png",
     quote: "ISTA transforms our profession by celebrating the human stories behind medical excellence. Every doctor deserves recognition for their dedication and sacrifice. This platform beautifully captures our journey and inspires the next generation of healers."
   },
   {
-    name: "Dr Seetharam Buddavarapu", 
+    name: "Dr Seetharam", 
     image: "/lovable-uploads/afb48efd-93ea-4e54-a46b-3fd49aa5b4e0.png",
     quote: "Through ISTA, I've witnessed doctors rediscover their passion for medicine. The organization doesn't just honor achievements—it honors the heart of healing. Every event reminds us why we chose this noble calling."
   }

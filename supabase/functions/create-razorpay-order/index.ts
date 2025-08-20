@@ -34,7 +34,7 @@ serve(async (req) => {
     console.log('Processing request...');
     
     // Get Razorpay credentials
-    const razorpayKeyId = "rzp_test_R7bubJ7VR6pDOp";
+    const razorpayKeyId = "YOUR_RAZORPAY_KEY_ID_HERE"; // Replace with your actual Key ID
     const razorpayKeySecret = Deno.env.get("RAZORPAY_KEY_SECRET");
     
     console.log('Razorpay Key ID:', razorpayKeyId);

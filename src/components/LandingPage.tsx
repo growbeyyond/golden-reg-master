@@ -301,29 +301,28 @@ export default function LandingPage() {
     <>
 
       {/* Hero Section */}
-      <section className="section-padding backdrop-gold">
+      <section className="pt-4 pb-16 backdrop-gold">
         <div className="mx-auto max-w-7xl px-4">
-          {/* Centered Logo */}
-          <div className="flex flex-col items-center mb-12">
-            <div className="flex items-center justify-between w-full mb-8 md:mb-12">
-              <div className="flex-1"></div>
-              <img 
-                src="/lovable-uploads/4a2d89c1-89fa-4016-9f29-00667be90c01.png" 
-                alt="ISTA Media Logo" 
-                className="h-28 md:h-40 w-auto filter drop-shadow-lg"
-                style={{ filter: 'drop-shadow(0 0 20px rgba(212, 175, 55, 0.4))' }}
-              />
-              <div className="flex-1 flex justify-end">
-                <Button 
-                  variant="outline" 
-                  onClick={() => window.location.href = '/auth'}
-                  className="text-sm"
-                >
-                  Sign In
-                </Button>
-              </div>
-            </div>
-            <div className="kicker text-center">Anniversary Edition 2025</div>
+          {/* Sign In Button - Top Right */}
+          <div className="flex justify-end mb-4">
+            <Button 
+              variant="outline" 
+              onClick={() => window.location.href = '/auth'}
+              className="text-sm"
+            >
+              Sign In
+            </Button>
+          </div>
+          
+          {/* Logo at Top */}
+          <div className="flex flex-col items-center mb-6">
+            <img 
+              src="/lovable-uploads/4a2d89c1-89fa-4016-9f29-00667be90c01.png" 
+              alt="ISTA Media Logo" 
+              className="h-28 md:h-40 w-auto filter drop-shadow-lg"
+              style={{ filter: 'drop-shadow(0 0 20px rgba(212, 175, 55, 0.4))' }}
+            />
+            <div className="kicker text-center mt-4">Anniversary Edition 2025</div>
           </div>
           
           <div className="text-center">

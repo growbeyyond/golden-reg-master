@@ -34,7 +34,7 @@ serve(async (req) => {
     console.log('Processing request...');
     
     // Get Razorpay credentials
-    const razorpayKeyId = "YOUR_RAZORPAY_KEY_ID_HERE"; // Replace with your actual Key ID
+    const razorpayKeyId = "rzp_test_R7bubJ7VR6pDOp"; // Your test key ID
     const razorpayKeySecret = Deno.env.get("RAZORPAY_KEY_SECRET");
     
     console.log('Razorpay Key ID:', razorpayKeyId);
@@ -43,6 +43,11 @@ serve(async (req) => {
     if (!razorpayKeySecret) {
       console.error('Razorpay secret not configured');
       throw new Error("Razorpay secret not configured");
+    }
+
+    if (!razorpayKeyId || razorpayKeyId === "YOUR_RAZORPAY_KEY_ID_HERE") {
+      console.error('Razorpay Key ID not configured properly');
+      throw new Error("Razorpay Key ID not configured");
     }
 
     // Create Supabase client
@@ -100,6 +105,15 @@ serve(async (req) => {
     if (!razorpayResponse.ok) {
       const errorText = await razorpayResponse.text();
       console.error("Razorpay API error:", errorText);
+      console.error("Response status:", razorpayResponse.status);
+      
+      // Handle specific account verification errors
+      if (razorpayResponse.status === 400 || razorpayResponse.status === 401) {
+        if (errorText.includes('account') || errorText.includes('verification')) {
+          throw new Error("Your Razorpay account needs to be verified before processing payments. Please complete account verification in your Razorpay dashboard.");
+        }
+      }
+      
       throw new Error(`Razorpay API error: ${razorpayResponse.status} - ${errorText}`);
     }
 

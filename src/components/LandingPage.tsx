@@ -23,6 +23,44 @@ const DEADLINES = {
   last: Date.parse("2025-09-12T18:29:59Z"),
 };
 
+const DOCTORS = [
+  {
+    name: "Dr Gopala Krishna Gokhale",
+    speciality: "Senior Physician",
+    quote: "ISTA transforms our profession by celebrating the human stories behind medical excellence. Every doctor deserves recognition for their dedication and sacrifice. This platform beautifully captures our journey and inspires the next generation of healers."
+  },
+  {
+    name: "Dr Seetharam Buddavarapu", 
+    speciality: "Consultant Physician",
+    quote: "Through ISTA, I've witnessed doctors rediscover their passion for medicine. The organization doesn't just honor achievements—it honors the heart of healing. Every event reminds us why we chose this noble calling."
+  },
+  {
+    name: "Dr Vani Veggalam",
+    speciality: "Medical Specialist", 
+    quote: "ISTA creates a sanctuary where doctors can share their vulnerabilities and victories. In a profession where we give so much, this platform gives back by amplifying our voices and celebrating our humanity."
+  },
+  {
+    name: "Dr Samatha Tulla",
+    speciality: "Healthcare Professional",
+    quote: "What sets ISTA apart is its genuine understanding of a doctor's journey. Beyond the clinical expertise, they recognize our emotional investment in every patient. This recognition fuels our commitment to excellence."
+  },
+  {
+    name: "Dr Hari Cherukuri", 
+    speciality: "Medical Practitioner",
+    quote: "ISTA doesn't just organize events—they create transformative experiences. Every gathering becomes a moment of reflection, growth, and renewed purpose. The impact extends far beyond the ceremony itself."
+  },
+  {
+    name: "Dr Rajeswari",
+    speciality: "Senior Doctor",
+    quote: "In my years of practice, I've rarely found a platform that truly understands doctors. ISTA bridges the gap between our professional achievements and personal stories, creating a legacy worth preserving."
+  },
+  {
+    name: "Dr Manjula Anagani",
+    speciality: "Medical Professional", 
+    quote: "ISTA's approach to celebrating doctors is refreshingly authentic. They don't just showcase our degrees—they honor our dedication, our sleepless nights, and our unwavering commitment to saving lives."
+  }
+];
+
 // Utility functions
 const formatTime = (ms: number): string => {
   if (ms <= 0) return "00:00:00";
@@ -385,19 +423,19 @@ export default function LandingPage() {
         <div className="mx-auto max-w-7xl px-4">
           <h2 className="text-3xl font-bold gold-glow text-center mb-8">Eminent Doctors Participating</h2>
           <div className="grid md:grid-cols-3 gap-6">
-            {[1, 2, 3].map((i) => (
-              <Card key={i} className="gold-border">
+            {DOCTORS.map((doctor, index) => (
+              <Card key={index} className="gold-border">
                 <CardContent className="p-6">
                   <div className="aspect-[4/3] rounded-xl overflow-hidden bg-muted mb-3 gold-border">
                     <img 
                       src={`https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=600&h=450&fit=crop&crop=face`} 
-                      alt={`Doctor ${i}`}
+                      alt={doctor.name}
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <h3 className="font-semibold">Dr. Name {i} — Speciality</h3>
+                  <h3 className="font-semibold">{doctor.name} — {doctor.speciality}</h3>
                   <p className="mt-2 text-muted-foreground italic text-sm">
-                    "ISTA's events are more than ceremonies; they are heartfelt experiences where doctors feel seen, valued, and uplifted."
+                    "{doctor.quote}"
                   </p>
                 </CardContent>
               </Card>

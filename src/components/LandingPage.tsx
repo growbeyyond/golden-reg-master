@@ -14,7 +14,7 @@ interface TierInfo {
   until: number | null;
 }
 
-const WHATSAPP_NUMBER = "+91994899001";
+const WHATSAPP_NUMBER = "919948999001"; // No + for wa.me links
 const RZP_KEY = "YOUR_RAZORPAY_KEY_ID";
 
 const DEADLINES = {
@@ -88,11 +88,6 @@ const DOCTORS = [
     name: "Dr Seetharam Buddavarapu", 
     image: "/lovable-uploads/afb48efd-93ea-4e54-a46b-3fd49aa5b4e0.png",
     quote: "Through ISTA, I've witnessed doctors rediscover their passion for medicine. The organization doesn't just honor achievements—it honors the heart of healing. Every event reminds us why we chose this noble calling."
-  },
-  {
-    name: "Dr Hari Cherukuri", 
-    image: "/lovable-uploads/5f6511ad-b869-47d1-ac4f-baa8aa3f2fa1.png",
-    quote: "ISTA doesn't just organize events—they create transformative experiences. Every gathering becomes a moment of reflection, growth, and renewed purpose. The impact extends far beyond the ceremony itself."
   }
 ];
 
@@ -115,6 +110,18 @@ const getActiveTier = (ts = Date.now()): TierInfo => {
 
 const openWhatsApp = () => {
   window.open(`https://wa.me/${WHATSAPP_NUMBER}`, "_blank");
+};
+
+const scrollToRegister = () => {
+  const element = document.getElementById('register');
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth' });
+    // Focus the full name input after scroll
+    setTimeout(() => {
+      const input = document.querySelector('#register input[type="text"]') as HTMLInputElement;
+      if (input) input.focus();
+    }, 1000);
+  }
 };
 
 // Main Component
@@ -208,7 +215,7 @@ export default function LandingPage() {
                 <Badge variant="outline" className="gold-pill">⏰ 6:00 PM onwards</Badge>
               </div>
               <div className="mt-8 flex flex-wrap justify-center md:justify-start gap-3">
-                <Button className="gold-gradient text-primary-foreground" size="lg">Register Now</Button>
+                <Button className="gold-gradient text-primary-foreground" size="lg" onClick={scrollToRegister}>Register Now</Button>
                 <Button variant="outline" size="lg" onClick={() => setShowModal(true)}>
                   What's Included
                 </Button>
@@ -277,6 +284,148 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Why This Event */}
+      <section className="section-padding">
+        <div className="mx-auto max-w-4xl px-4 text-center">
+          <h2 className="text-3xl font-bold gold-glow">Why This Event Matters</h2>
+          <p className="mt-4 text-lg text-muted-foreground">Beyond recognition, it's about building legacy and fostering connection in the medical community</p>
+          <div className="mt-8 grid md:grid-cols-2 gap-6">
+            <Card className="gold-border bg-card/50 p-6">
+              <div className="text-2xl mb-3">📚</div>
+              <h3 className="font-semibold text-primary mb-2">Editorial Polish</h3>
+              <p className="text-sm text-muted-foreground">Your story, professionally crafted and beautifully presented in our premium souvenir publication</p>
+            </Card>
+            <Card className="gold-border bg-card/50 p-6">
+              <div className="text-2xl mb-3">🏆</div>
+              <h3 className="font-semibold text-primary mb-2">Peer Recognition</h3>
+              <p className="text-sm text-muted-foreground">Be celebrated among colleagues and healthcare leaders in a distinguished ceremony</p>
+            </Card>
+            <Card className="gold-border bg-card/50 p-6">
+              <div className="text-2xl mb-3">🌟</div>
+              <h3 className="font-semibold text-primary mb-2">Legacy Publication</h3>
+              <p className="text-sm text-muted-foreground">A keepsake that honors your medical journey and inspires future generations of healers</p>
+            </Card>
+            <Card className="gold-border bg-card/50 p-6">
+              <div className="text-2xl mb-3">🤝</div>
+              <h3 className="font-semibold text-primary mb-2">Network Building</h3>
+              <p className="text-sm text-muted-foreground">Connect with distinguished medical professionals and healthcare leaders across specialties</p>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* 2025 Guest of Honour */}
+      <section className="section-padding section-bg">
+        <div className="mx-auto max-w-4xl px-4 text-center">
+          <h2 className="text-3xl font-bold gold-glow">2025 Guest of Honour</h2>
+          <p className="text-muted-foreground mt-2">A distinguished personality to be announced soon</p>
+          <Card className="mt-8 gold-border bg-card/50 max-w-md mx-auto">
+            <CardContent className="p-8">
+              <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-primary/20 flex items-center justify-center text-4xl font-bold text-primary">
+                TBD
+              </div>
+              <h3 className="text-xl font-semibold mb-2">To Be Announced</h3>
+              <p className="text-sm text-muted-foreground italic">We are honored to have a distinguished guest who will inspire and celebrate our medical community. Stay tuned for the big reveal!</p>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* 2025 Event Highlights */}
+      <section className="section-padding">
+        <div className="mx-auto max-w-6xl px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold gold-glow">2025 Event Highlights</h2>
+            <p className="text-muted-foreground">What makes this anniversary edition special</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card className="gold-border bg-card/50 p-6 text-center">
+              <div className="text-4xl mb-4">📖</div>
+              <h3 className="font-semibold text-primary mb-2">Premium Souvenir</h3>
+              <p className="text-sm text-muted-foreground">Black & gold cinematic edition featuring your professional journey</p>
+            </Card>
+            <Card className="gold-border bg-card/50 p-6 text-center">
+              <div className="text-4xl mb-4">🏅</div>
+              <h3 className="font-semibold text-primary mb-2">Recognition Awards</h3>
+              <p className="text-sm text-muted-foreground">On-stage recognition and appreciation certificates</p>
+            </Card>
+            <Card className="gold-border bg-card/50 p-6 text-center">
+              <div className="text-4xl mb-4">🤝</div>
+              <h3 className="font-semibold text-primary mb-2">Elite Networking</h3>
+              <p className="text-sm text-muted-foreground">Connect with 200+ distinguished medical professionals</p>
+            </Card>
+            <Card className="gold-border bg-card/50 p-6 text-center">
+              <div className="text-4xl mb-4">👥</div>
+              <h3 className="font-semibold text-primary mb-2">Distinguished Guests</h3>
+              <p className="text-sm text-muted-foreground">Ministers, governors, and healthcare leaders in attendance</p>
+            </Card>
+            <Card className="gold-border bg-card/50 p-6 text-center">
+              <div className="text-4xl mb-4">🎭</div>
+              <h3 className="font-semibold text-primary mb-2">Cultural Performances</h3>
+              <p className="text-sm text-muted-foreground">Elegant entertainment and celebration activities</p>
+            </Card>
+            <Card className="gold-border bg-card/50 p-6 text-center">
+              <div className="text-4xl mb-4">📱</div>
+              <h3 className="font-semibold text-primary mb-2">Digital Legacy</h3>
+              <p className="text-sm text-muted-foreground">Online features and social media amplification</p>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Event Agenda */}
+      <section className="section-padding section-bg">
+        <div className="mx-auto max-w-4xl px-4">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold gold-glow">Event Agenda</h2>
+            <p className="text-muted-foreground">Sunday, 14 September 2025 • JRC Convention, Hyderabad</p>
+          </div>
+          <div className="space-y-4">
+            {[
+              { time: "6:00 – 6:45 PM", event: "Registration & Networking", desc: "Welcome reception and professional mingling" },
+              { time: "6:45 – 7:00 PM", event: "Opening & Welcome Address", desc: "Official ceremony commencement" },
+              { time: "7:00 – 8:00 PM", event: "Recognitions & Felicitations", desc: "Honoring distinguished medical professionals" },
+              { time: "8:00 – 8:45 PM", event: "Cultural Performances", desc: "Entertainment and celebration activities" },
+              { time: "8:45 – 9:15 PM", event: "Awards & Appreciation", desc: "Special recognitions and souvenir presentation" },
+              { time: "9:15 – 9:30 PM", event: "Closing & Group Photography", desc: "Final remarks and memorable moments" }
+            ].map((item, idx) => (
+              <Card key={idx} className="gold-border bg-card/50">
+                <CardContent className="p-4 flex gap-4">
+                  <div className="text-primary font-semibold text-sm min-w-fit">{item.time}</div>
+                  <div className="flex-1">
+                    <div className="font-semibold">{item.event}</div>
+                    <div className="text-sm text-muted-foreground">{item.desc}</div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Venue Spotlight */}
+      <section className="section-padding">
+        <div className="mx-auto max-w-4xl px-4 text-center">
+          <h2 className="text-3xl font-bold gold-glow">Venue Spotlight</h2>
+          <Card className="mt-8 gold-border bg-card/50">
+            <CardContent className="p-8">
+              <h3 className="text-2xl font-semibold mb-4">JRC Convention Center</h3>
+              <p className="text-muted-foreground mb-6">A premium venue in the heart of Hyderabad, known for hosting distinguished events and celebrations. The elegant ambiance perfectly complements our anniversary celebration.</p>
+              <div className="flex flex-wrap justify-center gap-4">
+                <Badge className="gold-pill">📍 Prime Hyderabad Location</Badge>
+                <Badge className="gold-pill">🅿️ Ample Parking Available</Badge>
+                <Badge className="gold-pill">♿ Accessibility Features</Badge>
+              </div>
+              <div className="mt-6">
+                <Button variant="outline" onClick={() => window.open('https://maps.google.com/?q=JRC+Convention,+Hyderabad', '_blank')}>
+                  📍 View on Google Maps
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
       {/* Pricing Section */}
       <section id="pricing" className="section-padding section-bg">
         <div className="mx-auto max-w-6xl px-4">
@@ -313,10 +462,14 @@ export default function LandingPage() {
               <div>🎟️ Current Tier: <span className="gold font-semibold">{tier.label}</span></div>
               <div>
                 Price: <span className="gold font-semibold">₹{tier.amount.toLocaleString('en-IN')}</span> • 
-                Ends in <span className="gold font-semibold">{tier.until ? `${Math.ceil((tier.until - Date.now()) / (1000 * 60 * 60 * 24))} days left` : 'Available now'}</span>
+                {tier.until ? (
+                  <>Ends in <span className="gold font-semibold">{formatTime(tier.until - Date.now())}</span> (IST)</>
+                ) : (
+                  <span className="gold font-semibold">Available now</span>
+                )}
               </div>
             </div>
-            <Button className="gold-gradient text-primary-foreground">Register at Current Price</Button>
+            <Button className="gold-gradient text-primary-foreground" onClick={scrollToRegister}>Register at Current Price</Button>
           </Card>
         </div>
       </section>
@@ -408,95 +561,47 @@ export default function LandingPage() {
                     />
                     I agree to be contacted via WhatsApp/Email for confirmation and print proof.
                   </label>
-                  <div className="flex flex-wrap gap-3 pt-4">
-                    <Button type="submit" className="gold-gradient text-primary-foreground">
-                      Submit & Pay (Razorpay)
-                    </Button>
-                    <Button variant="outline" onClick={openWhatsApp}>
-                      Chat on WhatsApp
-                    </Button>
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    We respect your privacy. Data is never sold to third parties.
-                  </p>
+                  <Button type="submit" className="gold-gradient text-primary-foreground w-full">
+                    Proceed to Payment (₹{tier.amount.toLocaleString('en-IN')})
+                  </Button>
                 </form>
               </CardContent>
             </Card>
 
-            <Card className="gold-border">
-              <CardContent className="p-6">
-                <h3 className="font-semibold gold">Need help?</h3>
-                <p className="text-muted-foreground mt-2">Message us on WhatsApp for instant assistance.</p>
-                <div className="mt-3 text-sm space-y-1">
-                  <div>📲 WhatsApp: <span className="gold font-semibold">+91 994899001</span></div>
-                  <div>✉️ Email: istadigitalmedia@gmail.com</div>
-                  <div>📍 Hyderabad, Telangana</div>
-                </div>
-                <Badge className="gold-pill mt-4 block">
-                  Tip: Uploading your photo & bio early improves placement quality.
-                </Badge>
-              </CardContent>
-            </Card>
+            <div className="text-center p-6 border-l border-primary/25">
+              <p className="font-semibold mb-2">Need help?</p>
+              <p className="text-sm text-muted-foreground mb-4">Chat with us on WhatsApp for instant assistance</p>
+              <Button variant="outline" onClick={openWhatsApp}>💬 +91 9948999001</Button>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Chief Guests */}
-      <section id="chief-guests" className="section-padding section-bg">
-        <div className="mx-auto max-w-6xl px-4">
+      {/* Previous Chief Guests */}
+      <section className="section-padding section-bg">
+        <div className="mx-auto max-w-7xl px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold gold-glow">Previous Chief Guests</h2>
-            <p className="text-muted-foreground mt-3">Distinguished personalities who have honored our events with their presence</p>
+            <p className="text-muted-foreground">Distinguished personalities who have graced our ceremonies</p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {CHIEF_GUESTS.map((guest, index) => (
-              <Card key={index} className="gold-border">
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-4 mb-4">
-                    <img 
-                      src={guest.image} 
-                      alt={guest.name}
-                      className="w-16 h-16 rounded-full object-cover border-2 border-primary/30"
-                    />
-                    <div>
-                      <h3 className="font-semibold gold text-sm">{guest.name}</h3>
-                      <p className="text-xs text-muted-foreground">{guest.designation}</p>
-                    </div>
-                  </div>
-                  <p className="text-sm text-muted-foreground italic">
-                    "{guest.quote}"
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-          <div className="text-center mt-8">
-            <p className="text-sm text-muted-foreground">
-              <span className="gold font-semibold">Thank you</span> to all our distinguished guests for supporting healthcare excellence
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Doctors Section */}
-      <section id="doctors" className="section-padding section-bg">
-        <div className="mx-auto max-w-7xl px-4">
-          <h2 className="text-3xl font-bold gold-glow text-center mb-8">Doctors about ISTA</h2>
           <div className="grid md:grid-cols-3 gap-8">
-            {DOCTORS.map((doctor, index) => (
-              <Card key={index} className="gold-border">
-                <CardContent className="p-6">
-                  <div className="aspect-[4/3] rounded-xl overflow-hidden bg-muted mb-4 gold-border">
-                    <img 
-                      src={doctor.image} 
-                      alt={doctor.name}
-                      className="w-full h-full object-cover"
-                    />
+            {CHIEF_GUESTS.map((guest, idx) => (
+              <Card key={idx} className="gold-border bg-card/50 overflow-hidden">
+                <div className="aspect-square relative overflow-hidden">
+                  <img 
+                    src={guest.image} 
+                    alt={guest.name}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <h3 className="font-bold text-primary-foreground">{guest.name}</h3>
+                    <p className="text-sm text-primary-foreground/80">{guest.designation}</p>
                   </div>
-                  <h3 className="font-semibold mb-3">{doctor.name}</h3>
-                  <p className="text-muted-foreground italic text-sm leading-relaxed">
-                    "{doctor.quote}"
-                  </p>
+                </div>
+                <CardContent className="p-6">
+                  <p className="text-sm text-muted-foreground italic">"{guest.quote}"</p>
                 </CardContent>
               </Card>
             ))}
@@ -504,21 +609,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Benefits */}
+      {/* Souvenir Showcase */}
       <section className="section-padding">
-        <div className="mx-auto max-w-6xl px-4 text-center">
-          <h2 className="text-3xl font-bold gold-glow">Why Register</h2>
-          <div className="grid md:grid-cols-4 gap-4 mt-6">
-            <Badge className="gold-pill p-4">Premium profile in Souvenir</Badge>
-            <Badge className="gold-pill p-4">Recognition among peers</Badge>
-            <Badge className="gold-pill p-4">Digital amplification</Badge>
-            <Badge className="gold-pill p-4">A legacy keepsake</Badge>
-          </div>
-        </div>
-      </section>
-
-      {/* Souvenir */}
-      <section id="souvenir" className="section-padding">
         <div className="mx-auto max-w-5xl px-4 text-center">
           <h2 className="text-3xl font-bold gold-glow">Souvenir Showcase</h2>
           <p className="mt-3 text-muted-foreground">
@@ -530,25 +622,168 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Testimonials */}
+      {/* Recognition & Awards */}
+      <section className="section-padding section-bg">
+        <div className="mx-auto max-w-4xl px-4">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold gold-glow">Recognition & Awards</h2>
+            <p className="text-muted-foreground">What you receive as part of this prestigious program</p>
+          </div>
+          <Card className="gold-border bg-card/50">
+            <CardContent className="p-8">
+              <div className="mb-6">
+                <p className="text-lg italic text-center">
+                  "Being featured in ISTA's souvenir isn't just recognition—it's a celebration of our commitment to healing humanity. The elegance and respect with which they present our stories makes every doctor feel truly valued and appreciated."
+                </p>
+                <p className="text-center text-sm text-muted-foreground mt-2">— Dr. Priya Sharma, Cardiologist</p>
+              </div>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="p-4 rounded-lg bg-primary/10">
+                  <h4 className="font-semibold text-primary mb-2">🎖️ Stage Recognition</h4>
+                  <p className="text-sm text-muted-foreground">Individual felicitation on stage during the ceremony</p>
+                </div>
+                <div className="p-4 rounded-lg bg-primary/10">
+                  <h4 className="font-semibold text-primary mb-2">📖 Souvenir Profile</h4>
+                  <p className="text-sm text-muted-foreground">Premium feature in our anniversary publication</p>
+                </div>
+                <div className="p-4 rounded-lg bg-primary/10">
+                  <h4 className="font-semibold text-primary mb-2">🏆 ISTA Badge</h4>
+                  <p className="text-sm text-muted-foreground">Official recognition certificate and badge</p>
+                </div>
+                <div className="p-4 rounded-lg bg-primary/10">
+                  <h4 className="font-semibold text-primary mb-2">📱 Digital Feature</h4>
+                  <p className="text-sm text-muted-foreground">Online profile and social media amplification</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* Partners & Sponsors */}
       <section className="section-padding">
         <div className="mx-auto max-w-6xl px-4">
-          <h2 className="text-3xl font-bold gold-glow text-center">What Doctors Say</h2>
-          <div className="grid md:grid-cols-2 gap-6 mt-8">
-            <Card className="gold-border">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold gold-glow">Partners & Sponsors</h2>
+            <p className="text-muted-foreground">Supporting healthcare excellence together</p>
+          </div>
+          <div className="space-y-6">
+            <Card className="gold-border bg-card/50">
               <CardContent className="p-6">
-                <p className="italic text-muted-foreground">
-                  "ISTA makes doctors feel like stars. They look at the human behind the stethoscope — the person who sacrifices weekends and family moments."
-                </p>
-                <div className="mt-2 text-sm text-muted-foreground">— Dr. Namratha, Oncologist</div>
+                <h3 className="text-xl font-semibold text-center mb-4 gold">Platinum Partners</h3>
+                <div className="grid md:grid-cols-4 gap-4">
+                  {[1,2,3,4].map((i) => (
+                    <div key={i} className="aspect-video bg-primary/10 rounded-lg flex items-center justify-center">
+                      <span className="text-muted-foreground text-sm">Partner {i}</span>
+                    </div>
+                  ))}
+                </div>
               </CardContent>
             </Card>
-            <Card className="gold-border">
+            <Card className="gold-border bg-card/50">
               <CardContent className="p-6">
-                <p className="italic text-muted-foreground">
-                  "I've attended many conferences, but ISTA's events stand apart. They're emotionally rich and thoughtfully curated."
+                <h3 className="text-lg font-semibold text-center mb-4 text-primary">Gold Supporters</h3>
+                <div className="grid md:grid-cols-6 gap-4">
+                  {[1,2,3,4,5,6].map((i) => (
+                    <div key={i} className="aspect-square bg-primary/10 rounded-lg flex items-center justify-center">
+                      <span className="text-muted-foreground text-xs">Supporter</span>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          <div className="text-center mt-6">
+            <p className="text-sm text-muted-foreground">We extend our heartfelt gratitude to all partners who make this celebration of healthcare excellence possible.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Doctors' Gallery */}
+      <section className="section-padding section-bg">
+        <div className="mx-auto max-w-7xl px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold gold-glow">Featured Doctors</h2>
+            <p className="text-muted-foreground">Celebrating our esteemed medical professionals</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {DOCTORS.slice(0, 6).map((doctor, idx) => (
+              <Card key={idx} className="gold-border bg-card/50 overflow-hidden">
+                <div className="aspect-square relative overflow-hidden">
+                  <img 
+                    src={doctor.image} 
+                    alt={doctor.name}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <h3 className="font-bold text-primary-foreground">{doctor.name}</h3>
+                  </div>
+                </div>
+                <CardContent className="p-6">
+                  <p className="text-sm text-muted-foreground italic">"{doctor.quote}"</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="section-padding">
+        <div className="mx-auto max-w-5xl px-4">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold gold-glow">What Doctors Say</h2>
+            <p className="text-muted-foreground">Heartfelt words from our medical community</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card className="gold-border bg-card/50">
+              <CardContent className="p-6">
+                <p className="text-lg italic mb-4">
+                  "ISTA has given me a platform to share not just my medical achievements, but my human journey. Being featured in their souvenir connected me with patients and colleagues in ways I never imagined."
                 </p>
-                <div className="mt-2 text-sm text-muted-foreground">— Dr. Ramesh, Orthopedic</div>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center font-semibold text-primary">
+                    Dr
+                  </div>
+                  <div>
+                    <div className="font-semibold">Dr. Anita Reddy</div>
+                    <div className="text-sm text-muted-foreground">Pediatrician, Apollo Hospitals</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="gold-border bg-card/50">
+              <CardContent className="p-6">
+                <p className="text-lg italic mb-4">
+                  "The professionalism and care ISTA puts into every detail is remarkable. From the elegant photography to the thoughtful storytelling, they make every doctor feel like a hero—because that's what we are."
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center font-semibold text-primary">
+                    Dr
+                  </div>
+                  <div>
+                    <div className="font-semibold">Dr. Rajesh Kumar</div>
+                    <div className="text-sm text-muted-foreground">Orthopedic Surgeon, KIMS Hospital</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="gold-border bg-card/50">
+              <CardContent className="p-6">
+                <p className="text-lg italic mb-4">
+                  "Every interaction with ISTA feels personal and meaningful. They don't just publish our stories—they honor our calling. The souvenir has become a treasured keepsake that my family and patients truly cherish."
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center font-semibold text-primary">
+                    Dr
+                  </div>
+                  <div>
+                    <div className="font-semibold">Dr. Meera Prasad</div>
+                    <div className="text-sm text-muted-foreground">Gynecologist, Continental Hospitals</div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -556,7 +791,7 @@ export default function LandingPage() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="section-padding">
+      <section className="section-padding section-bg">
         <div className="mx-auto max-w-5xl px-4">
           <h2 className="text-3xl font-bold gold-glow text-center">FAQ</h2>
           <div className="mt-6 space-y-3">
@@ -582,50 +817,87 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Final CTA + Contact */}
+      <section className="section-padding">
+        <div className="mx-auto max-w-4xl px-4 text-center">
+          <Card className="gold-border bg-card/50">
+            <CardContent className="p-12">
+              <h2 className="text-3xl font-bold gold-glow mb-4">Ready to Join Our Distinguished Community?</h2>  
+              <p className="text-lg text-muted-foreground mb-8">Secure your place in the 2025 Anniversary Edition and be celebrated among healthcare's finest.</p>
+              <Button size="lg" className="gold-gradient text-primary-foreground mb-8" onClick={scrollToRegister}>
+                Register Now - Limited Spots Available
+              </Button>
+              <div className="border-t border-primary/25 pt-6">
+                <h3 className="font-semibold text-primary mb-4">Need Help? Get In Touch</h3>
+                <div className="flex flex-wrap justify-center gap-6 text-sm">
+                  <a href="tel:+919948999001" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                    📞 <span>+91 9948999001</span>
+                  </a>
+                  <a href="mailto:istadigitalmedia@gmail.com" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                    📧 <span>istadigitalmedia@gmail.com</span>
+                  </a>
+                  <button onClick={openWhatsApp} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                    💬 <span>Chat on WhatsApp</span>
+                  </button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
       {/* Footer */}
-      <footer className="section-padding border-t border-primary/25">
+      <footer className="border-t border-primary/25 py-8">
         <div className="mx-auto max-w-7xl px-4">
-          <div className="grid md:grid-cols-3 gap-4">
-            <Card className="gold-border">
-              <CardContent className="p-4">
-                <h4 className="font-semibold gold">Phone</h4>
-                <p className="text-muted-foreground mt-1">+91 994899001</p>
-              </CardContent>
-            </Card>
-            <Card className="gold-border">
-              <CardContent className="p-4">
-                <h4 className="font-semibold gold">Email</h4>
-                <p className="text-muted-foreground mt-1">istadigitalmedia@gmail.com</p>
-              </CardContent>
-            </Card>
-            <Card className="gold-border">
-              <CardContent className="p-4">
-                <h4 className="font-semibold gold">Venue</h4>
-                <p className="text-muted-foreground mt-1">JRC Convention, Hyderabad</p>
-              </CardContent>
-            </Card>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div>
+              <div className="font-semibold text-primary">ISTA Digital Media</div>
+              <p className="text-sm text-muted-foreground mt-2">Celebrating healthcare excellence through impactful storytelling and prestigious recognition programs.</p>
+            </div>
+            <div>
+              <div className="font-semibold text-primary">Contact Us</div>
+              <div className="text-sm text-muted-foreground mt-2 space-y-1">
+                <a href="mailto:istadigitalmedia@gmail.com" className="flex items-center gap-1 hover:text-primary transition-colors">📧 istadigitalmedia@gmail.com</a>
+                <a href="tel:+919948999001" className="flex items-center gap-1 hover:text-primary transition-colors">📞 +91 9948999001</a>
+                <button onClick={openWhatsApp} className="flex items-center gap-1 hover:text-primary transition-colors text-left">💬 WhatsApp support available</button>
+              </div>
+            </div>
+            <div>
+              <div className="font-semibold text-primary">Event Details</div>
+              <div className="text-sm text-muted-foreground mt-2 space-y-1">
+                <div>📅 Sunday, 14 September 2025</div>
+                <div>⏰ 6:00 PM onwards</div>
+                <div>📍 JRC Convention, Hyderabad</div>
+              </div>
+            </div>
           </div>
-          <div className="mt-10 text-center text-muted-foreground text-sm">
-            © 2025 ISTA Digital Media · All rights reserved
+          <div className="border-t border-primary/25 mt-8 pt-6 text-center text-sm text-muted-foreground">
+            <p>&copy; 2025 ISTA Digital Media. All rights reserved. | Celebrating medical excellence with dignity and respect.</p>
           </div>
         </div>
       </footer>
 
-      {/* Sticky CTA */}
-      <div className="sticky-cta px-4 py-3 flex items-center justify-between gap-3">
-        <div className="text-sm">
-          🎟️ <span className="gold font-semibold">{tier.label}</span> — 
-          ₹<span className="gold font-semibold">{tier.amount.toLocaleString('en-IN')}</span> • 
-          {tier.until ? `${Math.ceil((tier.until - Date.now()) / (1000 * 60 * 60 * 24))} days left` : 'Available now'}
-        </div>
-        <div className="flex gap-2">
-          <Button className="gold-gradient text-primary-foreground">Register</Button>
-          <Button className="bg-[#25D366] text-black hover:bg-[#20c757]" onClick={openWhatsApp}>
-            WhatsApp
-          </Button>
+      {/* Sticky CTA Bar */}
+      <div className="sticky-cta">
+        <div className="mx-auto max-w-7xl px-4 py-3">
+          <div className="flex items-center justify-between gap-4 flex-col sm:flex-row">
+            <div className="text-sm">
+              <div>🎟️ <span className="gold font-semibold">{tier.label}</span> — ₹{tier.amount.toLocaleString('en-IN')}</div>
+              <div className="text-xs text-muted-foreground">
+                {tier.until ? (
+                  <>Ends in <span className="gold font-semibold">{formatTime(tier.until - Date.now())}</span> (IST)</>
+                ) : (
+                  <>Available now</>
+                )}
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <Button size="sm" className="gold-gradient text-primary-foreground" onClick={scrollToRegister}>Register</Button>
+              <Button size="sm" variant="outline" onClick={openWhatsApp}>WhatsApp</Button>
+            </div>
+          </div>
         </div>
       </div>
-
 
       {/* Modal */}
       {showModal && (
@@ -662,7 +934,7 @@ export default function LandingPage() {
                   <Button variant="outline" onClick={() => setShowModal(false)}>
                     Maybe Later
                   </Button>
-                  <Button className="gold-gradient text-primary-foreground">
+                  <Button type="button" onClick={scrollToRegister} className="gold-gradient text-primary-foreground">
                     Register Now
                   </Button>
                 </div>

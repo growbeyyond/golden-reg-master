@@ -162,4 +162,13 @@ All colors MUST be HSL.
   .sticky-cta {
     @apply fixed left-1/2 -translate-x-1/2 bottom-4 z-40 w-[min(940px,90%)] rounded-2xl bg-black/85 backdrop-blur-sm border border-primary/35 shadow-2xl;
   }
+
+  /* Text shadow utilities for better readability over images */
+  .text-shadow {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+  }
+  
+  .text-shadow-lg {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+  }
 }

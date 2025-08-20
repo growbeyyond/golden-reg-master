@@ -25,28 +25,28 @@ const DEADLINES = {
 
 const CHIEF_GUESTS = [
   {
-    name: "Sri. Damodar Rajanarasimha Garu",
-    designation: "Health Minister of Telangana",
-    image: "/lovable-uploads/632d5279-ccad-4a29-a60d-cfcea9b52d67.png",
-    quote: "ISTA has consistently created a platform where the medical fraternity feels celebrated and recognized for their selfless service to humanity."
-  },
-  {
     name: "Sri. Jishnu Dev Varma Garu", 
     designation: "Governor of Telangana",
     image: "/lovable-uploads/07095247-9d5e-4433-aa60-1b2377dc2836.png",
     quote: "The noble work of ISTA in honoring our healthcare heroes deserves appreciation from every section of society."
   },
   {
-    name: "Sri. V. V. Lakshminarayana Garu",
-    designation: "Ex CBI Joint Director, Agriculturist, Social worker", 
-    image: "/lovable-uploads/1c0d8019-a6fd-402d-9278-8fa452533b98.png",
-    quote: "Through ISTA's initiatives, we witness the true spirit of recognizing those who dedicate their lives to healing others."
+    name: "Sri. Damodar Rajanarasimha Garu",
+    designation: "Health Minister of Telangana",
+    image: "/lovable-uploads/632d5279-ccad-4a29-a60d-cfcea9b52d67.png",
+    quote: "ISTA has consistently created a platform where the medical fraternity feels celebrated and recognized for their selfless service to humanity."
   },
   {
     name: "Sri. Madavaneni Raghunandan Rao Garu",
     designation: "Member of Parliament Medak constituency",
     image: "/lovable-uploads/af60150e-f4be-4cc5-a06e-be8e25dd77c2.png", 
     quote: "ISTA's commitment to celebrating medical excellence sets a benchmark for honoring our healthcare professionals."
+  },
+  {
+    name: "Sri. V. V. Lakshminarayana Garu",
+    designation: "Ex CBI Joint Director, Agriculturist, Social worker", 
+    image: "/lovable-uploads/1c0d8019-a6fd-402d-9278-8fa452533b98.png",
+    quote: "Through ISTA's initiatives, we witness the true spirit of recognizing those who dedicate their lives to healing others."
   },
   {
     name: "Smt. Nerella Sharada Garu",
@@ -592,10 +592,10 @@ export default function LandingPage() {
                     className="w-full h-full object-cover"
                     loading="lazy"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
                   <div className="absolute bottom-4 left-4 right-4">
-                    <h3 className="font-bold text-primary-foreground">{guest.name}</h3>
-                    <p className="text-sm text-primary-foreground/80">{guest.designation}</p>
+                    <h3 className="font-bold text-white text-shadow-lg text-lg">{guest.name}</h3>
+                    <p className="text-sm text-white/90 text-shadow">{guest.designation}</p>
                   </div>
                 </div>
                 <CardContent className="p-6">
@@ -714,9 +714,9 @@ export default function LandingPage() {
                     className="w-full h-full object-cover"
                     loading="lazy"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
                   <div className="absolute bottom-4 left-4 right-4">
-                    <h3 className="font-bold text-primary-foreground">{doctor.name}</h3>
+                    <h3 className="font-bold text-white text-shadow-lg text-lg">{doctor.name}</h3>
                   </div>
                 </div>
                 <CardContent className="p-6">

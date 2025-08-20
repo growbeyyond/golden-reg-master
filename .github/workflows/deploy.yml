@@ -1,0 +1,27 @@
+name: Deploy to Hostinger (FTPS)
+
+on:
+  push:
+    branches: [ main ]   # Deploy when pushing to main branch
+  workflow_dispatch:      # Allow manual trigger in Actions tab
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Upload via FTPS
+        uses: SamKirkland/FTP-Deploy-Action@v4
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: ${{ secrets.FTP_PORT }}
+          protocol: ftps
+          local-dir: ./        # Change to dist/ or build/ if needed
+          server-dir: ${{ secrets.FTP_DIR }}
+          dangerous-clean-slate: false
+          state-name: .ftp-deploy-sync-state.json

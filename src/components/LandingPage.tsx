@@ -826,65 +826,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="section-padding">
-        <div className="mx-auto max-w-5xl px-4">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold gold-glow">What Doctors Say</h2>
-            <p className="text-muted-foreground">Heartfelt words from our medical community</p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="gold-border bg-card/50">
-              <CardContent className="p-6">
-                <p className="text-lg italic mb-4">
-                  "ISTA has given me a platform to share not just my medical achievements, but my human journey. Being featured in their souvenir connected me with patients and colleagues in ways I never imagined."
-                </p>
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center font-semibold text-primary">
-                    Dr
-                  </div>
-                  <div>
-                    <div className="font-semibold">Dr. Anita Reddy</div>
-                    <div className="text-sm text-muted-foreground">Pediatrician, Apollo Hospitals</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="gold-border bg-card/50">
-              <CardContent className="p-6">
-                <p className="text-lg italic mb-4">
-                  "The professionalism and care ISTA puts into every detail is remarkable. From the elegant photography to the thoughtful storytelling, they make every doctor feel like a hero—because that's what we are."
-                </p>
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center font-semibold text-primary">
-                    Dr
-                  </div>
-                  <div>
-                    <div className="font-semibold">Dr. Rajesh Kumar</div>
-                    <div className="text-sm text-muted-foreground">Orthopedic Surgeon, KIMS Hospital</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="gold-border bg-card/50">
-              <CardContent className="p-6">
-                <p className="text-lg italic mb-4">
-                  "Every interaction with ISTA feels personal and meaningful. They don't just publish our stories—they honor our calling. The souvenir has become a treasured keepsake that my family and patients truly cherish."
-                </p>
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center font-semibold text-primary">
-                    Dr
-                  </div>
-                  <div>
-                    <div className="font-semibold">Dr. Meera Prasad</div>
-                    <div className="text-sm text-muted-foreground">Gynecologist, Continental Hospitals</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
 
       {/* FAQ */}
       <section className="section-padding section-bg">

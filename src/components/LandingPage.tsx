@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
+
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
@@ -105,11 +105,6 @@ export default function LandingPage() {
 
   return (
     <>
-      <Helmet>
-        <title>ISTA Doctors' Souvenir — Anniversary Registration</title>
-        <meta name="description" content="Register for ISTA Digital Media's Doctors' Souvenir Anniversary 2025. Limited-time offer pricing. Secure your feature today." />
-        <script src="https://checkout.razorpay.com/v1/checkout.js" />
-      </Helmet>
 
       {/* Navigation */}
       <header className="sticky top-0 z-40 border-b border-primary/25 bg-black/70 backdrop-blur">

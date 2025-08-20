@@ -74,7 +74,7 @@ const DOCTORS = [
   },
   {
     name: "Dr KVNN Santosh Murthy",
-    image: "/lovable-uploads/5f6511ad-b869-47d1-ac4f-baa8aa3f2fa1.png",
+    image: "/lovable-uploads/d0daa190-d243-44cb-bf66-fd91e5f3cd9f.png",
     quote: "ISTA provides a unique platform where medical professionals can connect, share experiences, and celebrate our collective commitment to healthcare excellence and patient care."
   },
   {
@@ -89,12 +89,12 @@ const DOCTORS = [
   },
   {
     name: "Dr Hari Chekuri",
-    image: "/lovable-uploads/742f39e6-a38a-46f8-aa50-454ea741cecb.png",
+    image: "/lovable-uploads/5f6511ad-b869-47d1-ac4f-baa8aa3f2fa1.png",
     quote: "ISTA creates meaningful connections within the medical community, fostering an environment where doctors can share knowledge, experiences, and support each other in our noble profession."
   },
   {
     name: "Dr Preeti Challa",
-    image: "/lovable-uploads/8b43851e-5291-4bd7-849f-7ec576eb7d86.png",
+    image: "/lovable-uploads/74242f09-0263-419c-bc80-ac7508e05126.png",
     quote: "Being part of the ISTA community means being recognized not just as a medical professional, but as a human being dedicated to healing and caring for others with compassion and expertise."
   },
   {

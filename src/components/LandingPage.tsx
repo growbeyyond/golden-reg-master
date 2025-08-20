@@ -15,7 +15,7 @@ interface TierInfo {
 }
 
 const WHATSAPP_NUMBER = "919948999001"; // No + for wa.me links
-const RZP_KEY = import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_key";
+const RZP_KEY = "rzp_test_R7bubJ7VR6pDOp";
 
 const DEADLINES = {
   early: Date.parse("2025-08-31T18:29:59Z"), // 23:59:59 IST

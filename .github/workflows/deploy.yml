@@ -18,26 +18,17 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      - name: Install deps & build
+      - name: Install & Build
         run: |
           npm ci
           npm run build
-        env:
-          # Add your envs here if you use them during build
-          # Example: VITE_API_URL: ${{ secrets.VITE_API_URL }}
-          # (Vite reads only vars that start with VITE_)
-          CI: true
 
       - name: Upload dist/ via FTPS
-        uses: SamKirkland/FTP-Deploy-Action@v4
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          port: ${{ secrets.FTP_PORT }}
+          port: ${{ secrets.FTP_PORT }}     # 21
           protocol: ftps
-          local-dir: dist/
-          server-dir: ${{ secrets.FTP_DIR }}
-          dangerous-clean-slate: false
-          state-name: .ftp-deploy-sync-state.json
-
+          local-

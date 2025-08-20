@@ -15,7 +15,7 @@ interface TierInfo {
 }
 
 const WHATSAPP_NUMBER = "919948999001"; // No + for wa.me links
-const RZP_KEY = "YOUR_RAZORPAY_KEY_ID";
+const RZP_KEY = import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_key";
 
 const DEADLINES = {
   early: Date.parse("2025-08-31T18:29:59Z"), // 23:59:59 IST
@@ -153,6 +153,10 @@ export default function LandingPage() {
     agree: false
   });
 
+  const [formErrors, setFormErrors] = useState({
+    phone: ''
+  });
+
   // Timer update
   useEffect(() => {
     const interval = setInterval(() => {
@@ -183,16 +187,46 @@ export default function LandingPage() {
       theme: { color: "#d4af37" },
       handler: function (response: any) {
         alert("Payment successful! Reference: " + response.razorpay_payment_id);
+      },
+      modal: {
+        ondismiss: function() {
+          console.log('Payment cancelled by user');
+        }
       }
     };
-    // @ts-ignore
-    new Razorpay(options).open();
+    
+    const rzp = new (window as any).Razorpay(options);
+    rzp.on('payment.failed', function (response: any) {
+      alert('Payment failed: ' + response.error.description);
+      console.error('Payment failed:', response.error);
+    });
+    rzp.open();
+  };
+
+  const validatePhone = (phone: string) => {
+    const phoneRegex = /^[6-9]\d{9}$/; // Indian mobile number validation
+    if (!phone) return 'Phone number is required';
+    if (!phoneRegex.test(phone)) return 'Please enter a valid 10-digit Indian mobile number';
+    return '';
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const phone = e.target.value.replace(/\D/g, '').slice(0, 10); // Only digits, max 10
+    setFormData({...formData, phone});
+    setFormErrors({...formErrors, phone: validatePhone(phone)});
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    const phoneError = validatePhone(formData.phone);
+    if (phoneError) {
+      setFormErrors({...formErrors, phone: phoneError});
+      return;
+    }
+    
     if (!formData.agree) {
-      alert("Please agree to the terms.");
+      alert("Please agree to the terms and conditions.");
       return;
     }
     handlePayment();
@@ -225,7 +259,7 @@ export default function LandingPage() {
               </p>
               <div className="mt-6 flex flex-wrap items-center justify-center md:justify-start gap-3">
                 <Badge variant="outline" className="gold-pill">📍 JRC Convention, Hyderabad</Badge>
-                <Badge variant="outline" className="gold-pill">🗓️ Sunday, 14 Sept 2025</Badge>
+                <Badge variant="outline" className="gold-pill">🗓️ Sunday, 14 September 2025</Badge>
                 <Badge variant="outline" className="gold-pill">⏰ 6:00 PM onwards</Badge>
               </div>
               <div className="mt-8 flex flex-wrap justify-center md:justify-start gap-3">
@@ -477,7 +511,7 @@ export default function LandingPage() {
               <div>
                 Price: <span className="gold font-semibold">₹{tier.amount.toLocaleString('en-IN')}</span> • 
                 {tier.until ? (
-                  <>Ends in <span className="gold font-semibold">{formatTime(tier.until - Date.now())}</span> (DD:HH:MM:SS IST)</>
+                  <>Ends in <span className="gold font-semibold">{formatTime(tier.until - Date.now())}</span> <span className="text-xs">(Days:Hours:Minutes:Seconds IST)</span></>
                 ) : (
                   <span className="gold font-semibold">Available now</span>
                 )}
@@ -493,7 +527,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-7xl px-4">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold gold-glow">Secure Your Spot</h2>
-            <p className="text-muted-foreground">Fill your details. We'll confirm instantly after payment.</p>
+            <p className="text-muted-foreground">Fill your details below. We'll confirm instantly after payment via secure Razorpay gateway.</p>
           </div>
           <div className="grid md:grid-cols-2 gap-8">
             <Card className="gold-border">
@@ -549,11 +583,18 @@ export default function LandingPage() {
                       <Input 
                         type="tel" 
                         required 
-                        placeholder="10-digit"
+                        placeholder="10-digit mobile number"
                         value={formData.phone}
-                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                        className="mt-1 bg-black/40 border-primary/35"
+                        onChange={handlePhoneChange}
+                        className={`mt-1 bg-black/40 border-primary/35 ${formErrors.phone ? 'border-destructive' : ''}`}
+                        aria-describedby="phone-help"
                       />
+                      <div id="phone-help" className="text-xs text-muted-foreground mt-1">
+                        Enter a valid 10-digit Indian mobile number (6-9 followed by 9 digits)
+                      </div>
+                      {formErrors.phone && (
+                        <div className="text-xs text-destructive mt-1">{formErrors.phone}</div>
+                      )}
                     </div>
                   </div>
                   <div>
@@ -674,42 +715,83 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Partners & Sponsors */}
+      {/* ISTA Track Record */}
       <section className="section-padding">
         <div className="mx-auto max-w-6xl px-4">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold gold-glow">Partners & Sponsors</h2>
-            <p className="text-muted-foreground">Supporting healthcare excellence together</p>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold gold-glow">ISTA Track Record</h2>
+            <p className="text-muted-foreground">A legacy of celebrating healthcare excellence</p>
           </div>
-          <div className="space-y-6">
-            <Card className="gold-border bg-card/50">
+          
+          {/* Stats Overview */}
+          <div className="grid md:grid-cols-4 gap-6 mb-12">
+            <Card className="gold-border bg-card/50 text-center">
               <CardContent className="p-6">
-                <h3 className="text-xl font-semibold text-center mb-4 gold">Platinum Partners</h3>
-                <div className="grid md:grid-cols-4 gap-4">
-                  {[1,2,3,4].map((i) => (
-                    <div key={i} className="aspect-video bg-primary/10 rounded-lg flex items-center justify-center">
-                      <span className="text-muted-foreground text-sm">Partner {i}</span>
-                    </div>
-                  ))}
-                </div>
+                <div className="text-3xl font-bold gold mb-2">3</div>
+                <div className="text-sm text-muted-foreground">Awards Ceremonies</div>
               </CardContent>
             </Card>
-            <Card className="gold-border bg-card/50">
+            <Card className="gold-border bg-card/50 text-center">
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold text-center mb-4 text-primary">Gold Supporters</h3>
-                <div className="grid md:grid-cols-6 gap-4">
-                  {[1,2,3,4,5,6].map((i) => (
-                    <div key={i} className="aspect-square bg-primary/10 rounded-lg flex items-center justify-center">
-                      <span className="text-muted-foreground text-xs">Supporter</span>
-                    </div>
-                  ))}
-                </div>
+                <div className="text-3xl font-bold gold mb-2">500+</div>
+                <div className="text-sm text-muted-foreground">Doctors Honored</div>
+              </CardContent>
+            </Card>
+            <Card className="gold-border bg-card/50 text-center">
+              <CardContent className="p-6">
+                <div className="text-3xl font-bold gold mb-2">25+</div>
+                <div className="text-sm text-muted-foreground">Distinguished Guests</div>
+              </CardContent>
+            </Card>
+            <Card className="gold-border bg-card/50 text-center">
+              <CardContent className="p-6">
+                <div className="text-3xl font-bold gold mb-2">1st</div>
+                <div className="text-sm text-muted-foreground">Souvenir Edition</div>
               </CardContent>
             </Card>
           </div>
-          <div className="text-center mt-6">
-            <p className="text-sm text-muted-foreground">We extend our heartfelt gratitude to all partners who make this celebration of healthcare excellence possible.</p>
+
+          {/* Timeline */}
+          <div className="mb-12">
+            <h3 className="text-xl font-semibold text-center mb-8 gold">Our Journey</h3>
+            <div className="grid md:grid-cols-3 gap-6">
+              <Card className="gold-border bg-card/50">
+                <CardContent className="p-6 text-center">
+                  <div className="text-2xl mb-3">🏆</div>
+                  <h4 className="font-semibold text-primary mb-2">First Awards Ceremony</h4>
+                  <p className="text-sm text-muted-foreground">Launched our mission to honor medical professionals with our inaugural awards event</p>
+                </CardContent>
+              </Card>
+              <Card className="gold-border bg-card/50">
+                <CardContent className="p-6 text-center">
+                  <div className="text-2xl mb-3">🌟</div>
+                  <h4 className="font-semibold text-primary mb-2">Continued Excellence</h4>
+                  <p className="text-sm text-muted-foreground">Successfully organized two more ceremonies, building a strong reputation in healthcare recognition</p>
+                </CardContent>
+              </Card>
+              <Card className="gold-border bg-card/50">
+                <CardContent className="p-6 text-center">
+                  <div className="text-2xl mb-3">📖</div>
+                  <h4 className="font-semibold text-primary mb-2">Souvenir Innovation</h4>
+                  <p className="text-sm text-muted-foreground">2025 marks our evolution into creating lasting legacies through premium publications</p>
+                </CardContent>
+              </Card>
+            </div>
           </div>
+
+          {/* New in 2025 */}
+          <Card className="gold-border bg-gradient-to-r from-primary/10 to-primary/5">
+            <CardContent className="p-8 text-center">
+              <Badge className="gold-pill mb-4">New in 2025</Badge>
+              <h3 className="text-2xl font-bold gold-glow mb-4">First Ever Souvenir Edition</h3>
+              <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+                After three successful awards ceremonies, we're proud to introduce our premium souvenir concept. This Anniversary Edition combines our proven expertise in medical recognition with a beautiful, lasting publication that doctors and their families will treasure forever.
+              </p>
+              <Button className="gold-gradient text-primary-foreground" onClick={scrollToRegister}>
+                Be Part of History - Register Now
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
@@ -899,7 +981,7 @@ export default function LandingPage() {
               <div>🎟️ <span className="gold font-semibold">{tier.label}</span> — ₹{tier.amount.toLocaleString('en-IN')}</div>
               <div className="text-xs text-muted-foreground">
                 {tier.until ? (
-                  <>Ends in <span className="gold font-semibold">{formatTime(tier.until - Date.now())}</span> (DD:HH:MM:SS IST)</>
+                  <>Ends in <span className="gold font-semibold">{formatTime(tier.until - Date.now())}</span> <span className="text-xs">(Days:Hours:Minutes:Seconds IST)</span></>
                 ) : (
                   <>Available now</>
                 )}

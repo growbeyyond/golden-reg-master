@@ -137,7 +137,12 @@ All colors MUST be HSL.
   }
   
   .section-padding {
-    @apply py-16 md:py-24;
+    @apply py-12 md:py-16;
+  }
+  
+  .logo-spotlight {
+    @apply ring-1 ring-primary/20 rounded-xl bg-black/30 p-3 drop-shadow-xl;
+    box-shadow: var(--gold-glow), 0 10px 30px -10px hsl(var(--gold) / 0.3);
   }
   
   .kicker {

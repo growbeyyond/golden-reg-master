@@ -23,40 +23,80 @@ const DEADLINES = {
   last: Date.parse("2025-09-12T18:29:59Z"),
 };
 
+const CHIEF_GUESTS = [
+  {
+    name: "Sri. Damodar Rajanarasimha Garu",
+    designation: "Former Governor of Telangana",
+    image: "/lovable-uploads/b0f5d108-2c60-46d7-ba9c-7453ace41049.png",
+    quote: "ISTA has consistently created a platform where the medical fraternity feels celebrated and recognized for their selfless service to humanity."
+  },
+  {
+    name: "Sri. Jishnu Dev Varma Garu", 
+    designation: "Former Governor of Telangana",
+    image: "/lovable-uploads/b0f5d108-2c60-46d7-ba9c-7453ace41049.png",
+    quote: "The noble work of ISTA in honoring our healthcare heroes deserves appreciation from every section of society."
+  },
+  {
+    name: "Sri. V. V. Lakshminarayana Garu",
+    designation: "Former Governor of Telangana", 
+    image: "/lovable-uploads/b0f5d108-2c60-46d7-ba9c-7453ace41049.png",
+    quote: "Through ISTA's initiatives, we witness the true spirit of recognizing those who dedicate their lives to healing others."
+  },
+  {
+    name: "Sri. Madavaneni Raghunandan Rao Garu",
+    designation: "Former Governor of Telangana",
+    image: "/lovable-uploads/b0f5d108-2c60-46d7-ba9c-7453ace41049.png", 
+    quote: "ISTA's commitment to celebrating medical excellence sets a benchmark for honoring our healthcare professionals."
+  },
+  {
+    name: "Smt. Nerella Sharada Garu",
+    designation: "Former Governor of Telangana",
+    image: "/lovable-uploads/b0f5d108-2c60-46d7-ba9c-7453ace41049.png",
+    quote: "The recognition provided by ISTA to our medical community is both timely and necessary for society's wellbeing."
+  }
+];
+
 const DOCTORS = [
   {
     name: "Dr Gopala Krishna Gokhale",
     speciality: "Senior Physician",
+    image: "/lovable-uploads/742f39e6-a38a-46f8-aa50-454ea741cecb.png",
     quote: "ISTA transforms our profession by celebrating the human stories behind medical excellence. Every doctor deserves recognition for their dedication and sacrifice. This platform beautifully captures our journey and inspires the next generation of healers."
   },
   {
     name: "Dr Seetharam Buddavarapu", 
     speciality: "Consultant Physician",
+    image: "/lovable-uploads/394f9d24-dbec-4251-9b86-ceeb9e6828b6.png",
     quote: "Through ISTA, I've witnessed doctors rediscover their passion for medicine. The organization doesn't just honor achievements—it honors the heart of healing. Every event reminds us why we chose this noble calling."
   },
   {
     name: "Dr Vani Veggalam",
     speciality: "Medical Specialist", 
+    image: "/lovable-uploads/2b9d7883-3862-4486-bce7-70db71356803.png",
     quote: "ISTA creates a sanctuary where doctors can share their vulnerabilities and victories. In a profession where we give so much, this platform gives back by amplifying our voices and celebrating our humanity."
   },
   {
     name: "Dr Samatha Tulla",
     speciality: "Healthcare Professional",
+    image: "/lovable-uploads/093f66d8-5797-4c86-84f0-0080686b193d.png",
     quote: "What sets ISTA apart is its genuine understanding of a doctor's journey. Beyond the clinical expertise, they recognize our emotional investment in every patient. This recognition fuels our commitment to excellence."
   },
   {
     name: "Dr Hari Cherukuri", 
     speciality: "Medical Practitioner",
+    image: "/lovable-uploads/a35c7add-a4ef-45c4-88ad-22365b3fb10b.png",
     quote: "ISTA doesn't just organize events—they create transformative experiences. Every gathering becomes a moment of reflection, growth, and renewed purpose. The impact extends far beyond the ceremony itself."
   },
   {
     name: "Dr Rajeswari",
     speciality: "Senior Doctor",
+    image: "/lovable-uploads/078624d0-1590-441b-a3e7-ce664db05e34.png",
     quote: "In my years of practice, I've rarely found a platform that truly understands doctors. ISTA bridges the gap between our professional achievements and personal stories, creating a legacy worth preserving."
   },
   {
     name: "Dr Manjula Anagani",
     speciality: "Medical Professional", 
+    image: "/lovable-uploads/b0f5d108-2c60-46d7-ba9c-7453ace41049.png",
     quote: "ISTA's approach to celebrating doctors is refreshingly authentic. They don't just showcase our degrees—they honor our dedication, our sleepless nights, and our unwavering commitment to saving lives."
   }
 ];
@@ -149,11 +189,11 @@ export default function LandingPage() {
       <section className="section-padding backdrop-gold">
         <div className="mx-auto max-w-7xl px-4 grid md:grid-cols-2 gap-12 items-center">
           <div>
-            <div className="flex flex-col items-center md:items-start mb-6">
+            <div className="flex flex-col items-center md:items-start mb-8">
               <img 
                 src="/lovable-uploads/8b43851e-5291-4bd7-849f-7ec576eb7d86.png" 
                 alt="ISTA Media Logo" 
-                className="h-16 w-auto mb-3 gold-glow"
+                className="h-20 md:h-24 w-auto mb-4 logo-spotlight"
               />
               <div className="kicker text-center md:text-left">Anniversary Edition 2025</div>
             </div>
@@ -209,9 +249,31 @@ export default function LandingPage() {
       <section id="about" className="section-padding">
         <div className="mx-auto max-w-4xl px-4 text-center">
           <h2 className="text-3xl font-bold gold-glow">About ISTA Digital Media</h2>
-          <p className="mt-3 text-muted-foreground">
-            ISTA curates healthcare stories, campaigns, and impact-led publications that champion the medical fraternity. Our Doctors' Souvenir honors clinical excellence and builds public trust — a keepsake that celebrates your journey.
-          </p>
+          <div className="mt-6 space-y-4 text-muted-foreground">
+            <p>
+              ISTA Digital Media has been at the forefront of celebrating healthcare excellence for over a decade. We specialize in curating impactful stories, campaigns, and publications that honor the medical fraternity and their invaluable contributions to society.
+            </p>
+            <p>
+              Our flagship Doctors' Souvenir series has featured over 500+ distinguished medical professionals, reaching audiences across hospitals, medical institutions, and healthcare communities nationwide. Each edition serves as both a tribute to clinical excellence and a bridge that builds public trust in our healthcare system.
+            </p>
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold gold mb-3">What We Do</h3>
+              <div className="grid md:grid-cols-3 gap-4 text-sm">
+                <div className="p-4 rounded-lg bg-card/50 border border-primary/20">
+                  <div className="font-semibold text-primary">Storytelling</div>
+                  <div>Crafting compelling narratives that showcase medical excellence</div>
+                </div>
+                <div className="p-4 rounded-lg bg-card/50 border border-primary/20">
+                  <div className="font-semibold text-primary">Recognition Programs</div>
+                  <div>Honoring healthcare heroes through prestigious publications</div>
+                </div>
+                <div className="p-4 rounded-lg bg-card/50 border border-primary/20">
+                  <div className="font-semibold text-primary">Impact Publications</div>
+                  <div>Creating keepsakes that celebrate medical journeys and inspire future generations</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -382,24 +444,36 @@ export default function LandingPage() {
       {/* Chief Guests */}
       <section id="chief-guests" className="section-padding">
         <div className="mx-auto max-w-6xl px-4">
-          <h2 className="text-3xl font-bold gold-glow text-center mb-8">Previous Chief Guests</h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            <Card className="gold-border">
-              <CardContent className="p-6">
-                <h3 className="text-xl font-semibold gold">Governor of Telangana</h3>
-                <p className="mt-3 text-muted-foreground italic">
-                  "ISTA has consistently created a platform where the medical fraternity feels celebrated. In a world where doctors often work behind the scenes, ISTA reminds us that they are the true heroes shaping society."
-                </p>
-              </CardContent>
-            </Card>
-            <Card className="gold-border">
-              <CardContent className="p-6">
-                <h3 className="text-xl font-semibold gold">Health Minister of Telangana</h3>
-                <p className="mt-3 text-muted-foreground italic">
-                  "The healthcare community is the backbone of society, and ISTA understands this truth deeply. By organizing these celebrations year after year, ISTA has helped build a culture of gratitude in our communities."
-                </p>
-              </CardContent>
-            </Card>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold gold-glow">Previous Chief Guests</h2>
+            <p className="text-muted-foreground mt-3">Distinguished personalities who have honored our events with their presence</p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {CHIEF_GUESTS.map((guest, index) => (
+              <Card key={index} className="gold-border">
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-4 mb-4">
+                    <img 
+                      src={guest.image} 
+                      alt={guest.name}
+                      className="w-16 h-16 rounded-full object-cover border-2 border-primary/30"
+                    />
+                    <div>
+                      <h3 className="font-semibold gold text-sm">{guest.name}</h3>
+                      <p className="text-xs text-muted-foreground">{guest.designation}</p>
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground italic">
+                    "{guest.quote}"
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+          <div className="text-center mt-8">
+            <p className="text-sm text-muted-foreground">
+              <span className="gold font-semibold">Thank you</span> to all our distinguished guests for supporting healthcare excellence
+            </p>
           </div>
         </div>
       </section>
@@ -409,35 +483,23 @@ export default function LandingPage() {
         <div className="mx-auto max-w-7xl px-4">
           <h2 className="text-3xl font-bold gold-glow text-center mb-8">Doctors about ISTA</h2>
           <div className="grid md:grid-cols-3 gap-8">
-            {DOCTORS.map((doctor, index) => {
-              const doctorImages = [
-                "/lovable-uploads/b0f5d108-2c60-46d7-ba9c-7453ace41049.png", // Dr Gopala Krishna Gokhale
-                "/lovable-uploads/742f39e6-a38a-46f8-aa50-454ea741cecb.png", // Dr Seetharam Buddavarapu
-                "/lovable-uploads/394f9d24-dbec-4251-9b86-ceeb9e6828b6.png", // Dr Vani Veggalam
-                "/lovable-uploads/2b9d7883-3862-4486-bce7-70db71356803.png", // Dr Samatha Tulla
-                "/lovable-uploads/093f66d8-5797-4c86-84f0-0080686b193d.png", // Dr Hari Cherukuri
-                "/lovable-uploads/a35c7add-a4ef-45c4-88ad-22365b3fb10b.png", // Dr Rajeswari
-                "/lovable-uploads/078624d0-1590-441b-a3e7-ce664db05e34.png", // Dr Manjula Anagani
-              ];
-              
-              return (
-                <Card key={index} className="gold-border">
-                  <CardContent className="p-6">
-                    <div className="aspect-[4/3] rounded-xl overflow-hidden bg-muted mb-4 gold-border">
-                      <img 
-                        src={doctorImages[index]} 
-                        alt={doctor.name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <h3 className="font-semibold mb-3">{doctor.name} — {doctor.speciality}</h3>
-                    <p className="text-muted-foreground italic text-sm leading-relaxed">
-                      "{doctor.quote}"
-                    </p>
-                  </CardContent>
-                </Card>
-              );
-            })}
+            {DOCTORS.map((doctor, index) => (
+              <Card key={index} className="gold-border">
+                <CardContent className="p-6">
+                  <div className="aspect-[4/3] rounded-xl overflow-hidden bg-muted mb-4 gold-border">
+                    <img 
+                      src={doctor.image} 
+                      alt={doctor.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <h3 className="font-semibold mb-3">{doctor.name} — {doctor.speciality}</h3>
+                  <p className="text-muted-foreground italic text-sm leading-relaxed">
+                    "{doctor.quote}"
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>

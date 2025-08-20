@@ -98,7 +98,7 @@ const DOCTORS = [
     quote: "Being part of the ISTA community means being recognized not just as a medical professional, but as a human being dedicated to healing and caring for others with compassion and expertise."
   },
   {
-    name: "Dr Vani",
+    name: "Dr Vani Veggalam",
     image: "/lovable-uploads/2592ccd1-42f2-4ac5-8e68-7de3b2422e65.png",
     quote: "ISTA creates a sanctuary where doctors can share their vulnerabilities and victories. In a profession where we give so much, this platform gives back by amplifying our voices and celebrating our humanity."
   }

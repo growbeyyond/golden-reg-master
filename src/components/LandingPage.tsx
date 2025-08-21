@@ -355,9 +355,9 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <section className="relative pt-4 pb-16 backdrop-gold overflow-hidden">
-        {/* Simple gradient background without images */}
+        {/* Light overlay to maintain text readability while showing gold background */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black/60"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/25"></div>
         </div>
         <div className="relative z-10 mx-auto max-w-7xl px-4">
           {/* Sign In Button - Top Right */}

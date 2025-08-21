@@ -357,7 +357,7 @@ export default function LandingPage() {
       <section className="relative pt-4 pb-16 backdrop-gold overflow-hidden">
         {/* Background Image Carousel Overlay */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/60"></div>
+          <div className="absolute inset-0 bg-black/75 md:bg-black/65"></div>
           <div className="relative h-full w-full">
             <div 
               className="absolute inset-0 bg-cover bg-center opacity-[0.02] animate-fade-in"

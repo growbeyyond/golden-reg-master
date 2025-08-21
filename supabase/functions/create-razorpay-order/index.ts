@@ -2,7 +2,7 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": "https://your-domain.com", // Replace with your actual domain
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
@@ -26,12 +26,16 @@ serve(async (req) => {
   
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
-    console.log('Handling CORS preflight request');
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    console.log('Processing request...');
+    // Validate authentication is present
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      console.error('No authorization header provided');
+      throw new Error("Authentication required");
+    }
     
     // Get Razorpay credentials
     const razorpayKeyId = "rzp_test_R7bubJ7VR6pDOp"; // Your test key ID
@@ -58,26 +62,40 @@ serve(async (req) => {
 
     console.log('Supabase client created');
 
-    // Get user from auth header (optional for guest checkout)
-    const authHeader = req.headers.get("Authorization");
-    let user = null;
+    // Get authenticated user
+    console.log('Getting authenticated user...');
+    const token = authHeader.replace("Bearer ", "");
+    const { data, error: authError } = await supabaseClient.auth.getUser(token);
     
-    if (authHeader) {
-      console.log('Auth header found, getting user...');
-      const token = authHeader.replace("Bearer ", "");
-      const { data } = await supabaseClient.auth.getUser(token);
-      user = data.user;
-      console.log('User retrieved:', user?.id);
-    } else {
-      console.log('No auth header - guest checkout');
+    if (authError || !data.user) {
+      console.error('Authentication failed:', authError?.message);
+      throw new Error("Invalid authentication");
     }
+    
+    const user = data.user;
+    console.log('User authenticated:', user.id);
 
     const requestBody = await req.json();
-    console.log('Request body:', requestBody);
-    
     const { amount, currency, formData, tierLabel }: OrderRequest = requestBody;
 
-    console.log('Parsed order data:', { amount, currency, tierLabel });
+    // Input validation
+    if (!amount || amount <= 0) {
+      throw new Error("Invalid amount");
+    }
+    if (!currency || !['INR', 'USD'].includes(currency)) {
+      throw new Error("Invalid currency");
+    }
+    if (!formData?.email || !formData.email.includes('@')) {
+      throw new Error("Invalid email");
+    }
+    if (!formData?.phone || formData.phone.length < 10) {
+      throw new Error("Invalid phone number");
+    }
+    if (!formData?.fullName || formData.fullName.length < 2) {
+      throw new Error("Invalid name");
+    }
+
+    console.log('Order validated for user:', user.id);
 
     // Create Razorpay order
     console.log('Creating Razorpay order...');
@@ -129,7 +147,7 @@ serve(async (req) => {
     );
 
     const orderData = {
-      user_id: user?.id || null,
+      user_id: user.id, // Always set from authenticated user
       razorpay_order_id: razorpayOrder.id,
       amount: amount,
       currency: currency,
@@ -144,7 +162,7 @@ serve(async (req) => {
       tier_label: tierLabel,
     };
 
-    console.log('Inserting order data:', orderData);
+    console.log('Creating order for user:', user.id);
 
     const { error: insertError } = await supabaseService.from("orders").insert(orderData);
 

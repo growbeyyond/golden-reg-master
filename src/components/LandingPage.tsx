@@ -290,7 +290,6 @@ export default function LandingPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted with data:', formData);
     
     // Validate all required fields
     const errors: Record<string, string> = {};

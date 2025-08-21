@@ -221,21 +221,8 @@ export default function LandingPage() {
         theme: { color: "#d4af37" },
         handler: function (response: any) {
           console.log('Payment successful:', response);
-          toast({
-            title: "Payment Successful!",
-            description: `Reference: ${response.razorpay_payment_id}`,
-          });
-          // Reset form
-          setFormData({
-            fullName: '',
-            speciality: '',
-            hospital: '',
-            city: '',
-            email: '',
-            phone: '',
-            notes: '',
-            agree: false
-          });
+          // Redirect to payment success page with Razorpay parameters
+          window.location.href = `/payment-success?razorpay_payment_id=${response.razorpay_payment_id}&razorpay_order_id=${orderData.orderId}&razorpay_signature=${response.razorpay_signature}`;
         },
         modal: {
           ondismiss: function() {

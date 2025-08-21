@@ -361,21 +361,21 @@ export default function LandingPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/60"></div>
           <div className="relative h-full w-full">
             <div 
-              className="absolute inset-0 bg-cover bg-center opacity-[0.18] animate-fade-in"
+              className="absolute inset-0 bg-cover bg-center opacity-[0.05] animate-fade-in"
               style={{
                 backgroundImage: 'url(/lovable-uploads/4e15b33e-2051-4fd3-816a-471c049c5673.png)',
                 animation: 'fade-in 2s ease-in-out infinite alternate'
               }}
             ></div>
             <div 
-              className="absolute inset-0 bg-cover bg-center opacity-[0.15]"
+              className="absolute inset-0 bg-cover bg-center opacity-[0.06]"
               style={{
                 backgroundImage: 'url(/lovable-uploads/c5166b45-c52e-4611-bf05-ea98f46e2dcf.png)',
                 animation: 'fade-in 2s ease-in-out infinite alternate 2s'
               }}
             ></div>
             <div 
-              className="absolute inset-0 bg-cover bg-center opacity-[0.16]"
+              className="absolute inset-0 bg-cover bg-center opacity-[0.05]"
               style={{
                 backgroundImage: 'url(/lovable-uploads/7828459e-35a5-49de-8d9f-ac8fbba6e1fa.png)',
                 animation: 'fade-in 2s ease-in-out infinite alternate 4s'
@@ -404,7 +404,7 @@ export default function LandingPage() {
               style={{ filter: 'drop-shadow(0 0 20px rgba(212, 175, 55, 0.4))' }}
               onClick={() => window.location.href = '/'}
             />
-            <div className="font-playfair italic text-xl md:text-2xl lg:text-3xl text-gold-light text-shadow-lg mt-2">
+            <div className="font-playfair italic text-xl md:text-2xl lg:text-3xl text-gold-light text-shadow-lg -mt-1">
               Anniversary Edition 2025
             </div>
           </div>

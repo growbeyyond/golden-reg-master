@@ -356,21 +356,30 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <section className="relative pt-4 pb-16 backdrop-gold overflow-hidden">
-        {/* Background Image Overlay */}
+        {/* Background Image Carousel Overlay */}
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/60"></div>
-          <div className="grid grid-cols-3 h-full w-full">
+          <div className="relative h-full w-full">
             <div 
-              className="bg-cover bg-center opacity-[0.15]" 
-              style={{backgroundImage: 'url(/lovable-uploads/07095247-9d5e-4433-aa60-1b2377dc2836.png)'}}
+              className="absolute inset-0 bg-cover bg-center opacity-[0.18] animate-fade-in"
+              style={{
+                backgroundImage: 'url(/lovable-uploads/4e15b33e-2051-4fd3-816a-471c049c5673.png)',
+                animation: 'fade-in 2s ease-in-out infinite alternate'
+              }}
             ></div>
             <div 
-              className="bg-cover bg-center opacity-[0.18]" 
-              style={{backgroundImage: 'url(/lovable-uploads/632d5279-ccad-4a29-a60d-cfcea9b52d67.png)'}}
+              className="absolute inset-0 bg-cover bg-center opacity-[0.15]"
+              style={{
+                backgroundImage: 'url(/lovable-uploads/c5166b45-c52e-4611-bf05-ea98f46e2dcf.png)',
+                animation: 'fade-in 2s ease-in-out infinite alternate 2s'
+              }}
             ></div>
             <div 
-              className="bg-cover bg-center opacity-[0.15]" 
-              style={{backgroundImage: 'url(/lovable-uploads/74242f09-0263-419c-bc80-ac7508e05126.png)'}}
+              className="absolute inset-0 bg-cover bg-center opacity-[0.16]"
+              style={{
+                backgroundImage: 'url(/lovable-uploads/7828459e-35a5-49de-8d9f-ac8fbba6e1fa.png)',
+                animation: 'fade-in 2s ease-in-out infinite alternate 4s'
+              }}
             ></div>
           </div>
         </div>
@@ -387,15 +396,15 @@ export default function LandingPage() {
           </div>
           
           {/* Logo at Top */}
-          <div className="flex flex-col md:flex-row items-center justify-center mb-6 gap-2 md:gap-4">
+          <div className="flex flex-col items-center mb-6">
             <img 
               src="/lovable-uploads/4a2d89c1-89fa-4016-9f29-00667be90c01.png" 
               alt="ISTA Media Logo" 
-              className="h-28 md:h-40 w-auto filter drop-shadow-lg cursor-pointer"
+              className="h-40 md:h-52 lg:h-60 w-auto filter drop-shadow-lg cursor-pointer"
               style={{ filter: 'drop-shadow(0 0 20px rgba(212, 175, 55, 0.4))' }}
               onClick={() => window.location.href = '/'}
             />
-            <div className="font-playfair italic text-lg md:text-xl text-gold-light text-shadow-lg">
+            <div className="font-playfair italic text-xl md:text-2xl lg:text-3xl text-gold-light text-shadow-lg mt-2">
               Anniversary Edition 2025
             </div>
           </div>

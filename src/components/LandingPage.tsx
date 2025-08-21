@@ -543,15 +543,64 @@ export default function LandingPage() {
       <section className="section-padding section-bg">
         <div className="mx-auto max-w-4xl px-4">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold gold-glow">Event Agenda</h2>
+            <h2 className="text-3xl font-bold gold-glow">Event Flow</h2>
             <p className="text-muted-foreground">Sunday, 14 September 2025 • JRC Convention, Hyderabad</p>
           </div>
-          <div className="flex justify-center">
-            <img 
-              src="/lovable-uploads/ed70e260-353f-4b3d-9866-3331dc909649" 
-              alt="Event Agenda - Sunday, 14 September 2025" 
-              className="w-full max-w-2xl rounded-lg shadow-lg border border-gold/20"
-            />
+          <div className="space-y-4 max-w-3xl mx-auto">
+            <div className="bg-card/50 rounded-lg p-4 gold-border">
+              <div className="flex justify-between items-center">
+                <span className="font-semibold text-primary">5:00pm – 5:45pm</span>
+                <span className="text-muted-foreground">Registration and check-in for doctors</span>
+              </div>
+            </div>
+            <div className="bg-card/50 rounded-lg p-4 gold-border">
+              <div className="flex justify-between items-center">
+                <span className="font-semibold text-primary">5:45pm – 6:00pm</span>
+                <span className="text-muted-foreground">Welcome and event introduction by the anchor</span>
+              </div>
+            </div>
+            <div className="bg-card/50 rounded-lg p-4 gold-border">
+              <div className="flex justify-between items-center">
+                <span className="font-semibold text-primary">6:00pm – 6:30pm</span>
+                <span className="text-muted-foreground">Doctor's debate session</span>
+              </div>
+            </div>
+            <div className="bg-card/50 rounded-lg p-4 gold-border">
+              <div className="flex justify-between items-center">
+                <span className="font-semibold text-primary">6:30pm – 6:45pm</span>
+                <span className="text-muted-foreground">Cultural activity</span>
+              </div>
+            </div>
+            <div className="bg-card/50 rounded-lg p-4 gold-border">
+              <div className="flex justify-between items-center">
+                <span className="font-semibold text-primary">6:45pm – 7:00pm</span>
+                <span className="text-muted-foreground">Lamp lighting ceremony conducted by the chief guest</span>
+              </div>
+            </div>
+            <div className="bg-card/50 rounded-lg p-4 gold-border">
+              <div className="flex justify-between items-center">
+                <span className="font-semibold text-primary">7:00pm – 7:30pm</span>
+                <span className="text-muted-foreground">Chief guest's welcome note and keynote speech</span>
+              </div>
+            </div>
+            <div className="bg-card/50 rounded-lg p-4 gold-border">
+              <div className="flex justify-between items-center">
+                <span className="font-semibold text-primary">7:30pm – 9:30pm</span>
+                <span className="text-muted-foreground">Awards ceremony</span>
+              </div>
+            </div>
+            <div className="bg-card/50 rounded-lg p-4 gold-border">
+              <div className="flex justify-between items-center">
+                <span className="font-semibold text-primary">9:30pm – 9:45pm</span>
+                <span className="text-muted-foreground">Doctor's sharing their perspectives "Doctor's Bytes"</span>
+              </div>
+            </div>
+            <div className="bg-card/50 rounded-lg p-4 gold-border">
+              <div className="flex justify-between items-center">
+                <span className="font-semibold text-primary">9:45pm – 10:30pm</span>
+                <span className="text-muted-foreground">Dinner • 10:30pm: Closing Ceremony</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>

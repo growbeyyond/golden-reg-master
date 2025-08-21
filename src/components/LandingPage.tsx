@@ -355,8 +355,26 @@ export default function LandingPage() {
     <>
 
       {/* Hero Section */}
-      <section className="pt-4 pb-16 backdrop-gold">
-        <div className="mx-auto max-w-7xl px-4">
+      <section className="relative pt-4 pb-16 backdrop-gold overflow-hidden">
+        {/* Background Image Overlay */}
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/60"></div>
+          <div className="grid grid-cols-3 h-full w-full">
+            <div 
+              className="bg-cover bg-center opacity-[0.15]" 
+              style={{backgroundImage: 'url(/lovable-uploads/07095247-9d5e-4433-aa60-1b2377dc2836.png)'}}
+            ></div>
+            <div 
+              className="bg-cover bg-center opacity-[0.18]" 
+              style={{backgroundImage: 'url(/lovable-uploads/632d5279-ccad-4a29-a60d-cfcea9b52d67.png)'}}
+            ></div>
+            <div 
+              className="bg-cover bg-center opacity-[0.15]" 
+              style={{backgroundImage: 'url(/lovable-uploads/74242f09-0263-419c-bc80-ac7508e05126.png)'}}
+            ></div>
+          </div>
+        </div>
+        <div className="relative z-10 mx-auto max-w-7xl px-4">
           {/* Sign In Button - Top Right */}
           <div className="flex justify-end mb-4">
             <Button 
@@ -369,7 +387,7 @@ export default function LandingPage() {
           </div>
           
           {/* Logo at Top */}
-          <div className="flex flex-col items-center mb-6">
+          <div className="flex flex-col md:flex-row items-center justify-center mb-6 gap-2 md:gap-4">
             <img 
               src="/lovable-uploads/4a2d89c1-89fa-4016-9f29-00667be90c01.png" 
               alt="ISTA Media Logo" 
@@ -377,7 +395,9 @@ export default function LandingPage() {
               style={{ filter: 'drop-shadow(0 0 20px rgba(212, 175, 55, 0.4))' }}
               onClick={() => window.location.href = '/'}
             />
-            <div className="kicker text-center mt-1">Anniversary Edition 2025</div>
+            <div className="font-playfair italic text-lg md:text-xl text-gold-light text-shadow-lg">
+              Anniversary Edition 2025
+            </div>
           </div>
           
            <div className="text-center">

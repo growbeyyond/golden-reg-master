@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from "sonner";
 
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -156,7 +156,6 @@ export default function LandingPage() {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   const [isProcessing, setIsProcessing] = useState(false);
-  const { toast } = useToast();
 
   // Timer update
   useEffect(() => {
@@ -227,11 +226,7 @@ export default function LandingPage() {
         modal: {
           ondismiss: function() {
             console.log('Payment cancelled by user');
-            toast({
-              title: "Payment Cancelled",
-              description: "You can try again anytime.",
-              variant: "destructive",
-            });
+            toast.error("Payment cancelled - You can try again anytime.");
           }
         }
       };
@@ -241,21 +236,13 @@ export default function LandingPage() {
       const rzp = new (window as any).Razorpay(options);
       rzp.on('payment.failed', function (response: any) {
         console.error('Payment failed:', response.error);
-        toast({
-          title: "Payment Failed",
-          description: response.error.description,
-          variant: "destructive",
-        });
+        toast.error(response.error.description || "Payment failed");
       });
       console.log('Opening Razorpay modal...');
       rzp.open();
     } catch (error: any) {
       console.error('Error in payment process:', error);
-      toast({
-        title: "Payment Error",
-        description: error.message || 'Error initializing payment. Please try again.',
-        variant: "destructive",
-      });
+      toast.error(error.message || 'Error initializing payment. Please try again.');
     } finally {
       setIsProcessing(false);
     }
@@ -314,21 +301,13 @@ export default function LandingPage() {
     
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
-      toast({
-        title: "Please fix the errors",
-        description: "Fill all required fields correctly to proceed.",
-        variant: "destructive",
-      });
+      toast.error("Fill all required fields correctly to proceed.");
       console.log('Form validation failed:', errors);
       return;
     }
     
     if (!formData.agree) {
-      toast({
-        title: "Agreement Required",
-        description: "Please agree to the terms and conditions to proceed.",
-        variant: "destructive",
-      });
+      toast.error("Please agree to the terms and conditions to proceed.");
       console.log('Form stopped due to missing agreement');
       return;
     }

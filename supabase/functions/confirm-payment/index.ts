@@ -168,7 +168,7 @@ serve(async (req) => {
       // Send email to customer
       try {
         await resend.emails.send({
-          from: "ISTA Media <noreply@istamedia.com>",
+          from: "onboarding@resend.dev",
           to: [order.email],
           subject: "Payment Confirmation - ISTA Media Event Registration",
           html: invoiceHtml,
@@ -181,8 +181,8 @@ serve(async (req) => {
       // Send notification email to team
       try {
         await resend.emails.send({
-          from: "ISTA Media <noreply@istamedia.com>",
-          to: ["contact@istamedia.com"],
+          from: "onboarding@resend.dev",
+          to: ["admin@yourdomain.com"],
           subject: `New Registration Payment Received - ${order.full_name}`,
           html: `
             <h2>New Payment Received</h2>

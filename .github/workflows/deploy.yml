@@ -48,5 +48,5 @@ jobs:
           protocol: ftps
           local-dir: dist/
           server-dir: ${{ secrets.FTP_DIR }}
-          dangerous-clean-slate: true
+          dangerous-clean-slate: false
           state-name: .ftp-deploy-sync-state.json

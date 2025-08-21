@@ -68,7 +68,7 @@ const DOCTORS = [
     quote: "Through ISTA, I've witnessed doctors rediscover their passion for medicine. The organization doesn't just honor achievements—it honors the heart of healing. Every event reminds us why we chose this noble calling."
   },
   {
-    name: "Dr Manjula",
+    name: "Dr Manjula Anagani",
     image: "/lovable-uploads/ac9f74f5-2c35-4213-a8f7-8b47e00b3b65.png",
     quote: "ISTA's approach to celebrating doctors is refreshingly authentic. They don't just showcase our degrees—they honor our dedication, our sleepless nights, and our unwavering commitment to saving lives."
   },
@@ -78,7 +78,7 @@ const DOCTORS = [
     quote: "ISTA provides a unique platform where medical professionals can connect, share experiences, and celebrate our collective commitment to healthcare excellence and patient care."
   },
   {
-    name: "Dr Rajeswari Hari Chekuri",
+    name: "Dr Rajeswari Reddy",
     image: "/lovable-uploads/c29b9f5f-fffd-4b5d-80b7-d23f6610d686.png",
     quote: "In my years of practice, I've rarely found a platform that truly understands doctors. ISTA bridges the gap between our professional achievements and personal stories, creating a legacy worth preserving."
   },
@@ -355,32 +355,9 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <section className="relative pt-4 pb-16 backdrop-gold overflow-hidden">
-        {/* Background Image Carousel Overlay */}
+        {/* Simple gradient background without images */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-black/75 md:bg-black/65"></div>
-          <div className="relative h-full w-full">
-            <div 
-              className="absolute inset-0 bg-cover bg-center opacity-[0.02] animate-fade-in"
-              style={{
-                backgroundImage: 'url(/lovable-uploads/4e15b33e-2051-4fd3-816a-471c049c5673.png)',
-                animation: 'fade-in 2s ease-in-out infinite alternate'
-              }}
-            ></div>
-            <div 
-              className="absolute inset-0 bg-cover bg-center opacity-[0.03]"
-              style={{
-                backgroundImage: 'url(/lovable-uploads/c5166b45-c52e-4611-bf05-ea98f46e2dcf.png)',
-                animation: 'fade-in 2s ease-in-out infinite alternate 2s'
-              }}
-            ></div>
-            <div 
-              className="absolute inset-0 bg-cover bg-center opacity-[0.02]"
-              style={{
-                backgroundImage: 'url(/lovable-uploads/7828459e-35a5-49de-8d9f-ac8fbba6e1fa.png)',
-                animation: 'fade-in 2s ease-in-out infinite alternate 4s'
-              }}
-            ></div>
-          </div>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black/60"></div>
         </div>
         <div className="relative z-10 mx-auto max-w-7xl px-4">
           {/* Sign In Button - Top Right */}
@@ -603,25 +580,12 @@ export default function LandingPage() {
             <h2 className="text-3xl font-bold gold-glow">Event Agenda</h2>
             <p className="text-muted-foreground">Sunday, 14 September 2025 • JRC Convention, Hyderabad</p>
           </div>
-          <div className="space-y-4">
-            {[
-              { time: "6:00 – 6:45 PM", event: "Registration & Networking", desc: "Welcome reception and professional mingling" },
-              { time: "6:45 – 7:00 PM", event: "Opening & Welcome Address", desc: "Official ceremony commencement" },
-              { time: "7:00 – 8:00 PM", event: "Recognitions & Felicitations", desc: "Honoring distinguished medical professionals" },
-              { time: "8:00 – 8:45 PM", event: "Cultural Performances", desc: "Entertainment and celebration activities" },
-              { time: "8:45 – 9:15 PM", event: "Awards & Appreciation", desc: "Special recognitions and souvenir presentation" },
-              { time: "9:15 – 9:30 PM", event: "Closing & Group Photography", desc: "Final remarks and memorable moments" }
-            ].map((item, idx) => (
-              <Card key={idx} className="gold-border bg-card/50">
-                <CardContent className="p-4 flex gap-4">
-                  <div className="text-primary font-semibold text-sm min-w-fit">{item.time}</div>
-                  <div className="flex-1">
-                    <div className="font-semibold">{item.event}</div>
-                    <div className="text-sm text-muted-foreground">{item.desc}</div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+          <div className="flex justify-center">
+            <img 
+              src="/lovable-uploads/ed70e260-353f-4b3d-9866-3331dc909649" 
+              alt="Event Agenda - Sunday, 14 September 2025" 
+              className="w-full max-w-2xl rounded-lg shadow-lg border border-gold/20"
+            />
           </div>
         </div>
       </section>
@@ -1066,8 +1030,8 @@ export default function LandingPage() {
                   <a href="tel:+919948999001" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                     📞 <span>+91 9948999001</span>
                   </a>
-                  <a href="mailto:istadigitalmedia@gmail.com" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                    📧 <span>istadigitalmedia@gmail.com</span>
+                  <a href="mailto:contact@istamedia.com" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                    📧 <span>contact@istamedia.com</span>
                   </a>
                   <button onClick={openWhatsApp} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                     💬 <span>Chat on WhatsApp</span>
@@ -1090,7 +1054,7 @@ export default function LandingPage() {
             <div>
               <div className="font-semibold text-primary">Contact Us</div>
               <div className="text-sm text-muted-foreground mt-2 space-y-1">
-                <a href="mailto:istadigitalmedia@gmail.com" className="flex items-center gap-1 hover:text-primary transition-colors">📧 istadigitalmedia@gmail.com</a>
+                <a href="mailto:contact@istamedia.com" className="flex items-center gap-1 hover:text-primary transition-colors">📧 contact@istamedia.com</a>
                 <a href="tel:+919948999001" className="flex items-center gap-1 hover:text-primary transition-colors">📞 +91 9948999001</a>
                 <button onClick={openWhatsApp} className="flex items-center gap-1 hover:text-primary transition-colors text-left">💬 WhatsApp support available</button>
               </div>

@@ -5,6 +5,10 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: true
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -22,6 +26,17 @@ jobs:
         run: |
           npm ci
           npm run build
+
+      - name: Add SPA .htaccess to dist
+        run: |
+          cat > dist/.htaccess << 'EOF'
+          RewriteEngine On
+          RewriteBase /
+          RewriteRule ^index\.html$ - [L]
+          RewriteCond %{REQUEST_FILENAME} !-f
+          RewriteCond %{REQUEST_FILENAME} !-d
+          RewriteRule . /index.html [L]
+          EOF
 
       - name: Upload dist/ via FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4

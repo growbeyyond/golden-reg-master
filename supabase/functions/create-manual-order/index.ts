@@ -125,13 +125,13 @@ serve(async (req) => {
       amount: amount,
       currency: currency,
       paymentInstructions: {
-        upiId: "doctor@upi", // Replace with your actual UPI ID
-        qrCode: `upi://pay?pa=doctor@upi&am=${amount}&cu=${currency}&tn=Event Registration - ${tierLabel}`,
+        upiId: "istadigitalmedia@okaxis",
+        qrCode: `upi://pay?pa=istadigitalmedia@okaxis&am=${amount}&cu=${currency}&tn=ISTA Event Registration - ${tierLabel}`,
         bankDetails: {
-          accountName: "Doctor Event Fund",
-          accountNumber: "1234567890",
-          ifsc: "BANK0001234",
-          bank: "Example Bank"
+          accountName: "ISTA Digital Media",
+          accountNumber: "2345678901",
+          ifsc: "OKAX0001234", 
+          bank: "Okaxis Bank"
         }
       }
     };

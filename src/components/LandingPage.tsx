@@ -115,11 +115,19 @@ const formatTime = (ms: number): string => {
   return `${String(days).padStart(2, "0")}:${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 };
 
+const calculateAmountWithGST = (baseAmount: number) => {
+  const gst = Math.round(baseAmount * 0.18);
+  return baseAmount + gst;
+};
+
 const getActiveTier = (ts = Date.now()): TierInfo => {
-  if (ts <= DEADLINES.early) return { label: "Early Bird", amount: 5000, until: DEADLINES.early };
-  if (ts <= DEADLINES.std) return { label: "Standard", amount: 10000, until: DEADLINES.std };
-  if (ts <= DEADLINES.last) return { label: "Last Chance", amount: 15000, until: DEADLINES.last };
-  return { label: "Final/On-spot", amount: 15000, until: null };
+  const baseAmount = 5000; // Fixed base amount as requested
+  const totalAmount = calculateAmountWithGST(baseAmount);
+  
+  if (ts <= DEADLINES.early) return { label: "Early Bird", amount: totalAmount, until: DEADLINES.early };
+  if (ts <= DEADLINES.std) return { label: "Standard", amount: totalAmount, until: DEADLINES.std };
+  if (ts <= DEADLINES.last) return { label: "Last Chance", amount: totalAmount, until: DEADLINES.last };
+  return { label: "Final/On-spot", amount: totalAmount, until: null };
 };
 
 const openWhatsApp = () => {

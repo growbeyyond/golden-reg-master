@@ -68,13 +68,13 @@ const PaymentInstructions = () => {
         
         // Set payment instructions
         setPaymentInstructions({
-          upiId: "doctor@upi",
-          qrCode: `upi://pay?pa=doctor@upi&am=${amount}&cu=${currency}&tn=Event Registration - ${orderData.tier_label}`,
+          upiId: "istadigitalmedia@okaxis",
+          qrCode: `upi://pay?pa=istadigitalmedia@okaxis&am=${amount}&cu=${currency}&tn=ISTA Event Registration - ${orderData.tier_label}`,
           bankDetails: {
-            accountName: "Doctor Event Fund",
-            accountNumber: "1234567890",
-            ifsc: "BANK0001234",
-            bank: "Example Bank"
+            accountName: "ISTA Digital Media",
+            accountNumber: "2345678901",
+            ifsc: "OKAX0001234",
+            bank: "Okaxis Bank"
           }
         });
       } catch (error) {
@@ -183,7 +183,10 @@ const PaymentInstructions = () => {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Amount</p>
-                <p className="text-2xl font-bold text-primary">₹{order.amount}</p>
+                <div>
+                  <p className="text-2xl font-bold text-primary">₹{order.amount}</p>
+                  <p className="text-xs text-muted-foreground">₹5000 + ₹900 GST (18%)</p>
+                </div>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Order ID</p>
@@ -219,12 +222,14 @@ const PaymentInstructions = () => {
             <div className="text-center">
               <p className="text-sm text-muted-foreground mb-2">Scan QR code with any UPI app</p>
               <div className="bg-white p-4 rounded-lg inline-block">
-                <div className="w-32 h-32 bg-muted flex items-center justify-center rounded-lg">
-                  <QrCode className="h-16 w-16 text-muted-foreground" />
-                </div>
+                <img 
+                  src="/lovable-uploads/c0cb2aeb-779b-402c-9b34-478507e45c16.png" 
+                  alt="UPI QR Code - istadigitalmedia@okaxis" 
+                  className="w-48 h-48 object-contain"
+                />
               </div>
               <p className="text-xs text-muted-foreground mt-2">
-                Amount: ₹{amount} • {order.tier_label}
+                Amount: ₹{amount} (₹5000 + ₹900 GST) • {order.tier_label}
               </p>
             </div>
           </CardContent>
@@ -296,11 +301,11 @@ const PaymentInstructions = () => {
               <div className="flex justify-center items-center gap-4">
                 <div className="flex items-center gap-2">
                   <Phone className="h-4 w-4" />
-                  <span>+91 9876543210</span>
+                  <span>+91 9948999001</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Mail className="h-4 w-4" />
-                  <span>support@doctorevent.com</span>
+                  <span>support@istadigitalmedia.com</span>
                 </div>
               </div>
             </div>

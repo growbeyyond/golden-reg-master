@@ -21,7 +21,7 @@ interface CustomerDetails {
   orderNumber: string;
 }
 
-interface PaymentInstructions {
+interface PaymentMethods {
   upiId: string;
   qrCode: string;
   bankDetails: {
@@ -36,7 +36,7 @@ const PaymentInstructions = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [customerDetails, setCustomerDetails] = useState<CustomerDetails | null>(null);
-  const [paymentInstructions, setPaymentInstructions] = useState<PaymentInstructions | null>(null);
+  const [paymentInstructions, setPaymentInstructions] = useState<PaymentMethods | null>(null);
   const [loading, setLoading] = useState(true);
   const [copiedField, setCopiedField] = useState<string | null>(null);
   const [uploadingProof, setUploadingProof] = useState(false);
@@ -71,7 +71,7 @@ const PaymentInstructions = () => {
           accountName: "ISTA DIGITAL MEDIA",
           accountNumber: "50200097383107",
           ifsc: "HDFC0009377",
-          bank: "HDFC Bank"
+          bank: "HDFC"
         }
       });
 

@@ -89,19 +89,28 @@ serve(async (req) => {
         
         const confirmationMessage = `✅ *PAYMENT CONFIRMED* ✅
 
-👤 *Name:* ${order.full_name}
-📧 *Email:* ${order.email}
-📱 *Phone:* ${order.phone}
-🏥 *Hospital:* ${order.hospital}
-💰 *Amount:* ₹${order.amount}
-🎫 *Tier:* ${order.tier_label}
-🆔 *Order ID:* ${orderId}
-🎟️ *Ticket QR:* ${qrCode}
+🎉 *Order Details:*
+• Order ID: ${order.id}
+• Name: ${order.full_name}
+• Email: ${order.email}
+• Phone: ${order.phone}
+• Speciality: ${order.speciality}
+• Hospital: ${order.hospital}
+• City: ${order.city}
 
-*Payment Status:* VERIFIED ✅
-*Time:* ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}
+💰 *Payment Summary:*
+• Tier: ${order.tier_label}
+• Base Amount: ₹${Math.round(order.amount / 1.18).toLocaleString('en-IN')}
+• GST (18%): ₹${Math.round(order.amount - (order.amount / 1.18)).toLocaleString('en-IN')}
+• *Total Paid: ₹${order.amount.toLocaleString('en-IN')}*
 
-Customer is now registered for the event!`;
+🎟️ *Ticket Details:*
+• Ticket ID: ${ticket.id}
+• QR Code: ${qrCode}
+• Generated: ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })} IST
+
+✅ Registration completed successfully! 
+Customer can now use their QR code for event entry.`;
 
         // Send to both team numbers
         for (const phoneNumber of teamNumbers) {

@@ -115,19 +115,13 @@ const formatTime = (ms: number): string => {
   return `${String(days).padStart(2, "0")}:${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 };
 
-const calculateAmountWithGST = (baseAmount: number) => {
-  const gst = Math.round(baseAmount * 0.18);
-  return baseAmount + gst;
-};
-
 const getActiveTier = (ts = Date.now()): TierInfo => {
-  const baseAmount = 5000; // Fixed base amount as requested
-  const totalAmount = calculateAmountWithGST(baseAmount);
+  const baseAmount = 5000; // Base amount without GST
   
-  if (ts <= DEADLINES.early) return { label: "Early Bird", amount: totalAmount, until: DEADLINES.early };
-  if (ts <= DEADLINES.std) return { label: "Standard", amount: totalAmount, until: DEADLINES.std };
-  if (ts <= DEADLINES.last) return { label: "Last Chance", amount: totalAmount, until: DEADLINES.last };
-  return { label: "Final/On-spot", amount: totalAmount, until: null };
+  if (ts <= DEADLINES.early) return { label: "Early Bird", amount: baseAmount, until: DEADLINES.early };
+  if (ts <= DEADLINES.std) return { label: "Standard", amount: baseAmount, until: DEADLINES.std };
+  if (ts <= DEADLINES.last) return { label: "Last Chance", amount: baseAmount, until: DEADLINES.last };
+  return { label: "Final/On-spot", amount: baseAmount, until: null };
 };
 
 const openWhatsApp = () => {
@@ -180,7 +174,7 @@ export default function LandingPage() {
     
     try {
       console.log('Invoking create-manual-order with data:', {
-        amount: tier.amount,
+        baseAmount: tier.amount, // Send base amount to server
         currency: "INR",
         formData,
         tierLabel: tier.label,
@@ -189,7 +183,7 @@ export default function LandingPage() {
       // Create order on server
       const { data: orderData, error } = await supabase.functions.invoke('create-manual-order', {
         body: {
-          amount: tier.amount,
+          baseAmount: tier.amount, // Send base amount, server will calculate GST
           currency: "INR",
           formData,
           tierLabel: tier.label,
@@ -214,7 +208,9 @@ export default function LandingPage() {
       const params = new URLSearchParams({
         orderId: orderData.orderId,
         orderNumber: orderData.orderNumber,
-        amount: orderData.amount.toString(),
+        amount: orderData.totalAmount.toString(), // Use total amount from server
+        baseAmount: orderData.baseAmount.toString(), // Pass base amount for breakdown
+        gstAmount: orderData.gstAmount.toString(), // Pass GST amount for breakdown
         currency: orderData.currency
       });
       
@@ -642,7 +638,7 @@ export default function LandingPage() {
             <div className="text-sm">
               <div>🎟️ Current Tier: <span className="gold font-semibold">{tier.label}</span></div>
               <div>
-                Price: <span className="gold font-semibold">₹{tier.amount.toLocaleString('en-IN')}</span> • 
+                Price: <span className="gold font-semibold">₹{tier.amount.toLocaleString('en-IN')}</span> <span className="text-xs text-muted-foreground">+ GST</span> • 
                 {tier.until ? (
                   <>Ends in <span className="gold font-semibold">{formatTime(tier.until - Date.now())}</span> <span className="text-xs">(Days:Hours:Minutes:Seconds IST)</span></>
                 ) : (
@@ -771,7 +767,7 @@ export default function LandingPage() {
                     className="gold-gradient text-primary-foreground w-full"
                     disabled={isProcessing}
                   >
-                    {isProcessing ? 'Processing...' : `Proceed to Payment (₹${tier.amount.toLocaleString('en-IN')})`}
+                    {isProcessing ? 'Processing...' : `Proceed to Payment (₹${tier.amount.toLocaleString('en-IN')} + GST)`}
                   </Button>
                 </form>
               </CardContent>
@@ -1073,7 +1069,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-7xl px-4 py-3">
           <div className="flex items-center justify-between gap-4 flex-col sm:flex-row">
             <div className="text-sm">
-              <div>🎟️ <span className="gold font-semibold">{tier.label}</span> — ₹{tier.amount.toLocaleString('en-IN')}</div>
+              <div>🎟️ <span className="gold font-semibold">{tier.label}</span> — ₹{tier.amount.toLocaleString('en-IN')} <span className="text-xs text-muted-foreground">+ GST</span></div>
               <div className="text-xs text-muted-foreground">
                 {tier.until ? (
                   <>Ends in <span className="gold font-semibold">{formatTime(tier.until - Date.now())}</span> <span className="text-xs">(Days:Hours:Minutes:Seconds IST)</span></>

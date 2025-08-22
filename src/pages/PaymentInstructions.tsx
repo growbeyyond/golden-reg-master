@@ -41,6 +41,8 @@ const PaymentInstructions = () => {
   const orderId = searchParams.get('orderId');
   const orderNumber = searchParams.get('orderNumber');
   const amount = searchParams.get('amount');
+  const baseAmount = searchParams.get('baseAmount');
+  const gstAmount = searchParams.get('gstAmount');
   const currency = searchParams.get('currency');
 
   useEffect(() => {
@@ -185,7 +187,11 @@ const PaymentInstructions = () => {
                 <p className="text-sm text-muted-foreground">Amount</p>
                 <div>
                   <p className="text-2xl font-bold text-primary">₹{order.amount}</p>
-                  <p className="text-xs text-muted-foreground">₹5000 + ₹900 GST (18%)</p>
+                  {baseAmount && gstAmount ? (
+                    <p className="text-xs text-muted-foreground">₹{baseAmount} + ₹{gstAmount} GST (18%)</p>
+                  ) : (
+                    <p className="text-xs text-muted-foreground">₹5000 + ₹900 GST (18%)</p>
+                  )}
                 </div>
               </div>
               <div>
@@ -229,7 +235,7 @@ const PaymentInstructions = () => {
                 />
               </div>
               <p className="text-xs text-muted-foreground mt-2">
-                Amount: ₹{amount} (₹5000 + ₹900 GST) • {order.tier_label}
+                Amount: ₹{amount} {baseAmount && gstAmount ? `(₹${baseAmount} + ₹${gstAmount} GST)` : '(₹5000 + ₹900 GST)'} • {order.tier_label}
               </p>
             </div>
           </CardContent>

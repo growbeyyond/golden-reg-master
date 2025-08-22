@@ -7,7 +7,7 @@ const corsHeaders = {
 };
 
 interface OrderRequest {
-  amount: number;
+  baseAmount: number; // Changed from 'amount' to 'baseAmount'
   currency: string;
   formData: {
     fullName: string;
@@ -55,10 +55,18 @@ serve(async (req) => {
     }
 
     const requestBody = await req.json();
-    const { amount, currency, formData, tierLabel }: OrderRequest = requestBody;
+    const { baseAmount, currency, formData, tierLabel }: OrderRequest = requestBody;
+
+    console.log('Received order request:', { baseAmount, currency, formData, tierLabel });
+    
+    // Calculate GST and total amount on server
+    const gstAmount = Math.round(baseAmount * 0.18);
+    const totalAmount = baseAmount + gstAmount;
+    
+    console.log('Amount calculation:', { baseAmount, gstAmount, totalAmount });
 
     // Input validation
-    if (!amount || amount <= 0) {
+    if (!baseAmount || baseAmount <= 0) {
       throw new Error("Invalid amount");
     }
     if (!currency || !['INR', 'USD'].includes(currency)) {
@@ -89,7 +97,7 @@ serve(async (req) => {
 
     const orderData = {
       user_id: user?.id || null,
-      amount: amount,
+      amount: totalAmount, // Store total amount including GST
       currency: currency,
       status: "pending_payment",
       full_name: formData.fullName,
@@ -125,22 +133,26 @@ serve(async (req) => {
         
         const orderMessage = `🏥 *NEW EVENT REGISTRATION* 🏥
 
-👤 *Name:* ${formData.fullName}
-📧 *Email:* ${formData.email}
-📱 *Phone:* ${formData.phone}
-🏥 *Hospital:* ${formData.hospital}
-🌍 *City:* ${formData.city}
-⚡ *Speciality:* ${formData.speciality}
-💰 *Amount:* ₹${amount}
-🎫 *Tier:* ${tierLabel}
-🆔 *Order ID:* ${order.id}
+📝 *Order Details:*
+• Order ID: ${order.id}
+• Name: ${formData.fullName}
+• Email: ${formData.email}
+• Phone: ${formData.phone}
+• Speciality: ${formData.speciality}
+• Hospital: ${formData.hospital}
+• City: ${formData.city}
 
-📝 *Notes:* ${formData.notes || 'None'}
+💰 *Payment Details:*
+• Tier: ${tierLabel}
+• Base Amount: ₹${baseAmount.toLocaleString('en-IN')}
+• GST (18%): ₹${gstAmount.toLocaleString('en-IN')}
+• *Total Amount: ₹${totalAmount.toLocaleString('en-IN')}*
+• Currency: ${currency}
+• Status: Pending Payment
 
-*Status:* Payment Pending
-*Time:* ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}
+📅 *Registration Time:* ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })} IST
 
-Please follow up for payment confirmation.`;
+Please verify the payment and update the order status accordingly.`;
 
         // Send to both team numbers
         for (const phoneNumber of teamNumbers) {
@@ -167,11 +179,13 @@ Please follow up for payment confirmation.`;
     const responseData = {
       orderId: order.id,
       orderNumber: orderId,
-      amount: amount,
+      totalAmount: totalAmount, // Total amount including GST
+      baseAmount: baseAmount, // Base amount without GST
+      gstAmount: gstAmount, // GST amount
       currency: currency,
       paymentInstructions: {
         upiId: "istadigitalmedia@okaxis",
-        qrCode: `upi://pay?pa=istadigitalmedia@okaxis&am=${amount}&cu=${currency}&tn=ISTA Event Registration - ${tierLabel}`,
+        qrCode: `upi://pay?pa=istadigitalmedia@okaxis&am=${totalAmount}&cu=${currency}&tn=ISTA Event Registration - ${tierLabel}`,
         bankDetails: {
           accountName: "ISTA Digital Media",
           accountNumber: "2345678901",

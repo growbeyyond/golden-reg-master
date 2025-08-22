@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle, Download, Loader2, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
+import { openWhatsAppWithMessage, getWhatsAppUrl, getWhatsAppNumber } from '@/lib/whatsapp';
 
 interface Order {
   id: string;
@@ -177,10 +178,7 @@ Personal Details:
 
 Thank you for confirming my registration! Looking forward to the event.`;
 
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/919948999001?text=${encodedMessage}`;
-    
-    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+    openWhatsAppWithMessage(message);
   };
 
   if (loading) {
@@ -293,7 +291,7 @@ Thank you for confirming my registration! Looking forward to the event.`;
 
         <div className="mt-6 text-center text-sm text-gray-600">
           <p>A confirmation email has been sent to {order.email}</p>
-          <p>For any queries, contact us on WhatsApp: <a href="https://wa.me/919948999001" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">+91 9948999001</a> or email: contact@istamedia.com</p>
+          <p>For any queries, contact us on WhatsApp: <a href={getWhatsAppUrl()} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{getWhatsAppNumber()}</a> or email: contact@istamedia.com</p>
         </div>
       </div>
     </div>

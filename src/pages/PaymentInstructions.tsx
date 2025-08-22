@@ -5,6 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Copy, Check, QrCode, CreditCard, Building2, User, Phone, Mail, ArrowLeft, Upload, MessageCircle } from "lucide-react";
+import { openWhatsAppWithMessage, getWhatsAppUrl, getWhatsAppNumber } from '@/lib/whatsapp';
 
 interface CustomerDetails {
   name: string;
@@ -141,10 +142,7 @@ I will share the payment screenshot shortly. Please verify my payment and confir
 
 Thank you!`;
 
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/919948999001?text=${encodedMessage}`;
-    
-    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+    openWhatsAppWithMessage(message);
   };
 
   if (loading) {
@@ -424,12 +422,12 @@ Thank you!`;
                 asChild
               >
                 <a
-                  href="https://wa.me/919948999001?text=Hi%2C%20I%20need%20help%20with%20my%20payment%20for%20ISTA%20Media%20event%20registration."
+                  href={getWhatsAppUrl("Hi, I need help with my payment for ISTA Media event registration.")}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   <MessageCircle className="w-4 h-4 mr-2" />
-                  Chat with us on WhatsApp (+91 9948999001)
+                  Chat with us on WhatsApp ({getWhatsAppNumber()})
                 </a>
               </Button>
               <div className="flex items-center gap-2 text-muted-foreground">

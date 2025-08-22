@@ -8,6 +8,7 @@ import { Textarea } from './ui/textarea';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { MessageCircle } from 'lucide-react';
+import { openWhatsAppWithMessage, openWhatsApp } from '@/lib/whatsapp';
 
 // Types and Config
 interface TierInfo {
@@ -15,8 +16,6 @@ interface TierInfo {
   amount: number;
   until: number | null;
 }
-
-const WHATSAPP_NUMBER = "919948999001"; // No + for wa.me links
 
 const DEADLINES = {
   early: Date.parse("2025-08-31T18:29:59Z"), // 23:59:59 IST
@@ -125,14 +124,6 @@ const getActiveTier = (ts = Date.now()): TierInfo => {
   return { label: "Final/On-spot", amount: baseAmount, until: null };
 };
 
-const openWhatsApp = () => {
-  window.open(`https://wa.me/${WHATSAPP_NUMBER}`, "_blank");
-};
-
-const openWhatsAppWithMessage = (message: string) => {
-  const encodedMessage = encodeURIComponent(message);
-  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`, "_blank");
-};
 
 const scrollToRegister = () => {
   const element = document.getElementById('register');

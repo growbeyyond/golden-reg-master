@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Copy, Check, QrCode, CreditCard, Building2, User, Phone, Mail, ArrowLeft, Upload } from "lucide-react";
+import { Copy, Check, QrCode, CreditCard, Building2, User, Phone, Mail, ArrowLeft, Upload, MessageCircle } from "lucide-react";
 
 interface CustomerDetails {
   name: string;
@@ -122,6 +122,29 @@ const PaymentInstructions = () => {
     } finally {
       setUploadingProof(false);
     }
+  };
+
+  const sendWhatsAppPaymentDetails = () => {
+    if (!customerDetails) return;
+    
+    const message = `Hi! I have completed the payment for my ISTA Media event registration.
+
+Order Details:
+📋 Order Number: ${customerDetails.orderNumber}
+👤 Name: ${customerDetails.name}
+📧 Email: ${customerDetails.email}
+📱 Phone: ${customerDetails.phone}
+🎟️ Tier: ${customerDetails.tierLabel}
+💰 Amount Paid: ₹${customerDetails.totalAmount.toLocaleString()} (including GST)
+
+I will share the payment screenshot shortly. Please verify my payment and confirm my registration.
+
+Thank you!`;
+
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/919948999001?text=${encodedMessage}`;
+    
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
   };
 
   if (loading) {
@@ -353,20 +376,30 @@ const PaymentInstructions = () => {
                 Payment Confirmation
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
               <p className="text-muted-foreground mb-4">
-                After making the payment, click the button below to submit your payment for verification. 
-                We'll contact you once the payment is verified.
+                After making the payment, you can either send us the details via WhatsApp or submit for manual verification.
               </p>
               
+              {/* WhatsApp Button - Primary Option */}
+              <Button 
+                onClick={sendWhatsAppPaymentDetails}
+                className="w-full"
+              >
+                <MessageCircle className="w-4 h-4 mr-2" />
+                Send payment details via WhatsApp
+              </Button>
+
+              {/* Manual Verification Button - Secondary Option */}
               <Button 
                 onClick={handlePaymentProofSubmit}
                 disabled={uploadingProof}
+                variant="outline"
                 className="w-full"
               >
                 {uploadingProof ? (
                   <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current mr-2"></div>
                     Submitting...
                   </>
                 ) : (
@@ -384,12 +417,22 @@ const PaymentInstructions = () => {
             <CardHeader>
               <CardTitle>Need Help?</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4" />
-                <span>+91 9876543210</span>
-              </div>
-              <div className="flex items-center gap-2">
+            <CardContent className="space-y-3">
+              <Button
+                variant="outline"
+                className="w-full justify-start"
+                asChild
+              >
+                <a
+                  href="https://wa.me/919948999001?text=Hi%2C%20I%20need%20help%20with%20my%20payment%20for%20ISTA%20Media%20event%20registration."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <MessageCircle className="w-4 h-4 mr-2" />
+                  Chat with us on WhatsApp (+91 9948999001)
+                </a>
+              </Button>
+              <div className="flex items-center gap-2 text-muted-foreground">
                 <Mail className="w-4 h-4" />
                 <span>contact@istamedia.com</span>
               </div>

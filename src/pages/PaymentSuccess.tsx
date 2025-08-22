@@ -4,7 +4,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle, Download, Loader2 } from "lucide-react";
+import { CheckCircle, Download, Loader2, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 
 interface Order {
@@ -160,6 +160,29 @@ const PaymentSuccess = () => {
     toast.success("Invoice downloaded successfully!");
   };
 
+  const sharePaymentConfirmation = () => {
+    if (!order) return;
+    
+    const message = `🎉 Great news! My payment has been successfully processed for ISTA Media event registration.
+
+Payment Confirmation:
+💳 Payment ID: ${order.razorpay_payment_id}
+🎟️ Registration: ${order.tier_label || 'Standard'} Tier  
+💰 Amount: ${order.currency} ${order.amount}
+
+Personal Details:
+👤 Name: ${order.full_name}
+📧 Email: ${order.email}
+📱 Phone: ${order.phone}
+
+Thank you for confirming my registration! Looking forward to the event.`;
+
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/919948999001?text=${encodedMessage}`;
+    
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -246,6 +269,13 @@ const PaymentSuccess = () => {
 
         <div className="flex flex-col sm:flex-row gap-4">
           <Button 
+            onClick={sharePaymentConfirmation}
+            className="flex items-center gap-2"
+          >
+            <MessageCircle className="w-4 h-4" />
+            Share confirmation via WhatsApp
+          </Button>
+          <Button 
             onClick={downloadInvoice}
             className="flex items-center gap-2"
             variant="outline"
@@ -255,7 +285,7 @@ const PaymentSuccess = () => {
           </Button>
           <Button 
             onClick={() => navigate("/")}
-            className="flex-1"
+            variant="outline"
           >
             Return to Home
           </Button>
@@ -263,7 +293,7 @@ const PaymentSuccess = () => {
 
         <div className="mt-6 text-center text-sm text-gray-600">
           <p>A confirmation email has been sent to {order.email}</p>
-          <p>For any queries, contact us at contact@istamedia.com</p>
+          <p>For any queries, contact us on WhatsApp: <a href="https://wa.me/919948999001" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">+91 9948999001</a> or email: contact@istamedia.com</p>
         </div>
       </div>
     </div>

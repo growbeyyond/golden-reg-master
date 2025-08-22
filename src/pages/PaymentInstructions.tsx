@@ -65,12 +65,12 @@ const PaymentInstructions = () => {
       
       // Set payment instructions
       setPaymentInstructions({
-        upiId: "istamedia@ybl",
-        qrCode: "/lovable-uploads/632d5279-ccad-4a29-a60d-cfcea9b52d67.png",
+        upiId: "istadigitalmedia@okaxis",
+        qrCode: "/lovable-uploads/3d7301ed-d85b-4d57-933d-52cc9642c413.png",
         bankDetails: {
-          accountName: "ISTA DIGITAL MEDIA PRIVATE LIMITED",
-          accountNumber: "50200084767896",
-          ifsc: "HDFC0000019",
+          accountName: "ISTA DIGITAL MEDIA",
+          accountNumber: "50200097383107",
+          ifsc: "HDFC0009377",
           bank: "HDFC Bank"
         }
       });
@@ -391,7 +391,7 @@ const PaymentInstructions = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4" />
-                <span>support@istamedia.in</span>
+                <span>contact@istamedia.com</span>
               </div>
             </CardContent>
           </Card>

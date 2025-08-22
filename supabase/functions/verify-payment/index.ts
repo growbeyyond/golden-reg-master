@@ -82,6 +82,47 @@ serve(async (req) => {
 
     console.log('Payment verified and ticket created:', ticket.id);
 
+    // Send WhatsApp confirmation to team numbers (background task)
+    const sendPaymentConfirmation = async () => {
+      try {
+        const teamNumbers = ["919948999001", "919876543210"];
+        
+        const confirmationMessage = `✅ *PAYMENT CONFIRMED* ✅
+
+👤 *Name:* ${order.full_name}
+📧 *Email:* ${order.email}
+📱 *Phone:* ${order.phone}
+🏥 *Hospital:* ${order.hospital}
+💰 *Amount:* ₹${order.amount}
+🎫 *Tier:* ${order.tier_label}
+🆔 *Order ID:* ${orderId}
+🎟️ *Ticket QR:* ${qrCode}
+
+*Payment Status:* VERIFIED ✅
+*Time:* ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}
+
+Customer is now registered for the event!`;
+
+        // Send to both team numbers
+        for (const phoneNumber of teamNumbers) {
+          await supabaseService.functions.invoke('send-whatsapp-notification', {
+            body: {
+              to: phoneNumber,
+              message: confirmationMessage,
+              type: 'team'
+            }
+          });
+        }
+
+        console.log('Payment confirmation sent to team numbers');
+      } catch (error) {
+        console.error('Error sending payment confirmation:', error);
+      }
+    };
+
+    // Send confirmation in background
+    sendPaymentConfirmation();
+
     return new Response(
       JSON.stringify({
         success: true,

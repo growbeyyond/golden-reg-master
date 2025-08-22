@@ -118,6 +118,51 @@ serve(async (req) => {
 
     console.log('Order created successfully:', order.id);
 
+    // Send WhatsApp notifications to team numbers (background task)
+    const sendWhatsAppNotifications = async () => {
+      try {
+        const teamNumbers = ["919948999001", "919876543210"]; // Add your 2 team numbers
+        
+        const orderMessage = `🏥 *NEW EVENT REGISTRATION* 🏥
+
+👤 *Name:* ${formData.fullName}
+📧 *Email:* ${formData.email}
+📱 *Phone:* ${formData.phone}
+🏥 *Hospital:* ${formData.hospital}
+🌍 *City:* ${formData.city}
+⚡ *Speciality:* ${formData.speciality}
+💰 *Amount:* ₹${amount}
+🎫 *Tier:* ${tierLabel}
+🆔 *Order ID:* ${order.id}
+
+📝 *Notes:* ${formData.notes || 'None'}
+
+*Status:* Payment Pending
+*Time:* ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}
+
+Please follow up for payment confirmation.`;
+
+        // Send to both team numbers
+        for (const phoneNumber of teamNumbers) {
+          await supabaseService.functions.invoke('send-whatsapp-notification', {
+            body: {
+              to: phoneNumber,
+              message: orderMessage,
+              type: 'team'
+            }
+          });
+        }
+
+        console.log('WhatsApp notifications sent to team numbers');
+      } catch (error) {
+        console.error('Error sending WhatsApp notifications:', error);
+        // Don't throw error as this is background task
+      }
+    };
+
+    // Send notifications in background (don't wait for completion)
+    sendWhatsAppNotifications();
+
     // Return payment instructions
     const responseData = {
       orderId: order.id,

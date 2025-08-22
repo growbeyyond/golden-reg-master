@@ -121,7 +121,7 @@ serve(async (req) => {
     // Send WhatsApp notifications to team numbers (background task)
     const sendWhatsAppNotifications = async () => {
       try {
-        const teamNumbers = ["919948999001", "919876543210"]; // Add your 2 team numbers
+        const teamNumbers = ["919948999001", "8886435551"]; // Add your 2 team numbers
         
         const orderMessage = `🏥 *NEW EVENT REGISTRATION* 🏥
 

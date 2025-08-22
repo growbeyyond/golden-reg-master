@@ -85,7 +85,7 @@ serve(async (req) => {
     // Send WhatsApp confirmation to team numbers (background task)
     const sendPaymentConfirmation = async () => {
       try {
-        const teamNumbers = ["919948999001", "919876543210"];
+        const teamNumbers = ["919948999001", "8886435551"];
         
         const confirmationMessage = `✅ *PAYMENT CONFIRMED* ✅
 

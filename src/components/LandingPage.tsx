@@ -7,6 +7,7 @@ import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
+import { MessageCircle } from 'lucide-react';
 
 // Types and Config
 interface TierInfo {
@@ -126,6 +127,11 @@ const getActiveTier = (ts = Date.now()): TierInfo => {
 
 const openWhatsApp = () => {
   window.open(`https://wa.me/${WHATSAPP_NUMBER}`, "_blank");
+};
+
+const openWhatsAppWithMessage = (message: string) => {
+  const encodedMessage = encodeURIComponent(message);
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`, "_blank");
 };
 
 const scrollToRegister = () => {
@@ -352,12 +358,21 @@ export default function LandingPage() {
                <Badge variant="outline" className="gold-pill">🗓️ Sunday, 14 September 2025</Badge>
                <Badge variant="outline" className="gold-pill">⏰ 6:00 PM onwards</Badge>
              </div>
-             <div className="mt-8 flex flex-wrap justify-center gap-4">
-               <Button className="gold-gradient text-primary-foreground" size="lg" onClick={scrollToRegister}>Register Now</Button>
-               <Button variant="outline" size="lg" onClick={() => setShowModal(true)}>
-                 What's Included
-               </Button>
-             </div>
+              <div className="mt-8 flex flex-wrap justify-center gap-4">
+                <Button className="gold-gradient text-primary-foreground" size="lg" onClick={scrollToRegister}>Register Now</Button>
+                <Button variant="outline" size="lg" onClick={() => setShowModal(true)}>
+                  What's Included
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  onClick={() => openWhatsAppWithMessage("Hi! I'm interested in the ISTA Media Anniversary Edition 2025. Can you help me with more details about the registration?")}
+                  className="flex items-center gap-2"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  Quick Questions?
+                </Button>
+              </div>
              <p className="mt-3 text-sm text-muted-foreground">
                Limited slots. Instant confirmation after payment.
              </p>
@@ -790,7 +805,14 @@ export default function LandingPage() {
             <div className="text-center p-6 border-l border-primary/25">
               <p className="font-semibold mb-2">Need help?</p>
               <p className="text-sm text-muted-foreground mb-4">Chat with us on WhatsApp for instant assistance</p>
-              <Button variant="outline" onClick={openWhatsApp}>💬 +91 9948999001</Button>
+              <Button 
+                variant="outline" 
+                onClick={() => openWhatsAppWithMessage("Hi! I need help with the ISTA Media event registration. Can you assist me?")}
+                className="flex items-center gap-2"
+              >
+                <MessageCircle className="w-4 h-4" />
+                Chat with us (+91 9948999001)
+              </Button>
             </div>
           </div>
         </div>
@@ -1037,9 +1059,14 @@ export default function LandingPage() {
                   <a href="mailto:contact@istamedia.com" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                     📧 <span>contact@istamedia.com</span>
                   </a>
-                  <button onClick={openWhatsApp} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                    💬 <span>Chat on WhatsApp</span>
-                  </button>
+                  <Button 
+                    variant="ghost" 
+                    onClick={() => openWhatsAppWithMessage("Hi! I'm interested in registering for the ISTA Media Anniversary Edition 2025. Can you help me with the process?")}
+                    className="flex items-center gap-2 text-muted-foreground hover:text-primary p-0 h-auto"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    <span>Chat on WhatsApp</span>
+                  </Button>
                 </div>
               </div>
             </CardContent>
@@ -1060,7 +1087,14 @@ export default function LandingPage() {
               <div className="text-sm text-muted-foreground mt-2 space-y-1">
                 <a href="mailto:contact@istamedia.com" className="flex items-center gap-1 hover:text-primary transition-colors">📧 contact@istamedia.com</a>
                 <a href="tel:+919948999001" className="flex items-center gap-1 hover:text-primary transition-colors">📞 +91 9948999001</a>
-                <button onClick={openWhatsApp} className="flex items-center gap-1 hover:text-primary transition-colors text-left">💬 WhatsApp support available</button>
+                <Button 
+                  variant="ghost" 
+                  onClick={() => openWhatsAppWithMessage("Hi! I have a question about the ISTA Media event. Can you help me?")}
+                  className="flex items-center gap-1 hover:text-primary transition-colors text-left p-0 h-auto text-sm text-muted-foreground"
+                >
+                  <MessageCircle className="w-3 h-3" />
+                  WhatsApp support available
+                </Button>
               </div>
             </div>
             <div>

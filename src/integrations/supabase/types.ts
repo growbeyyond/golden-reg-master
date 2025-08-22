@@ -17,6 +17,7 @@ export type Database = {
       orders: {
         Row: {
           amount: number
+          check_in_time: string | null
           city: string | null
           created_at: string
           currency: string
@@ -24,18 +25,21 @@ export type Database = {
           full_name: string
           hospital: string | null
           id: string
+          is_checked_in: boolean | null
           notes: string | null
+          payment_method: string | null
+          payment_proof_url: string | null
           phone: string
-          razorpay_order_id: string
-          razorpay_payment_id: string | null
           speciality: string | null
           status: string
+          ticket_qr_code: string | null
           tier_label: string | null
           updated_at: string
           user_id: string | null
         }
         Insert: {
           amount: number
+          check_in_time?: string | null
           city?: string | null
           created_at?: string
           currency?: string
@@ -43,18 +47,21 @@ export type Database = {
           full_name: string
           hospital?: string | null
           id?: string
+          is_checked_in?: boolean | null
           notes?: string | null
+          payment_method?: string | null
+          payment_proof_url?: string | null
           phone: string
-          razorpay_order_id: string
-          razorpay_payment_id?: string | null
           speciality?: string | null
           status?: string
+          ticket_qr_code?: string | null
           tier_label?: string | null
           updated_at?: string
           user_id?: string | null
         }
         Update: {
           amount?: number
+          check_in_time?: string | null
           city?: string | null
           created_at?: string
           currency?: string
@@ -62,12 +69,14 @@ export type Database = {
           full_name?: string
           hospital?: string | null
           id?: string
+          is_checked_in?: boolean | null
           notes?: string | null
+          payment_method?: string | null
+          payment_proof_url?: string | null
           phone?: string
-          razorpay_order_id?: string
-          razorpay_payment_id?: string | null
           speciality?: string | null
           status?: string
+          ticket_qr_code?: string | null
           tier_label?: string | null
           updated_at?: string
           user_id?: string | null
@@ -100,6 +109,44 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      tickets: {
+        Row: {
+          created_at: string
+          id: string
+          is_used: boolean | null
+          order_id: string
+          qr_code: string
+          updated_at: string
+          used_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_used?: boolean | null
+          order_id: string
+          qr_code: string
+          updated_at?: string
+          used_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_used?: boolean | null
+          order_id?: string
+          qr_code?: string
+          updated_at?: string
+          used_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tickets_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

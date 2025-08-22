@@ -22,7 +22,7 @@ interface OrderRequest {
 }
 
 serve(async (req) => {
-  console.log('Edge function started - create-razorpay-order');
+  console.log('Edge function started - create-manual-order');
   
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
@@ -36,7 +36,6 @@ serve(async (req) => {
     
     if (authHeader) {
       console.log('Authentication header found, authenticating user...');
-      // Create Supabase client
       const supabaseClient = createClient(
         Deno.env.get("SUPABASE_URL") ?? "",
         Deno.env.get("SUPABASE_ANON_KEY") ?? ""
@@ -53,23 +52,6 @@ serve(async (req) => {
       }
     } else {
       console.log('No authentication header, proceeding as guest');
-    }
-    
-    // Get Razorpay credentials
-    const razorpayKeyId = Deno.env.get("RAZORPAY_KEY_ID");
-    const razorpayKeySecret = Deno.env.get("RAZORPAY_KEY_SECRET");
-    
-    console.log('Razorpay Key ID exists:', !!razorpayKeyId);
-    console.log('Razorpay Secret exists:', !!razorpayKeySecret);
-    
-    if (!razorpayKeySecret) {
-      console.error('Razorpay secret not configured');
-      throw new Error("Razorpay secret not configured");
-    }
-
-    if (!razorpayKeyId) {
-      console.error('Razorpay Key ID not configured');
-      throw new Error("Razorpay Key ID not configured");
     }
 
     const requestBody = await req.json();
@@ -94,61 +76,22 @@ serve(async (req) => {
 
     console.log('Order validated for user:', user?.id || 'guest');
 
-    // Create Razorpay order
-    console.log('Creating Razorpay order...');
-    const razorpayResponse = await fetch("https://api.razorpay.com/v1/orders", {
-      method: "POST",
-      headers: {
-        "Authorization": `Basic ${btoa(`${razorpayKeyId}:${razorpayKeySecret}`)}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        amount: amount * 100, // Convert to paise
-        currency: currency,
-        receipt: `receipt_${Date.now()}`,
-        notes: {
-          full_name: formData.fullName,
-          email: formData.email,
-          phone: formData.phone,
-          tier: tierLabel,
-        },
-      }),
-    });
-
-    console.log('Razorpay API response status:', razorpayResponse.status);
-
-    if (!razorpayResponse.ok) {
-      const errorText = await razorpayResponse.text();
-      console.error("Razorpay API error:", errorText);
-      console.error("Response status:", razorpayResponse.status);
-      
-      // Handle specific account verification errors
-      if (razorpayResponse.status === 400 || razorpayResponse.status === 401) {
-        if (errorText.includes('account') || errorText.includes('verification')) {
-          throw new Error("Your Razorpay account needs to be verified before processing payments. Please complete account verification in your Razorpay dashboard.");
-        }
-      }
-      
-      throw new Error(`Razorpay API error: ${razorpayResponse.status} - ${errorText}`);
-    }
-
-    const razorpayOrder = await razorpayResponse.json();
-    console.log("Razorpay order created:", razorpayOrder.id);
-
-    // Save order to database using service role
-    console.log('Saving order to database...');
+    // Create order using service role
+    console.log('Creating manual order...');
     const supabaseService = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
       { auth: { persistSession: false } }
     );
 
+    // Generate a unique order ID for reference
+    const orderId = `MO${Date.now()}${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+
     const orderData = {
-      user_id: user?.id || null, // Allow null for guest orders
-      razorpay_order_id: razorpayOrder.id,
+      user_id: user?.id || null,
       amount: amount,
       currency: currency,
-      status: "created",
+      status: "pending_payment",
       full_name: formData.fullName,
       email: formData.email,
       phone: formData.phone,
@@ -157,27 +100,43 @@ serve(async (req) => {
       city: formData.city,
       notes: formData.notes,
       tier_label: tierLabel,
+      payment_method: "upi",
     };
 
     console.log('Creating order for user:', user?.id || 'guest');
 
-    const { error: insertError } = await supabaseService.from("orders").insert(orderData);
+    const { data: order, error: insertError } = await supabaseService
+      .from("orders")
+      .insert(orderData)
+      .select()
+      .single();
 
     if (insertError) {
       console.error("Database error:", insertError);
       throw new Error(`Failed to save order to database: ${insertError.message}`);
     }
 
-    console.log('Order saved to database successfully');
+    console.log('Order created successfully:', order.id);
 
+    // Return payment instructions
     const responseData = {
-      orderId: razorpayOrder.id,
-      amount: razorpayOrder.amount,
-      currency: razorpayOrder.currency,
-      keyId: razorpayKeyId,
+      orderId: order.id,
+      orderNumber: orderId,
+      amount: amount,
+      currency: currency,
+      paymentInstructions: {
+        upiId: "doctor@upi", // Replace with your actual UPI ID
+        qrCode: `upi://pay?pa=doctor@upi&am=${amount}&cu=${currency}&tn=Event Registration - ${tierLabel}`,
+        bankDetails: {
+          accountName: "Doctor Event Fund",
+          accountNumber: "1234567890",
+          ifsc: "BANK0001234",
+          bank: "Example Bank"
+        }
+      }
     };
 
-    console.log('Returning response:', responseData);
+    console.log('Returning response with payment instructions');
 
     return new Response(
       JSON.stringify(responseData),
@@ -187,7 +146,7 @@ serve(async (req) => {
       }
     );
   } catch (error) {
-    console.error("Error in create-razorpay-order function:", error);
+    console.error("Error in create-manual-order function:", error);
     return new Response(
       JSON.stringify({ 
         error: error.message,

@@ -165,13 +165,13 @@ export default function LandingPage() {
     return () => clearInterval(interval);
   }, []);
 
-  // Razorpay Integration - Secure payment with server-side order creation
+  // Manual Payment Integration - UPI/Bank Transfer System
   const handlePayment = async () => {
     console.log('handlePayment called');
     setIsProcessing(true);
     
     try {
-      console.log('Invoking create-razorpay-order with data:', {
+      console.log('Invoking create-manual-order with data:', {
         amount: tier.amount,
         currency: "INR",
         formData,
@@ -179,7 +179,7 @@ export default function LandingPage() {
       });
 
       // Create order on server
-      const { data: orderData, error } = await supabase.functions.invoke('create-razorpay-order', {
+      const { data: orderData, error } = await supabase.functions.invoke('create-manual-order', {
         body: {
           amount: tier.amount,
           currency: "INR",
@@ -200,49 +200,20 @@ export default function LandingPage() {
       }
 
       console.log('Order created successfully:', orderData);
+      toast.success('Registration submitted! Redirecting to payment instructions...');
 
-      if (!(window as any).Razorpay) {
-        throw new Error('Razorpay script not loaded. Please refresh the page and try again.');
-      }
-      
-      const options = {
-        key: orderData.keyId,
-        order_id: orderData.orderId,
-        amount: orderData.amount,
-        currency: orderData.currency,
-        name: "ISTA Doctors' Souvenir",
-        description: tier.label,
-        prefill: {
-          name: formData.fullName,
-          email: formData.email,
-          contact: formData.phone
-        },
-        theme: { color: "#d4af37" },
-        handler: function (response: any) {
-          console.log('Payment successful:', response);
-          // Redirect to payment success page with Razorpay parameters
-          window.location.href = `/payment-success?razorpay_payment_id=${response.razorpay_payment_id}&razorpay_order_id=${orderData.orderId}&razorpay_signature=${response.razorpay_signature}`;
-        },
-        modal: {
-          ondismiss: function() {
-            console.log('Payment cancelled by user');
-            toast.error("Payment cancelled - You can try again anytime.");
-          }
-        }
-      };
-      
-      console.log('Creating Razorpay instance with options:', options);
-      
-      const rzp = new (window as any).Razorpay(options);
-      rzp.on('payment.failed', function (response: any) {
-        console.error('Payment failed:', response.error);
-        toast.error(response.error.description || "Payment failed");
+      // Redirect to payment instructions page
+      const params = new URLSearchParams({
+        orderId: orderData.orderId,
+        orderNumber: orderData.orderNumber,
+        amount: orderData.amount.toString(),
+        currency: orderData.currency
       });
-      console.log('Opening Razorpay modal...');
-      rzp.open();
+      
+      window.location.href = `/payment-instructions?${params.toString()}`;
     } catch (error: any) {
       console.error('Error in payment process:', error);
-      toast.error(error.message || 'Error initializing payment. Please try again.');
+      toast.error(error.message || 'Error creating order. Please try again.');
     } finally {
       setIsProcessing(false);
     }

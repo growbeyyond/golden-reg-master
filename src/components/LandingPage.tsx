@@ -204,14 +204,28 @@ export default function LandingPage() {
       console.log('Order created successfully:', orderData);
       toast.success('Registration submitted! Redirecting to payment instructions...');
 
-      // Redirect to payment instructions page
+      // Store customer details in sessionStorage for payment page
+      const customerDetails = {
+        name: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        speciality: formData.speciality,
+        hospital: formData.hospital,
+        city: formData.city,
+        notes: formData.notes,
+        tierLabel: tier.label,
+        baseAmount: orderData.baseAmount,
+        gstAmount: orderData.gstAmount,
+        totalAmount: orderData.totalAmount,
+        orderNumber: orderData.orderNumber
+      };
+      
+      sessionStorage.setItem('customerDetails', JSON.stringify(customerDetails));
+      
+      // Redirect to payment instructions page with minimal parameters
       const params = new URLSearchParams({
         orderId: orderData.orderId,
-        orderNumber: orderData.orderNumber,
-        amount: orderData.totalAmount.toString(), // Use total amount from server
-        baseAmount: orderData.baseAmount.toString(), // Pass base amount for breakdown
-        gstAmount: orderData.gstAmount.toString(), // Pass GST amount for breakdown
-        currency: orderData.currency
+        amount: orderData.totalAmount.toString()
       });
       
       window.location.href = `/payment-instructions?${params.toString()}`;

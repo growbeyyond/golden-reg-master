@@ -3,19 +3,22 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Copy, Check, QrCode, CreditCard, Building2, User, Phone, Mail, ArrowLeft, Upload } from "lucide-react";
 
-interface Order {
-  id: string;
-  full_name: string;
+interface CustomerDetails {
+  name: string;
   email: string;
   phone: string;
-  amount: number;
-  currency: string;
-  tier_label: string;
-  status: string;
+  speciality: string;
+  hospital: string;
+  city: string;
+  notes: string;
+  tierLabel: string;
+  baseAmount: number;
+  gstAmount: number;
+  totalAmount: number;
+  orderNumber: string;
 }
 
 interface PaymentInstructions {
@@ -32,18 +35,14 @@ interface PaymentInstructions {
 const PaymentInstructions = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [order, setOrder] = useState<Order | null>(null);
+  const [customerDetails, setCustomerDetails] = useState<CustomerDetails | null>(null);
   const [paymentInstructions, setPaymentInstructions] = useState<PaymentInstructions | null>(null);
   const [loading, setLoading] = useState(true);
   const [copiedField, setCopiedField] = useState<string | null>(null);
   const [uploadingProof, setUploadingProof] = useState(false);
 
   const orderId = searchParams.get('orderId');
-  const orderNumber = searchParams.get('orderNumber');
   const amount = searchParams.get('amount');
-  const baseAmount = searchParams.get('baseAmount');
-  const gstAmount = searchParams.get('gstAmount');
-  const currency = searchParams.get('currency');
 
   useEffect(() => {
     if (!orderId || !amount) {
@@ -52,80 +51,74 @@ const PaymentInstructions = () => {
       return;
     }
 
-    const fetchOrderDetails = async () => {
-      try {
-        const { data: orderData, error } = await supabase
-          .from('orders')
-          .select('*')
-          .eq('id', orderId)
-          .single();
-
-        if (error || !orderData) {
-          toast.error("Order not found");
-          navigate('/');
-          return;
-        }
-
-        setOrder(orderData);
-        
-        // Set payment instructions
-        setPaymentInstructions({
-          upiId: "istadigitalmedia@okaxis",
-          qrCode: `upi://pay?pa=istadigitalmedia@okaxis&am=${amount}&cu=${currency}&tn=ISTA Event Registration - ${orderData.tier_label}`,
-          bankDetails: {
-            accountName: "ISTA Digital Media",
-            accountNumber: "2345678901",
-            ifsc: "OKAX0001234",
-            bank: "Okaxis Bank"
-          }
-        });
-      } catch (error) {
-        console.error('Error fetching order:', error);
-        toast.error("Failed to load payment instructions");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchOrderDetails();
-  }, [orderId, amount, currency, navigate]);
-
-  const copyToClipboard = async (text: string, field: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopiedField(field);
-      toast.success("Copied to clipboard!");
-      setTimeout(() => setCopiedField(null), 2000);
-    } catch (error) {
-      toast.error("Failed to copy to clipboard");
+    // Get customer details from sessionStorage instead of database
+    const storedDetails = sessionStorage.getItem('customerDetails');
+    if (!storedDetails) {
+      toast.error("Session expired. Please try again.");
+      navigate('/');
+      return;
     }
-  };
 
-  const handlePaymentProofSubmit = async () => {
-    if (!order) return;
-    
-    setUploadingProof(true);
     try {
-      // For now, we'll mark as submitted without file upload
-      // In a real implementation, you'd upload the file first
-      const { data, error } = await supabase.functions.invoke('verify-payment', {
-        body: { 
-          orderId: order.id,
-          paymentProofUrl: "manual_verification_required",
-          transactionId: `TXN_${Date.now()}`
+      const details = JSON.parse(storedDetails) as CustomerDetails;
+      setCustomerDetails(details);
+      
+      // Set payment instructions
+      setPaymentInstructions({
+        upiId: "istamedia@ybl",
+        qrCode: "/lovable-uploads/632d5279-ccad-4a29-a60d-cfcea9b52d67.png",
+        bankDetails: {
+          accountName: "ISTA DIGITAL MEDIA PRIVATE LIMITED",
+          accountNumber: "50200084767896",
+          ifsc: "HDFC0000019",
+          bank: "HDFC Bank"
         }
       });
 
-      if (error) {
-        toast.error("Failed to submit payment verification");
-        return;
-      }
-
-      toast.success("Payment proof submitted! Your ticket will be generated once payment is verified.");
+      setLoading(false);
+    } catch (error) {
+      console.error('Error parsing customer details:', error);
+      toast.error("Invalid session data. Please try again.");
       navigate('/');
+    }
+  }, [orderId, amount, navigate]);
+
+  const copyToClipboard = (text: string, field: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedField(field);
+      toast.success(`${field} copied to clipboard!`);
+      setTimeout(() => setCopiedField(null), 2000);
+    });
+  };
+
+  const handlePaymentProofSubmit = async () => {
+    if (!orderId) return;
+    
+    setUploadingProof(true);
+    
+    try {
+      const response = await fetch(`https://vnccezzqcohvgzkwojqz.supabase.co/functions/v1/verify-payment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          orderId,
+          paymentProofUrl: 'manual_verification_pending',
+          transactionId: 'manual_verification'
+        })
+      });
+
+      if (response.ok) {
+        toast.success("Payment proof submitted for verification. We'll contact you once verified.");
+        // Clear session data after successful submission
+        sessionStorage.removeItem('customerDetails');
+      } else {
+        throw new Error('Failed to submit payment proof');
+      }
     } catch (error) {
       console.error('Error submitting payment proof:', error);
-      toast.error("Failed to submit payment proof");
+      toast.error("Failed to submit payment proof. Please try again.");
     } finally {
       setUploadingProof(false);
     }
@@ -133,199 +126,282 @@ const PaymentInstructions = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-2 text-muted-foreground">Loading payment instructions...</p>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-background/90 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
   }
 
-  if (!order || !paymentInstructions) {
+  if (!customerDetails || !paymentInstructions) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-destructive">Failed to load payment instructions</p>
-          <Button onClick={() => navigate('/')} className="mt-4">
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Return to Home
-          </Button>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-background/90 flex items-center justify-center">
+        <Card className="max-w-md mx-auto">
+          <CardContent className="p-6 text-center">
+            <p className="text-destructive mb-4">Failed to load payment instructions</p>
+            <Button onClick={() => navigate('/')} variant="outline">
+              Return to Home
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20 p-4">
-      <div className="max-w-2xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold">Complete Your Payment</h1>
-          <p className="text-muted-foreground">Follow the instructions below to complete your registration</p>
-        </div>
-
-        {/* Order Summary */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <User className="h-5 w-5" />
-              Order Summary
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm text-muted-foreground">Name</p>
-                <p className="font-semibold">{order.full_name}</p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Tier</p>
-                <Badge>{order.tier_label}</Badge>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Amount</p>
-                <div>
-                  <p className="text-2xl font-bold text-primary">₹{order.amount}</p>
-                  {baseAmount && gstAmount ? (
-                    <p className="text-xs text-muted-foreground">₹{baseAmount} + ₹{gstAmount} GST (18%)</p>
-                  ) : (
-                    <p className="text-xs text-muted-foreground">₹5000 + ₹900 GST (18%)</p>
-                  )}
-                </div>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Order ID</p>
-                <p className="font-mono text-sm">{orderNumber}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* UPI Payment */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <QrCode className="h-5 w-5" />
-              UPI Payment (Recommended)
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
-              <div>
-                <p className="text-sm text-muted-foreground">UPI ID</p>
-                <p className="font-mono font-semibold">{paymentInstructions.upiId}</p>
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => copyToClipboard(paymentInstructions.upiId, 'upi')}
-              >
-                {copiedField === 'upi' ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-              </Button>
-            </div>
-            
-            <div className="text-center">
-              <p className="text-sm text-muted-foreground mb-2">Scan QR code with any UPI app</p>
-              <div className="bg-white p-4 rounded-lg inline-block">
-                <img 
-                  src="/lovable-uploads/c0cb2aeb-779b-402c-9b34-478507e45c16.png" 
-                  alt="UPI QR Code - istadigitalmedia@okaxis" 
-                  className="w-48 h-48 object-contain"
-                />
-              </div>
-              <p className="text-xs text-muted-foreground mt-2">
-                Amount: ₹{amount} {baseAmount && gstAmount ? `(₹${baseAmount} + ₹${gstAmount} GST)` : '(₹5000 + ₹900 GST)'} • {order.tier_label}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Bank Transfer */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Building2 className="h-5 w-5" />
-              Bank Transfer
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {Object.entries({
-              'Account Name': paymentInstructions.bankDetails.accountName,
-              'Account Number': paymentInstructions.bankDetails.accountNumber,
-              'IFSC Code': paymentInstructions.bankDetails.ifsc,
-              'Bank': paymentInstructions.bankDetails.bank
-            }).map(([label, value]) => (
-              <div key={label} className="flex items-center justify-between p-3 bg-muted rounded-lg">
-                <div>
-                  <p className="text-sm text-muted-foreground">{label}</p>
-                  <p className="font-mono font-semibold">{value}</p>
-                </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => copyToClipboard(value, label.toLowerCase().replace(' ', '_'))}
-                >
-                  {copiedField === label.toLowerCase().replace(' ', '_') ? 
-                    <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                </Button>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-
-        {/* Payment Proof */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Upload className="h-5 w-5" />
-              Submit Payment Proof
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg">
-              <p className="text-sm">
-                After making the payment, click the button below to submit your payment for verification. 
-                Your ticket will be generated once the payment is confirmed.
-              </p>
-            </div>
-            <Button 
-              onClick={handlePaymentProofSubmit} 
-              disabled={uploadingProof}
-              className="w-full"
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-background/90">
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-8">
+            <Button
+              variant="ghost" 
+              onClick={() => navigate('/')}
+              className="flex items-center gap-2"
             >
-              {uploadingProof ? "Submitting..." : "I have made the payment"}
+              <ArrowLeft className="w-4 h-4" />
+              Back to Home
             </Button>
-          </CardContent>
-        </Card>
+            <h1 className="text-2xl font-bold">Payment Instructions</h1>
+          </div>
 
-        {/* Contact Info */}
-        <Card>
-          <CardContent className="pt-6">
-            <div className="text-center space-y-2 text-sm text-muted-foreground">
-              <p>Need help? Contact us:</p>
-              <div className="flex justify-center items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <Phone className="h-4 w-4" />
-                  <span>+91 9948999001</span>
+          {/* Order Summary */}
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <User className="w-5 h-5" />
+                Order Summary
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-muted-foreground">Name</p>
+                  <p className="font-medium">{customerDetails.name}</p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Mail className="h-4 w-4" />
-                  <span>support@istadigitalmedia.com</span>
+                <div>
+                  <p className="text-sm text-muted-foreground">Email</p>
+                  <p className="font-medium">{customerDetails.email}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Phone</p>
+                  <p className="font-medium">{customerDetails.phone}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Order Number</p>
+                  <p className="font-medium">{customerDetails.orderNumber}</p>
                 </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+              
+              {/* Amount Breakdown */}
+              <div className="border-t pt-4">
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Registration Fee ({customerDetails.tierLabel})</span>
+                    <span>₹{customerDetails.baseAmount.toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">GST (18%)</span>
+                    <span>₹{customerDetails.gstAmount.toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between font-bold text-lg border-t pt-2">
+                    <span>Total Amount</span>
+                    <span>₹{customerDetails.totalAmount.toLocaleString()}</span>
+                  </div>
+                </div>
+              </div>
+              
+              <Badge variant="secondary" className="w-fit">
+                {customerDetails.tierLabel}
+              </Badge>
+            </CardContent>
+          </Card>
 
-        <Button 
-          variant="outline" 
-          onClick={() => navigate('/')} 
-          className="w-full"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Return to Home
-        </Button>
+          {/* Payment Methods */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* UPI Payment */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <QrCode className="w-5 h-5" />
+                  UPI Payment
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="text-center">
+                  <img 
+                    src={paymentInstructions.qrCode} 
+                    alt="UPI QR Code" 
+                    className="w-48 h-48 mx-auto border rounded-lg"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-sm text-muted-foreground">UPI ID</label>
+                  <div className="flex items-center gap-2 mt-1">
+                    <code className="flex-1 p-2 bg-muted rounded text-sm font-mono">
+                      {paymentInstructions.upiId}
+                    </code>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => copyToClipboard(paymentInstructions.upiId, 'UPI ID')}
+                    >
+                      {copiedField === 'UPI ID' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                    </Button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-sm text-muted-foreground">Amount</label>
+                  <div className="flex items-center gap-2 mt-1">
+                    <code className="flex-1 p-2 bg-muted rounded text-sm font-mono">
+                      ₹{customerDetails.totalAmount}
+                    </code>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => copyToClipboard(customerDetails.totalAmount.toString(), 'Amount')}
+                    >
+                      {copiedField === 'Amount' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Bank Transfer */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Building2 className="w-5 h-5" />
+                  Bank Transfer
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <label className="text-sm text-muted-foreground">Account Name</label>
+                  <div className="flex items-center gap-2 mt-1">
+                    <code className="flex-1 p-2 bg-muted rounded text-sm font-mono">
+                      {paymentInstructions.bankDetails.accountName}
+                    </code>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => copyToClipboard(paymentInstructions.bankDetails.accountName, 'Account Name')}
+                    >
+                      {copiedField === 'Account Name' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                    </Button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-sm text-muted-foreground">Account Number</label>
+                  <div className="flex items-center gap-2 mt-1">
+                    <code className="flex-1 p-2 bg-muted rounded text-sm font-mono">
+                      {paymentInstructions.bankDetails.accountNumber}
+                    </code>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => copyToClipboard(paymentInstructions.bankDetails.accountNumber, 'Account Number')}
+                    >
+                      {copiedField === 'Account Number' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                    </Button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-sm text-muted-foreground">IFSC Code</label>
+                  <div className="flex items-center gap-2 mt-1">
+                    <code className="flex-1 p-2 bg-muted rounded text-sm font-mono">
+                      {paymentInstructions.bankDetails.ifsc}
+                    </code>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => copyToClipboard(paymentInstructions.bankDetails.ifsc, 'IFSC Code')}
+                    >
+                      {copiedField === 'IFSC Code' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                    </Button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-sm text-muted-foreground">Bank Name</label>
+                  <div className="flex items-center gap-2 mt-1">
+                    <code className="flex-1 p-2 bg-muted rounded text-sm font-mono">
+                      {paymentInstructions.bankDetails.bank}
+                    </code>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => copyToClipboard(paymentInstructions.bankDetails.bank, 'Bank Name')}
+                    >
+                      {copiedField === 'Bank Name' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Payment Confirmation */}
+          <Card className="mt-6">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <CreditCard className="w-5 h-5" />
+                Payment Confirmation
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground mb-4">
+                After making the payment, click the button below to submit your payment for verification. 
+                We'll contact you once the payment is verified.
+              </p>
+              
+              <Button 
+                onClick={handlePaymentProofSubmit}
+                disabled={uploadingProof}
+                className="w-full"
+              >
+                {uploadingProof ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Submitting...
+                  </>
+                ) : (
+                  <>
+                    <Upload className="w-4 h-4 mr-2" />
+                    I have completed the payment
+                  </>
+                )}
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Contact Information */}
+          <Card className="mt-6">
+            <CardHeader>
+              <CardTitle>Need Help?</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <div className="flex items-center gap-2">
+                <Phone className="w-4 h-4" />
+                <span>+91 9876543210</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Mail className="w-4 h-4" />
+                <span>support@istamedia.in</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          <div className="mt-8 text-center">
+            <Button variant="outline" onClick={() => navigate('/')}>
+              Return to Home
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );

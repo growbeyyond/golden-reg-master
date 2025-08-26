@@ -6,6 +6,30 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Helper function to check if user has required role
+async function hasStaffRole(supabase: any, userId: string): Promise<boolean> {
+  const { data, error } = await supabase.rpc('has_role', {
+    _user_id: userId,
+    _role: 'admin'
+  });
+  
+  if (error) {
+    const { data: moderatorData, error: modError } = await supabase.rpc('has_role', {
+      _user_id: userId,
+      _role: 'moderator'
+    });
+    
+    if (modError) {
+      console.error('Error checking roles:', error, modError);
+      return false;
+    }
+    
+    return moderatorData === true;
+  }
+  
+  return data === true;
+}
+
 interface PaymentVerificationRequest {
   orderId: string;
   paymentProofUrl?: string;
@@ -30,12 +54,57 @@ serve(async (req) => {
 
     console.log('Verifying payment for order:', orderId);
 
-    // Use service role to update order and create ticket
+    // Get authorization header and check if user is staff
+    const authHeader = req.headers.get('Authorization');
+    let isStaffUser = false;
+
     const supabaseService = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
       { auth: { persistSession: false } }
     );
+
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: userData, error: userError } = await supabaseService.auth.getUser(token);
+      
+      if (!userError && userData.user) {
+        isStaffUser = await hasStaffRole(supabaseService, userData.user.id);
+      }
+    }
+
+    // If not a staff user, only update to pending_verification
+    if (!isStaffUser) {
+      console.log('Non-staff verification request - updating to pending_verification');
+      
+      const { data: updateData, error: updateError } = await supabaseService
+        .from('orders')
+        .update({ 
+          status: 'pending_verification',
+          payment_proof_url: paymentProofUrl,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', orderId)
+        .select()
+        .single();
+
+      if (updateError) {
+        console.error('Error updating order to pending_verification:', updateError);
+        throw new Error(`Failed to update order status: ${updateError.message}`);
+      }
+
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          message: 'Payment submitted for verification',
+          order: updateData,
+          status: 'pending_verification'
+        }),
+        { status: 202, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    console.log('Staff user verification - proceeding with full payment processing');
 
     // Update order status to paid
     const { data: order, error: updateError } = await supabaseService

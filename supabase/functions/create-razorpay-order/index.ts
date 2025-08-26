@@ -43,11 +43,19 @@ serve(async (req) => {
       throw new Error("Missing Supabase environment variables");
     }
 
-    // Hardcoded credentials for testing
-    const razorpayKeyId = "rzp_live_R9raeVZnq16wOA";
-    const razorpayKeySecret = "Xp5uflUf3ifg5UR4wuJ3keE0";
+    // Razorpay credentials from environment
+    const razorpayKeyId = Deno.env.get('RAZORPAY_KEY_ID');
+    const razorpayKeySecret = Deno.env.get('RAZORPAY_KEY_SECRET');
     
-    console.log('Razorpay credentials loaded (hardcoded for testing)');
+    if (!razorpayKeyId || !razorpayKeySecret) {
+      console.error('Missing Razorpay credentials');
+      return new Response(
+        JSON.stringify({ error: 'Razorpay credentials not configured' }),
+        { status: 500, headers: corsHeaders }
+      );
+    }
+    
+    console.log('Razorpay credentials loaded from environment');
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey, {
       auth: { persistSession: false }

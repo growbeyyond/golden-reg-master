@@ -29,15 +29,27 @@ serve(async (req) => {
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const razorpayKeyId = Deno.env.get("RAZORPAY_KEY_ID")!;
-    const razorpayKeySecret = Deno.env.get("RAZORPAY_KEY_SECRET")!;
+    const razorpayKeyId = Deno.env.get("RAZORPAY_KEY_ID");
+    const razorpayKeySecret = Deno.env.get("RAZORPAY_KEY_SECRET");
 
     console.log('Environment check:', {
+      hasSupabaseUrl: !!supabaseUrl,
+      hasSupabaseServiceKey: !!supabaseServiceKey,
       hasRazorpayKeyId: !!razorpayKeyId,
       hasRazorpayKeySecret: !!razorpayKeySecret,
-      keyIdLength: razorpayKeyId?.length,
-      keySecretLength: razorpayKeySecret?.length
+      keyIdLength: razorpayKeyId?.length || 0,
+      keySecretLength: razorpayKeySecret?.length || 0,
+      allEnvVars: Object.keys(Deno.env.toObject()).filter(key => key.includes('RAZORPAY'))
     });
+
+    // Check if Razorpay credentials are available
+    if (!razorpayKeyId || !razorpayKeySecret) {
+      console.error('Missing Razorpay credentials:', {
+        keyId: !!razorpayKeyId,
+        keySecret: !!razorpayKeySecret
+      });
+      throw new Error("Razorpay credentials not configured. Please check the edge function secrets.");
+    }
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey, {
       auth: { persistSession: false }

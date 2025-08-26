@@ -32,9 +32,10 @@ serve(async (req) => {
     const razorpayKeyId = Deno.env.get("RAZORPAY_KEY_ID");
     const razorpayKeySecret = Deno.env.get("RAZORPAY_KEY_SECRET");
 
-    // Check if Razorpay credentials are available
+    // Check if Razorpay credentials are available (Updated: 2025-08-26)
     console.log('Environment check - RAZORPAY_KEY_ID exists:', !!razorpayKeyId);
     console.log('Environment check - RAZORPAY_KEY_SECRET exists:', !!razorpayKeySecret);
+    console.log('Function redeployed to pick up new secrets');
     
     if (!razorpayKeyId || !razorpayKeySecret) {
       console.error('Missing Razorpay credentials - KeyId:', !!razorpayKeyId, 'KeySecret:', !!razorpayKeySecret);

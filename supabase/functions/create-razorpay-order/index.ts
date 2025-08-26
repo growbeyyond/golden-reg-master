@@ -1,7 +1,6 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
-// CORS headers for edge function calls
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -24,95 +23,58 @@ interface RazorpayOrderRequest {
 }
 
 serve(async (req) => {
-  console.log('=== EDGE FUNCTION STARTED ===');
-  console.log('Method:', req.method);
-  
+  // Handle CORS preflight
   if (req.method === "OPTIONS") {
-    console.log('Handling OPTIONS request');
     return new Response("ok", { headers: corsHeaders });
   }
 
   try {
-    console.log('=== INITIALIZING ===');
-    const supabaseUrl = Deno.env.get("SUPABASE_URL");
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    // Initialize Supabase
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     
-    console.log('Environment check:');
-    console.log('- SUPABASE_URL exists:', !!supabaseUrl);
-    console.log('- SERVICE_KEY exists:', !!supabaseServiceKey);
-    
-    if (!supabaseUrl || !supabaseServiceKey) {
-      throw new Error("Missing Supabase environment variables");
-    }
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Razorpay credentials from environment
+    // Get Razorpay credentials
     const razorpayKeyId = Deno.env.get('RAZORPAY_KEY_ID');
     const razorpayKeySecret = Deno.env.get('RAZORPAY_KEY_SECRET');
+    
+    console.log("Checking Razorpay credentials...");
+    console.log("RAZORPAY_KEY_ID exists:", !!razorpayKeyId);
+    console.log("RAZORPAY_KEY_SECRET exists:", !!razorpayKeySecret);
     
     if (!razorpayKeyId || !razorpayKeySecret) {
       console.error('Missing Razorpay credentials');
       return new Response(
-        JSON.stringify({ error: 'Razorpay credentials not configured' }),
-        { status: 500, headers: corsHeaders }
+        JSON.stringify({ error: 'Razorpay credentials not found in environment' }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
-    
-    console.log('Razorpay credentials loaded from environment');
 
-    const supabase = createClient(supabaseUrl, supabaseServiceKey, {
-      auth: { persistSession: false }
-    });
+    // Parse request
+    const { baseAmount, currency, formData, tierLabel }: RazorpayOrderRequest = await req.json();
 
-    console.log('=== PARSING REQUEST ===');
-    let requestBody;
-    try {
-      requestBody = await req.json();
-      console.log('Request body parsed successfully');
-      console.log('Request data:', JSON.stringify(requestBody, null, 2));
-    } catch (e) {
-      console.error('Failed to parse request body:', e);
-      throw new Error("Invalid request body");
-    }
-
-    const { baseAmount, currency, formData, tierLabel }: RazorpayOrderRequest = requestBody;
-
-    console.log('=== VALIDATION ===');
-    console.log('Base amount:', baseAmount);
-    console.log('Currency:', currency);
-    console.log('Tier label:', tierLabel);
-    console.log('Form data keys:', Object.keys(formData || {}));
-
-    // Input validation
+    // Validate input
     if (!baseAmount || baseAmount <= 0) {
-      throw new Error("Invalid amount: " + baseAmount);
+      throw new Error("Invalid amount");
     }
-    if (!currency || !['INR', 'USD'].includes(currency)) {
-      throw new Error("Invalid currency: " + currency);
-    }
-    if (!formData?.email || !formData.email.includes('@')) {
-      throw new Error("Invalid email: " + formData?.email);
-    }
-    if (!formData?.fullName) {
-      throw new Error("Missing full name");
+    if (!formData?.email || !formData?.fullName) {
+      throw new Error("Missing required customer details");
     }
 
-    console.log('Validation passed');
-
-    // Calculate GST and total amount
+    // Calculate total amount with GST
     const gstAmount = Math.round(baseAmount * 0.18);
     const totalAmount = baseAmount + gstAmount;
     
-    console.log('=== AMOUNT CALCULATION ===');
-    console.log('Base:', baseAmount, 'GST:', gstAmount, 'Total:', totalAmount);
-
-    // Generate unique order ID
+    // Generate order number
     const orderNumber = `RZP${Date.now()}${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
-    console.log('Generated order number:', orderNumber);
+
+    console.log(`Creating Razorpay order: ${orderNumber}, Amount: ${totalAmount}`);
 
     // Create Razorpay order
     const razorpayOrderData = {
       amount: totalAmount * 100, // Convert to paise
-      currency: currency,
+      currency: currency || "INR",
       receipt: orderNumber,
       notes: {
         customer_name: formData.fullName,
@@ -120,9 +82,6 @@ serve(async (req) => {
         tier: tierLabel,
       }
     };
-
-    console.log('=== CREATING RAZORPAY ORDER ===');
-    console.log('Razorpay order data:', JSON.stringify(razorpayOrderData, null, 2));
 
     const razorpayResponse = await fetch('https://api.razorpay.com/v1/orders', {
       method: 'POST',
@@ -133,46 +92,32 @@ serve(async (req) => {
       body: JSON.stringify(razorpayOrderData),
     });
 
-    console.log('Razorpay API response status:', razorpayResponse.status);
-
     if (!razorpayResponse.ok) {
       const errorText = await razorpayResponse.text();
-      console.error('Razorpay API error response:', errorText);
-      throw new Error(`Razorpay order creation failed: ${errorText}`);
+      console.error('Razorpay API error:', errorText);
+      throw new Error(`Razorpay order creation failed: ${razorpayResponse.status}`);
     }
 
     const razorpayOrder = await razorpayResponse.json();
-    console.log('Razorpay order created successfully:', razorpayOrder);
+    console.log('Razorpay order created:', razorpayOrder.id);
 
-    // Create order in our database
-    console.log('=== CREATING DATABASE ORDER ===');
-    const orderData = {
-      amount: totalAmount,
-      currency: currency,
-      status: "pending_payment",
-      full_name: formData.fullName,
-      email: formData.email,
-      phone: formData.phone,
-      speciality: formData.speciality,
-      hospital: formData.hospital,
-      city: formData.city,
-      notes: formData.notes || "",
-      tier_label: tierLabel,
-      payment_method: "razorpay"
-    };
-
-    console.log('Order data for database:', {
-      amount: totalAmount,
-      currency: currency,
-      attendee: formData.fullName ? 'name_present' : 'no_name',
-      hasEmail: !!formData.email,
-      hasPhone: !!formData.phone,
-      tier: tierLabel
-    });
-
+    // Create order in database
     const { data: order, error: orderError } = await supabase
       .from("orders")
-      .insert(orderData)
+      .insert({
+        amount: totalAmount,
+        currency: currency || "INR",
+        status: "pending_payment",
+        full_name: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        speciality: formData.speciality,
+        hospital: formData.hospital,
+        city: formData.city,
+        notes: formData.notes || "",
+        tier_label: tierLabel,
+        payment_method: "razorpay"
+      })
       .select()
       .single();
 
@@ -181,27 +126,16 @@ serve(async (req) => {
       throw new Error(`Database error: ${orderError.message}`);
     }
 
-    console.log('Database order created:', order);
+    // Store Razorpay mapping
+    await supabase.from("razorpay_orders").insert({
+      razorpay_order_id: razorpayOrder.id,
+      manual_order_id: order.id,
+      amount: razorpayOrder.amount,
+      currency: razorpayOrder.currency,
+      status: razorpayOrder.status
+    });
 
-    // Store Razorpay order mapping
-    console.log('=== CREATING RAZORPAY MAPPING ===');
-    const { error: razorpayError } = await supabase
-      .from("razorpay_orders")
-      .insert({
-        razorpay_order_id: razorpayOrder.id,
-        manual_order_id: order.id,
-        amount: razorpayOrder.amount,
-        currency: razorpayOrder.currency,
-        status: razorpayOrder.status
-      });
-
-    if (razorpayError) {
-      console.error("Razorpay order mapping error:", razorpayError);
-      // Don't fail the entire request for this
-    } else {
-      console.log('Razorpay mapping created successfully');
-    }
-
+    // Return success response
     const responseData = {
       orderId: order.id,
       orderNumber: orderNumber,
@@ -209,9 +143,9 @@ serve(async (req) => {
       amount: totalAmount,
       baseAmount: baseAmount,
       gstAmount: gstAmount,
-      currency: currency,
+      currency: currency || "INR",
       key: razorpayKeyId,
-      name: "ISTA Media",
+      name: "ISTA Digital Media Anniversary Edition 2025",
       description: `${tierLabel} Registration`,
       prefill: {
         name: formData.fullName,
@@ -220,23 +154,19 @@ serve(async (req) => {
       }
     };
 
-    console.log('=== SUCCESS ===');
-    console.log('Returning response data:', JSON.stringify(responseData, null, 2));
+    console.log('Order created successfully:', order.id);
 
     return new Response(JSON.stringify(responseData), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
 
   } catch (error) {
-    console.error("=== ERROR ===");
-    console.error("Error message:", error.message);
-    console.error("Error stack:", error.stack);
+    console.error("Error creating order:", error.message);
     
     return new Response(
       JSON.stringify({ 
         error: error.message,
-        timestamp: new Date().toISOString(),
-        function: "create-razorpay-order"
+        timestamp: new Date().toISOString()
       }),
       {
         status: 400,

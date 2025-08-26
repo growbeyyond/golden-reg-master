@@ -189,7 +189,12 @@ export default function LandingPage() {
       });
 
       if (error) {
-        console.error('Order creation error:', error);
+        console.error('=== SUPABASE FUNCTION ERROR ===');
+        console.error('Error object:', error);
+        console.error('Error message:', error.message);
+        console.error('Error details:', error.details);
+        console.error('Error hint:', error.hint);
+        
         // Handle specific error codes
         if (error.message?.includes('PAYMENT_UNAVAILABLE')) {
           throw new Error('Payment system is temporarily unavailable. Please contact our support team for assistance.');
@@ -197,6 +202,7 @@ export default function LandingPage() {
         throw new Error(error.message || 'Failed to create order');
       }
 
+      console.log('=== RAZORPAY ORDER SUCCESS ===');
       console.log('Razorpay order created successfully:', orderData);
 
       // Load Razorpay and process payment

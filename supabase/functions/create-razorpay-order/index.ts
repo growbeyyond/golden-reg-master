@@ -30,24 +30,16 @@ serve(async (req) => {
     console.log('=== RAZORPAY ORDER CREATION START ===');
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const razorpayKeyId = Deno.env.get("RAZORPAY_KEY_ID");
-    const razorpayKeySecret = Deno.env.get("RAZORPAY_KEY_SECRET");
+    
+    // Temporarily hardcode credentials to test
+    const razorpayKeyId = "rzp_live_R9raeVZnq16wOA";
+    const razorpayKeySecret = "Xp5uflUf3ifg5UR4wuJ3keE0";
 
-    // Enhanced credential checking with detailed logging
-    console.log('=== CREDENTIAL CHECK ===');
+    console.log('=== USING HARDCODED CREDENTIALS FOR TESTING ===');
     console.log('SUPABASE_URL exists:', !!supabaseUrl);
     console.log('SUPABASE_SERVICE_ROLE_KEY exists:', !!supabaseServiceKey);
-    console.log('RAZORPAY_KEY_ID exists:', !!razorpayKeyId);
-    console.log('RAZORPAY_KEY_SECRET exists:', !!razorpayKeySecret);
-    
-    if (razorpayKeyId) {
-      console.log('RAZORPAY_KEY_ID length:', razorpayKeyId.length);
-      console.log('RAZORPAY_KEY_ID starts with:', razorpayKeyId.substring(0, 4));
-    }
-    
-    if (razorpayKeySecret) {
-      console.log('RAZORPAY_KEY_SECRET length:', razorpayKeySecret.length);
-    }
+    console.log('RAZORPAY_KEY_ID (hardcoded):', razorpayKeyId);
+    console.log('RAZORPAY_KEY_SECRET length (hardcoded):', razorpayKeySecret.length);
     
     if (!razorpayKeyId || !razorpayKeySecret) {
       console.error('Missing Razorpay credentials - KeyId:', !!razorpayKeyId, 'KeySecret:', !!razorpayKeySecret);

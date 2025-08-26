@@ -211,7 +211,7 @@ export default function LandingPage() {
       const paymentResponse = await createRazorpayOrder({
         amount: orderData.amount,
         currency: orderData.currency,
-        orderId: orderData.razorpayOrderId,
+        razorpayOrderId: orderData.razorpayOrderId,
         key: orderData.key,
         customerDetails: {
           name: formData.fullName,

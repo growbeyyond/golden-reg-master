@@ -44,7 +44,7 @@ export const loadRazorpayScript = (): Promise<boolean> => {
 export const createRazorpayOrder = async (orderData: {
   amount: number;
   currency: string;
-  orderId: string;
+  razorpayOrderId: string;
   key: string;
   customerDetails: {
     name: string;
@@ -58,16 +58,20 @@ export const createRazorpayOrder = async (orderData: {
     throw new Error('Failed to load Razorpay SDK');
   }
 
+  console.log('=== RAZORPAY PAYMENT SETUP ===');
+  console.log('Amount received:', orderData.amount);
+  console.log('Key:', orderData.key);
+  console.log('Order ID:', orderData.razorpayOrderId);
+
   const options: RazorpayOptions = {
-    key: orderData.key, // Use the key from server
-    amount: orderData.amount * 100, // Convert to paise
+    key: orderData.key,
+    amount: orderData.amount, // Amount already in paise from server
     currency: orderData.currency,
     name: 'ISTA Media',
     description: 'Event Registration Payment',
-    order_id: orderData.orderId,
+    order_id: orderData.razorpayOrderId, // Use razorpayOrderId
     handler: (response: any) => {
       console.log('Payment successful:', response);
-      // Payment success will be handled by the calling component
       return response;
     },
     prefill: {
@@ -76,7 +80,7 @@ export const createRazorpayOrder = async (orderData: {
       contact: orderData.customerDetails.phone,
     },
     theme: {
-      color: '#D4AF37', // Gold color matching the design
+      color: '#D4AF37',
     },
     modal: {
       ondismiss: () => {

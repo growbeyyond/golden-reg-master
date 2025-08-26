@@ -59,13 +59,14 @@ export const createRazorpayOrder = async (orderData: {
   }
 
   console.log('=== RAZORPAY PAYMENT SETUP ===');
-  console.log('Amount received:', orderData.amount);
-  console.log('Key:', orderData.key);
+  console.log('Amount received (paise):', orderData.amount);
+  console.log('Amount in INR:', orderData.amount / 100);
+  console.log('Key:', orderData.key ? `${orderData.key.substring(0, 8)}...` : 'MISSING');
   console.log('Order ID:', orderData.razorpayOrderId);
 
   const options: RazorpayOptions = {
     key: orderData.key,
-    amount: orderData.amount, // Amount already in paise from server
+    amount: orderData.amount, // Amount in paise from server
     currency: orderData.currency,
     name: 'ISTA Media',
     description: 'Event Registration Payment',

@@ -69,7 +69,12 @@ serve(async (req) => {
     // Generate order number
     const orderNumber = `RZP${Date.now()}${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
 
-    console.log(`Creating Razorpay order: ${orderNumber}, Amount: ${totalAmount}`);
+    console.log("=== ORDER CREATION DETAILS ===");
+    console.log(`Order Number: ${orderNumber}`);
+    console.log(`Base Amount: ₹${baseAmount}`);
+    console.log(`GST Amount (18%): ₹${gstAmount}`);
+    console.log(`Total Amount: ₹${totalAmount}`);
+    console.log(`Amount in Paise: ${totalAmount * 100}`);
 
     // Create Razorpay order
     const razorpayOrderData = {
@@ -94,8 +99,22 @@ serve(async (req) => {
 
     if (!razorpayResponse.ok) {
       const errorText = await razorpayResponse.text();
-      console.error('Razorpay API error:', errorText);
-      throw new Error(`Razorpay order creation failed: ${razorpayResponse.status}`);
+      console.error('=== RAZORPAY API ERROR ===');
+      console.error('Status:', razorpayResponse.status);
+      console.error('Status Text:', razorpayResponse.statusText);
+      console.error('Response:', errorText);
+      
+      // Provide user-friendly error messages based on Razorpay response
+      let userMessage = 'Payment gateway error. Please try again.';
+      if (razorpayResponse.status === 401) {
+        userMessage = 'Payment configuration error. Please contact support.';
+      } else if (razorpayResponse.status === 400) {
+        userMessage = 'Invalid payment request. Please refresh and try again.';
+      } else if (razorpayResponse.status >= 500) {
+        userMessage = 'Payment service temporarily unavailable. Please try again later.';
+      }
+      
+      throw new Error(userMessage);
     }
 
     const razorpayOrder = await razorpayResponse.json();
@@ -140,9 +159,10 @@ serve(async (req) => {
       orderId: order.id,
       orderNumber: orderNumber,
       razorpayOrderId: razorpayOrder.id,
-      amount: totalAmount,
+      amount: totalAmount * 100, // Amount in paise for Razorpay
       baseAmount: baseAmount,
       gstAmount: gstAmount,
+      totalAmount: totalAmount, // Keep INR amount for display
       currency: currency || "INR",
       key: razorpayKeyId,
       name: "ISTA Digital Media Anniversary Edition 2025",
@@ -161,15 +181,37 @@ serve(async (req) => {
     });
 
   } catch (error) {
-    console.error("Error creating order:", error.message);
+    console.error("=== ERROR CREATING ORDER ===");
+    console.error("Error type:", error.constructor.name);
+    console.error("Error message:", error.message);
+    console.error("Full error:", error);
+    
+    // Provide more specific error messages for debugging
+    let errorMessage = error.message;
+    let statusCode = 400;
+    
+    if (error.message?.includes('Razorpay')) {
+      errorMessage = 'Payment gateway error. Please try again in a moment.';
+      statusCode = 502;
+    } else if (error.message?.includes('Database')) {
+      errorMessage = 'Database error. Please contact support if this persists.';
+      statusCode = 500;
+    } else if (error.message?.includes('Invalid amount')) {
+      errorMessage = 'Invalid payment amount. Please refresh the page and try again.';
+      statusCode = 400;
+    } else if (error.message?.includes('Missing required')) {
+      errorMessage = 'Required information is missing. Please fill all fields.';
+      statusCode = 400;
+    }
     
     return new Response(
       JSON.stringify({ 
-        error: error.message,
-        timestamp: new Date().toISOString()
+        error: errorMessage,
+        timestamp: new Date().toISOString(),
+        requestId: `ERR_${Date.now()}`
       }),
       {
-        status: 400,
+        status: statusCode,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       }
     );

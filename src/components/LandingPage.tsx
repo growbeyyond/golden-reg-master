@@ -154,6 +154,13 @@ export default function LandingPage() {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   const [isProcessing, setIsProcessing] = useState(false);
+  const [paymentStep, setPaymentStep] = useState<string>('');
+
+  // Payment progress steps for better UX
+  const updatePaymentStep = (step: string) => {
+    setPaymentStep(step);
+    console.log(`=== PAYMENT STEP: ${step} ===`);
+  };
 
   // Timer update
   useEffect(() => {
@@ -167,9 +174,10 @@ export default function LandingPage() {
   const handlePayment = async () => {
     console.log('handlePayment called - using Razorpay');
     setIsProcessing(true);
+    updatePaymentStep('Initializing payment...');
     
     try {
-      // Direct payment processing without credential test
+      updatePaymentStep('Creating secure order...');
       
       console.log('Creating Razorpay order with data:', {
         baseAmount: tier.amount,
@@ -195,11 +203,20 @@ export default function LandingPage() {
         console.error('Error details:', error.details);
         console.error('Error hint:', error.hint);
         
-        // Handle specific error codes
+        // Handle specific error codes with user-friendly messages
+        let userMessage = 'Payment processing failed. Please try again.';
+        
         if (error.message?.includes('PAYMENT_UNAVAILABLE')) {
-          throw new Error('Payment system is temporarily unavailable. Please contact our support team for assistance.');
+          userMessage = 'Payment system is temporarily unavailable. Please contact our support team for assistance.';
+        } else if (error.message?.includes('credentials')) {
+          userMessage = 'Payment configuration error. Please contact support.';
+        } else if (error.message?.includes('amount')) {
+          userMessage = 'Invalid amount. Please refresh the page and try again.';
+        } else if (error.message?.includes('network') || error.message?.includes('timeout')) {
+          userMessage = 'Network error. Please check your connection and try again.';
         }
-        throw new Error(error.message || 'Failed to create order');
+        
+        throw new Error(userMessage);
       }
 
       console.log('=== RAZORPAY ORDER SUCCESS ===');
@@ -207,7 +224,8 @@ export default function LandingPage() {
       console.log('Order data details:', {
         orderId: orderData.orderId,
         razorpayOrderId: orderData.razorpayOrderId,
-        amount: orderData.amount,
+        amount: orderData.amount, // Amount in paise
+        totalAmount: orderData.totalAmount, // Amount in INR
         baseAmount: orderData.baseAmount,
         gstAmount: orderData.gstAmount,
         currency: orderData.currency,
@@ -215,11 +233,14 @@ export default function LandingPage() {
       });
 
       // Load Razorpay and process payment
+      updatePaymentStep('Opening payment gateway...');
+      
       const { createRazorpayOrder } = await import('@/lib/razorpay');
       
       console.log('=== STARTING RAZORPAY PAYMENT ===');
       console.log('Payment data being sent to Razorpay:', {
-        amount: orderData.amount,
+        amount: orderData.amount, // Amount in paise
+        amountDisplay: `₹${orderData.totalAmount || (orderData.amount / 100)}`,
         currency: orderData.currency,
         razorpayOrderId: orderData.razorpayOrderId,
         key: orderData.key ? `${orderData.key.substring(0, 8)}...` : 'MISSING',
@@ -247,6 +268,9 @@ export default function LandingPage() {
 
         console.log('=== PAYMENT SUCCESS ===');
         console.log('Payment completed:', paymentResponse);
+        
+        updatePaymentStep('Verifying payment...');
+        
       } catch (razorpayError) {
         console.error('=== RAZORPAY PAYMENT ERROR ===');
         console.error('Error type:', razorpayError.constructor.name);
@@ -267,26 +291,52 @@ export default function LandingPage() {
       });
 
       if (verifyError) {
+        console.error('Payment verification failed:', verifyError);
         throw new Error(verifyError.message || 'Payment verification failed');
       }
 
-      toast.success("Payment successful! Redirecting to confirmation page...");
+      updatePaymentStep('Payment confirmed! Redirecting...');
+      console.log('=== PAYMENT VERIFICATION SUCCESS ===');
+
+      toast.success("Payment successful! 🎉", {
+        description: "Redirecting to your confirmation page with tickets..."
+      });
+      
+      // Show loading state before redirect
+      setIsProcessing(true);
       
       // Redirect to success page
       setTimeout(() => {
         window.location.href = `/payment-success?orderId=${orderData.orderId}`;
-      }, 1500);
+      }, 2000);
 
     } catch (error: any) {
-      console.error('Payment processing error:', error);
+      console.error('=== PAYMENT ERROR ===');
+      console.error('Error type:', error.constructor.name);
+      console.error('Error message:', error.message);
+      console.error('Full error object:', error);
       
+      // Enhanced error handling with user-friendly messages
       if (error.message === 'Payment cancelled by user') {
-        toast.error("Payment was cancelled. Please try again when ready.");
+        toast.error("Payment was cancelled. Please try again when ready.", {
+          description: "No charges were made to your account."
+        });
+      } else if (error.message?.includes('network') || error.message?.includes('timeout')) {
+        toast.error("Network connection issue", {
+          description: "Please check your internet connection and try again."
+        });
+      } else if (error.message?.includes('verification failed')) {
+        toast.error("Payment verification failed", {
+          description: "Your payment may have been processed. Please contact support if amount was debited."
+        });
       } else {
-        toast.error(error.message || "Payment processing failed. Please try again.");
+        toast.error("Payment processing failed", {
+          description: error.message || "Please try again or contact support if the issue persists."
+        });
       }
     } finally {
       setIsProcessing(false);
+      setPaymentStep('');
     }
   };
 
@@ -831,13 +881,25 @@ export default function LandingPage() {
                     />
                     I agree to be contacted via WhatsApp/Email for confirmation and print proof.
                   </label>
-                  <Button 
-                    type="submit" 
-                    className="gold-gradient text-primary-foreground w-full"
-                    disabled={isProcessing}
-                  >
-                    {isProcessing ? 'Processing...' : `Proceed to Payment (₹${tier.amount.toLocaleString('en-IN')} + GST)`}
-                  </Button>
+                   <Button 
+                     type="submit" 
+                     className="gold-gradient text-primary-foreground w-full relative"
+                     disabled={isProcessing}
+                   >
+                     {isProcessing ? (
+                       <div className="flex items-center gap-2">
+                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                         {paymentStep || 'Processing Payment...'}
+                       </div>
+                     ) : (
+                       `Register Now - ₹${tier.amount.toLocaleString('en-IN')} + GST (Total: ₹${Math.round(tier.amount * 1.18).toLocaleString('en-IN')})`
+                     )}
+                   </Button>
+                   {isProcessing && paymentStep && (
+                     <div className="text-center mt-2">
+                       <p className="text-xs text-muted-foreground">{paymentStep}</p>
+                     </div>
+                   )}
                 </form>
               </CardContent>
             </Card>

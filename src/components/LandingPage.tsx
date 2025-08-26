@@ -116,7 +116,7 @@ const formatTime = (ms: number): string => {
 };
 
 const getActiveTier = (ts = Date.now()): TierInfo => {
-  const baseAmount = 5000; // Base amount without GST
+  const baseAmount = 10000; // Base amount without GST
   
   if (ts <= DEADLINES.early) return { label: "Early Bird", amount: baseAmount, until: DEADLINES.early };
   if (ts <= DEADLINES.std) return { label: "Standard", amount: baseAmount, until: DEADLINES.std };

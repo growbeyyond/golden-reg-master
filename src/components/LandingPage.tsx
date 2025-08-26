@@ -18,9 +18,8 @@ interface TierInfo {
 }
 
 const DEADLINES = {
-  early: Date.parse("2025-08-31T18:29:59Z"), // 23:59:59 IST
-  std: Date.parse("2025-09-07T18:29:59Z"),
-  last: Date.parse("2025-09-12T18:29:59Z"),
+  early: Date.parse("2025-09-04T18:29:59Z"), // Sept 4th 23:59:59 IST
+  std: Date.parse("2025-09-14T18:29:59Z"), // Sept 14th 23:59:59 IST
 };
 
 const CHIEF_GUESTS = [
@@ -116,12 +115,12 @@ const formatTime = (ms: number): string => {
 };
 
 const getActiveTier = (ts = Date.now()): TierInfo => {
-  const baseAmount = 10000; // Base amount without GST
+  const earlyAmount = 10000; // Early Bird amount
+  const standardAmount = 20000; // Standard amount
   
-  if (ts <= DEADLINES.early) return { label: "Early Bird", amount: baseAmount, until: DEADLINES.early };
-  if (ts <= DEADLINES.std) return { label: "Standard", amount: baseAmount, until: DEADLINES.std };
-  if (ts <= DEADLINES.last) return { label: "Last Chance", amount: baseAmount, until: DEADLINES.last };
-  return { label: "Final/On-spot", amount: baseAmount, until: null };
+  if (ts <= DEADLINES.early) return { label: "Early Bird", amount: earlyAmount, until: DEADLINES.early };
+  if (ts <= DEADLINES.std) return { label: "Standard", amount: standardAmount, until: DEADLINES.std };
+  return { label: "Final/On-spot", amount: standardAmount, until: null };
 };
 
 
@@ -639,26 +638,19 @@ export default function LandingPage() {
             <h2 className="text-3xl font-bold gold-glow">Limited-Time Offer Pricing</h2>
             <p className="text-muted-foreground">Auto-updates by date (IST). Pay securely via Razorpay.</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 gap-6">
             <Card className="gold-border bg-card/50">
               <CardContent className="p-6">
-                <div className="kicker mb-2">Till Aug 31</div>
+                <div className="kicker mb-2">Till Sep 4</div>
                 <div className="text-4xl font-extrabold">₹10,000</div>
-                <p className="mt-2 text-sm text-muted-foreground">Early Bird — ends Aug 31, 23:59 IST</p>
+                <p className="mt-2 text-sm text-muted-foreground">Early Bird — ends Sep 4, 23:59 IST</p>
               </CardContent>
             </Card>
             <Card className="gold-border bg-card/50">
               <CardContent className="p-6">
-                <div className="kicker mb-2">Sep 1 – Sep 7</div>
+                <div className="kicker mb-2">Sep 5 – Sep 14</div>
                 <div className="text-4xl font-extrabold">₹20,000</div>
-                <p className="mt-2 text-sm text-muted-foreground">Standard — ends Sep 7, 23:59 IST</p>
-              </CardContent>
-            </Card>
-            <Card className="gold-border bg-card/50">
-              <CardContent className="p-6">
-                <div className="kicker mb-2">Sep 8 – Sep 12</div>
-                <div className="text-4xl font-extrabold">₹30,000</div>
-                <p className="mt-2 text-sm text-muted-foreground">Last Chance — ends Sep 12, 23:59 IST</p>
+                <p className="mt-2 text-sm text-muted-foreground">Standard — ends Sep 14, 23:59 IST</p>
               </CardContent>
             </Card>
           </div>

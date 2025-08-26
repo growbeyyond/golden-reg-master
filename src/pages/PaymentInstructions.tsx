@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Copy, Check, QrCode, CreditCard, Building2, User, Phone, Mail, ArrowLeft, Upload, MessageCircle } from "lucide-react";
 import { openWhatsAppWithMessage, getWhatsAppUrl, getWhatsAppNumber } from '@/lib/whatsapp';
+import { supabase } from '@/integrations/supabase/client';
 
 interface CustomerDetails {
   name: string;
@@ -98,25 +99,21 @@ const PaymentInstructions = () => {
     setUploadingProof(true);
     
     try {
-      const response = await fetch(`https://vnccezzqcohvgzkwojqz.supabase.co/functions/v1/verify-payment`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const { data, error } = await supabase.functions.invoke('verify-payment', {
+        body: {
           orderId,
           paymentProofUrl: 'manual_verification_pending',
           transactionId: 'manual_verification'
-        })
+        }
       });
 
-      if (response.ok) {
-        toast.success("Payment proof submitted for verification. We'll contact you once verified.");
-        // Clear session data after successful submission
-        sessionStorage.removeItem('customerDetails');
-      } else {
-        throw new Error('Failed to submit payment proof');
+      if (error) {
+        throw error;
       }
+
+      toast.success("Payment proof submitted for verification. We'll contact you once verified.");
+      // Clear session data after successful submission
+      sessionStorage.removeItem('customerDetails');
     } catch (error) {
       console.error('Error submitting payment proof:', error);
       toast.error("Failed to submit payment proof. Please try again.");

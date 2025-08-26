@@ -37,41 +37,80 @@ const PaymentSuccess = () => {
       const razorpay_payment_id = searchParams.get("razorpay_payment_id");
       const razorpay_order_id = searchParams.get("razorpay_order_id");
       const razorpay_signature = searchParams.get("razorpay_signature");
+      const orderId = searchParams.get("orderId");
 
-      if (!razorpay_payment_id || !razorpay_order_id || !razorpay_signature) {
-        toast.error("Invalid payment parameters");
-        navigate("/");
+      // If we have Razorpay parameters, verify payment normally
+      if (razorpay_payment_id && razorpay_order_id && razorpay_signature) {
+        setConfirming(true);
+
+        try {
+          // Confirm payment with backend
+          const { data, error } = await supabase.functions.invoke("verify-razorpay-payment", {
+            body: {
+              razorpay_order_id,
+              razorpay_payment_id,
+              razorpay_signature,
+            },
+          });
+
+          if (error) {
+            console.error("Payment confirmation error:", error);
+            toast.error("Failed to confirm payment");
+            return;
+          }
+
+          setOrder(data);
+          toast.success("Payment confirmed successfully!");
+          
+        } catch (error) {
+          console.error("Error confirming payment:", error);
+          toast.error("Failed to confirm payment");
+        } finally {
+          setConfirming(false);
+          setLoading(false);
+        }
         return;
       }
 
-      setConfirming(true);
+      // If we have orderId, fetch order directly from database
+      if (orderId) {
+        try {
+          const { data, error } = await supabase
+            .from('orders')
+            .select('*')
+            .eq('id', orderId)
+            .eq('status', 'paid')
+            .single();
 
-      try {
-        // Confirm payment with backend
-        const { data, error } = await supabase.functions.invoke("verify-razorpay-payment", {
-          body: {
-            razorpay_order_id,
-            razorpay_payment_id,
-            razorpay_signature,
-          },
-        });
+          if (error) {
+            console.error("Order fetch error:", error);
+            toast.error("Could not find your order");
+            navigate("/");
+            return;
+          }
 
-        if (error) {
-          console.error("Payment confirmation error:", error);
-          toast.error("Failed to confirm payment");
-          return;
+          // Transform data to match expected Order interface
+          const orderData = {
+            ...data,
+            razorpay_payment_id: data.ticket_qr_code || 'MANUAL_PAYMENT'
+          };
+
+          setOrder(orderData);
+          toast.success("Order details loaded successfully!");
+          
+        } catch (error) {
+          console.error("Error fetching order:", error);
+          toast.error("Failed to load order details");
+          navigate("/");
+        } finally {
+          setLoading(false);
         }
-
-        setOrder(data);
-        toast.success("Payment confirmed successfully!");
-        
-      } catch (error) {
-        console.error("Error confirming payment:", error);
-        toast.error("Failed to confirm payment");
-      } finally {
-        setConfirming(false);
-        setLoading(false);
+        return;
       }
+
+      // No valid parameters found
+      toast.error("Invalid payment parameters");
+      navigate("/");
     };
 
     confirmPayment();

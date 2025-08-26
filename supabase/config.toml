@@ -15,6 +15,3 @@ verify_jwt = false
 
 [functions.verify-razorpay-payment]
 verify_jwt = false
-
-[functions.test-credentials]
-verify_jwt = false

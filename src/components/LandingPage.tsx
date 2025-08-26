@@ -169,13 +169,7 @@ export default function LandingPage() {
     setIsProcessing(true);
     
     try {
-      // Test credentials first
-      console.log('Testing Razorpay credentials...');
-      const { data: credTest, error: credError } = await supabase.functions.invoke("test-credentials");
-      console.log('Credentials test result:', credTest);
-      if (credError) {
-        console.error('Credentials test error:', credError);
-      }
+      // Direct payment processing without credential test
       
       console.log('Creating Razorpay order with data:', {
         baseAmount: tier.amount,

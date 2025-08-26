@@ -27,15 +27,27 @@ serve(async (req) => {
   }
 
   try {
+    console.log('=== RAZORPAY ORDER CREATION START ===');
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const razorpayKeyId = Deno.env.get("RAZORPAY_KEY_ID");
     const razorpayKeySecret = Deno.env.get("RAZORPAY_KEY_SECRET");
 
-    // Check if Razorpay credentials are available (Updated: 2025-08-26)
-    console.log('Environment check - RAZORPAY_KEY_ID exists:', !!razorpayKeyId);
-    console.log('Environment check - RAZORPAY_KEY_SECRET exists:', !!razorpayKeySecret);
-    console.log('Function redeployed to pick up new secrets');
+    // Enhanced credential checking with detailed logging
+    console.log('=== CREDENTIAL CHECK ===');
+    console.log('SUPABASE_URL exists:', !!supabaseUrl);
+    console.log('SUPABASE_SERVICE_ROLE_KEY exists:', !!supabaseServiceKey);
+    console.log('RAZORPAY_KEY_ID exists:', !!razorpayKeyId);
+    console.log('RAZORPAY_KEY_SECRET exists:', !!razorpayKeySecret);
+    
+    if (razorpayKeyId) {
+      console.log('RAZORPAY_KEY_ID length:', razorpayKeyId.length);
+      console.log('RAZORPAY_KEY_ID starts with:', razorpayKeyId.substring(0, 4));
+    }
+    
+    if (razorpayKeySecret) {
+      console.log('RAZORPAY_KEY_SECRET length:', razorpayKeySecret.length);
+    }
     
     if (!razorpayKeyId || !razorpayKeySecret) {
       console.error('Missing Razorpay credentials - KeyId:', !!razorpayKeyId, 'KeySecret:', !!razorpayKeySecret);

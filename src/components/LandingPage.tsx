@@ -188,6 +188,10 @@ export default function LandingPage() {
 
       if (error) {
         console.error('Order creation error:', error);
+        // Handle specific error codes
+        if (error.message?.includes('PAYMENT_UNAVAILABLE')) {
+          throw new Error('Payment system is temporarily unavailable. Please contact our support team for assistance.');
+        }
         throw new Error(error.message || 'Failed to create order');
       }
 

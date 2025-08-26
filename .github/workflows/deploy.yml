@@ -32,6 +32,13 @@ jobs:
           cat > dist/.htaccess << 'EOF'
           RewriteEngine On
           RewriteBase /
+          
+          # Handle CORS preflight requests
+          Header always set Access-Control-Allow-Origin "*"
+          Header always set Access-Control-Allow-Methods "GET, POST, OPTIONS, PUT, DELETE"
+          Header always set Access-Control-Allow-Headers "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"
+          
+          # SPA routing - redirect all routes to index.html
           RewriteRule ^index\.html$ - [L]
           RewriteCond %{REQUEST_FILENAME} !-f
           RewriteCond %{REQUEST_FILENAME} !-d

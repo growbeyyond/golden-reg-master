@@ -32,6 +32,13 @@ serve(async (req) => {
     const razorpayKeyId = Deno.env.get("RAZORPAY_KEY_ID")!;
     const razorpayKeySecret = Deno.env.get("RAZORPAY_KEY_SECRET")!;
 
+    console.log('Environment check:', {
+      hasRazorpayKeyId: !!razorpayKeyId,
+      hasRazorpayKeySecret: !!razorpayKeySecret,
+      keyIdLength: razorpayKeyId?.length,
+      keySecretLength: razorpayKeySecret?.length
+    });
+
     const supabase = createClient(supabaseUrl, supabaseServiceKey, {
       auth: { persistSession: false }
     });

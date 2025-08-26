@@ -155,6 +155,9 @@ export default function LandingPage() {
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentStep, setPaymentStep] = useState<string>('');
+  const [lastError, setLastError] = useState<{message: string, details: any, requestId?: string} | null>(null);
+  const [showErrorDetails, setShowErrorDetails] = useState(false);
+  const [showFallbackOptions, setShowFallbackOptions] = useState(false);
 
   // Payment progress steps for better UX
   const updatePaymentStep = (step: string) => {
@@ -202,6 +205,15 @@ export default function LandingPage() {
         console.error('Error message:', error.message);
         console.error('Error details:', error.details);
         console.error('Error hint:', error.hint);
+        
+        // Store error for debugging
+        const errorData = {
+          message: error.message || 'Payment processing failed',
+          details: error,
+          requestId: error.details?.requestId || `req_${Date.now()}`
+        };
+        setLastError(errorData);
+        setShowFallbackOptions(true);
         
         // Handle specific error codes with user-friendly messages
         let userMessage = 'Payment processing failed. Please try again.';
@@ -315,6 +327,16 @@ export default function LandingPage() {
       console.error('Error type:', error.constructor.name);
       console.error('Error message:', error.message);
       console.error('Full error object:', error);
+      
+      // Store error details if not already stored
+      if (!lastError) {
+        setLastError({
+          message: error.message,
+          details: error,
+          requestId: `req_${Date.now()}`
+        });
+        setShowFallbackOptions(true);
+      }
       
       // Enhanced error handling with user-friendly messages
       if (error.message === 'Payment cancelled by user') {
@@ -780,6 +802,37 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-2 gap-8">
             <Card className="gold-border">
               <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                    🔒 Payment mode: Live
+                  </Badge>
+                  {lastError && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowErrorDetails(!showErrorDetails)}
+                      className="text-xs text-muted-foreground"
+                    >
+                      {showErrorDetails ? 'Hide' : 'View'} error details
+                    </Button>
+                  )}
+                </div>
+                
+                {showErrorDetails && lastError && (
+                  <Card className="mb-4 border-red-200 bg-red-50">
+                    <CardContent className="p-3">
+                      <div className="text-xs space-y-2">
+                        <div><strong>Error:</strong> {lastError.message}</div>
+                        <div><strong>Request ID:</strong> {lastError.requestId}</div>
+                        <div className="bg-red-100 p-2 rounded text-xs overflow-auto max-h-32">
+                          <pre>{JSON.stringify(lastError.details, null, 2)}</pre>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+                
                 <form onSubmit={handleSubmit} className="space-y-4">
                    <div className="grid md:grid-cols-2 gap-4">
                      <div>
@@ -894,13 +947,47 @@ export default function LandingPage() {
                      ) : (
                        `Register Now - ₹${tier.amount.toLocaleString('en-IN')} + GST (Total: ₹${Math.round(tier.amount * 1.18).toLocaleString('en-IN')})`
                      )}
-                   </Button>
-                   {isProcessing && paymentStep && (
-                     <div className="text-center mt-2">
-                       <p className="text-xs text-muted-foreground">{paymentStep}</p>
-                     </div>
-                   )}
-                </form>
+                    </Button>
+                    
+                    {showFallbackOptions && (
+                      <div className="mt-4 space-y-2">
+                        <div className="flex gap-2">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              setLastError(null);
+                              setShowFallbackOptions(false);
+                              setShowErrorDetails(false);
+                              handlePayment();
+                            }}
+                            className="flex-1"
+                          >
+                            Try Again
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="outline"  
+                            size="sm"
+                            onClick={() => window.location.href = '/payment-instructions'}
+                            className="flex-1"
+                          >
+                            Use Manual Payment
+                          </Button>
+                        </div>
+                        <div className="text-xs text-center text-muted-foreground">
+                          Having trouble? Contact support with request ID: {lastError?.requestId}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {isProcessing && paymentStep && (
+                      <div className="text-center mt-2">
+                        <p className="text-xs text-muted-foreground">{paymentStep}</p>
+                      </div>
+                    )}
+                 </form>
               </CardContent>
             </Card>
 

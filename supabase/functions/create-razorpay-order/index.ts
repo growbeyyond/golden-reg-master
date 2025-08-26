@@ -174,7 +174,14 @@ serve(async (req) => {
       }
     };
 
-    console.log('Order created successfully:', order.id);
+    console.log('=== ORDER CREATION SUCCESS ===');
+    console.log('Order created successfully:', {
+      orderId: order.id,
+      orderNumber: orderNumber,
+      customerEmail: formData.email,
+      amount: totalAmount,
+      razorpayOrderId: razorpayOrder.id
+    });
 
     return new Response(JSON.stringify(responseData), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },

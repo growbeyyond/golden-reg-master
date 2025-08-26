@@ -634,21 +634,21 @@ export default function LandingPage() {
             <Card className="gold-border bg-card/50">
               <CardContent className="p-6">
                 <div className="kicker mb-2">Till Aug 31</div>
-                <div className="text-4xl font-extrabold">₹5,000</div>
+                <div className="text-4xl font-extrabold">₹10,000</div>
                 <p className="mt-2 text-sm text-muted-foreground">Early Bird — ends Aug 31, 23:59 IST</p>
               </CardContent>
             </Card>
             <Card className="gold-border bg-card/50">
               <CardContent className="p-6">
                 <div className="kicker mb-2">Sep 1 – Sep 7</div>
-                <div className="text-4xl font-extrabold">₹10,000</div>
+                <div className="text-4xl font-extrabold">₹20,000</div>
                 <p className="mt-2 text-sm text-muted-foreground">Standard — ends Sep 7, 23:59 IST</p>
               </CardContent>
             </Card>
             <Card className="gold-border bg-card/50">
               <CardContent className="p-6">
                 <div className="kicker mb-2">Sep 8 – Sep 12</div>
-                <div className="text-4xl font-extrabold">₹15,000</div>
+                <div className="text-4xl font-extrabold">₹30,000</div>
                 <p className="mt-2 text-sm text-muted-foreground">Last Chance — ends Sep 12, 23:59 IST</p>
               </CardContent>
             </Card>

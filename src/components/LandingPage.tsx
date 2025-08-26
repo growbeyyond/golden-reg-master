@@ -204,23 +204,58 @@ export default function LandingPage() {
 
       console.log('=== RAZORPAY ORDER SUCCESS ===');
       console.log('Razorpay order created successfully:', orderData);
+      console.log('Order data details:', {
+        orderId: orderData.orderId,
+        razorpayOrderId: orderData.razorpayOrderId,
+        amount: orderData.amount,
+        baseAmount: orderData.baseAmount,
+        gstAmount: orderData.gstAmount,
+        currency: orderData.currency,
+        key: orderData.key ? `${orderData.key.substring(0, 8)}...` : 'MISSING'
+      });
 
       // Load Razorpay and process payment
       const { createRazorpayOrder } = await import('@/lib/razorpay');
       
-      const paymentResponse = await createRazorpayOrder({
+      console.log('=== STARTING RAZORPAY PAYMENT ===');
+      console.log('Payment data being sent to Razorpay:', {
         amount: orderData.amount,
         currency: orderData.currency,
         razorpayOrderId: orderData.razorpayOrderId,
-        key: orderData.key,
+        key: orderData.key ? `${orderData.key.substring(0, 8)}...` : 'MISSING',
         customerDetails: {
           name: formData.fullName,
           email: formData.email,
           phone: formData.phone,
-        },
+        }
       });
+      
+      let paymentResponse;
+      try {
+        console.log('=== ATTEMPTING RAZORPAY PAYMENT ===');
+        paymentResponse = await createRazorpayOrder({
+          amount: orderData.amount,
+          currency: orderData.currency,
+          razorpayOrderId: orderData.razorpayOrderId,
+          key: orderData.key,
+          customerDetails: {
+            name: formData.fullName,
+            email: formData.email,
+            phone: formData.phone,
+          },
+        });
 
-      console.log('Payment completed:', paymentResponse);
+        console.log('=== PAYMENT SUCCESS ===');
+        console.log('Payment completed:', paymentResponse);
+      } catch (razorpayError) {
+        console.error('=== RAZORPAY PAYMENT ERROR ===');
+        console.error('Error type:', razorpayError.constructor.name);
+        console.error('Error message:', razorpayError.message);
+        console.error('Full error:', razorpayError);
+        
+        // Re-throw with more context
+        throw new Error(`Payment failed: ${razorpayError.message}`);
+      }
 
       // Verify payment
       const { error: verifyError } = await supabase.functions.invoke('verify-razorpay-payment', {

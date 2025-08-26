@@ -110,6 +110,47 @@ export type Database = {
         }
         Relationships: []
       }
+      razorpay_orders: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          id: string
+          manual_order_id: string
+          razorpay_order_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string
+          id?: string
+          manual_order_id: string
+          razorpay_order_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          manual_order_id?: string
+          razorpay_order_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "razorpay_orders_manual_order_id_fkey"
+            columns: ["manual_order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tickets: {
         Row: {
           created_at: string

@@ -164,71 +164,80 @@ export default function LandingPage() {
     return () => clearInterval(interval);
   }, []);
 
-  // Manual Payment Integration - UPI/Bank Transfer System
+  // Razorpay Payment Integration
   const handlePayment = async () => {
-    console.log('handlePayment called');
+    console.log('handlePayment called - using Razorpay');
     setIsProcessing(true);
     
     try {
-      console.log('Invoking create-manual-order with data:', {
-        baseAmount: tier.amount, // Send base amount to server
+      console.log('Creating Razorpay order with data:', {
+        baseAmount: tier.amount,
         currency: "INR",
         formData,
         tierLabel: tier.label,
       });
 
-      // Create order on server
-      const { data: orderData, error } = await supabase.functions.invoke('create-manual-order', {
+      // Create Razorpay order
+      const { data: orderData, error } = await supabase.functions.invoke('create-razorpay-order', {
         body: {
-          baseAmount: tier.amount, // Send base amount, server will calculate GST
+          baseAmount: tier.amount,
           currency: "INR",
           formData,
           tierLabel: tier.label,
         }
       });
 
-      console.log('Supabase function response:', { data: orderData, error });
-
       if (error) {
         console.error('Order creation error:', error);
         throw new Error(error.message || 'Failed to create order');
       }
 
-      if (!orderData) {
-        throw new Error('No order data received from server');
+      console.log('Razorpay order created successfully:', orderData);
+
+      // Load Razorpay and process payment
+      const { createRazorpayOrder } = await import('@/lib/razorpay');
+      
+      const paymentResponse = await createRazorpayOrder({
+        amount: orderData.amount,
+        currency: orderData.currency,
+        orderId: orderData.razorpayOrderId,
+        customerDetails: {
+          name: formData.fullName,
+          email: formData.email,
+          phone: formData.phone,
+        },
+      });
+
+      console.log('Payment completed:', paymentResponse);
+
+      // Verify payment
+      const { error: verifyError } = await supabase.functions.invoke('verify-razorpay-payment', {
+        body: {
+          razorpay_order_id: paymentResponse.razorpay_order_id,
+          razorpay_payment_id: paymentResponse.razorpay_payment_id,
+          razorpay_signature: paymentResponse.razorpay_signature,
+        }
+      });
+
+      if (verifyError) {
+        throw new Error(verifyError.message || 'Payment verification failed');
       }
 
-      console.log('Order created successfully:', orderData);
-      toast.success('Registration submitted! Redirecting to payment instructions...');
+      toast.success("Payment successful! Redirecting to confirmation page...");
+      
+      // Redirect to success page
+      setTimeout(() => {
+        window.location.href = `/payment-success?orderId=${orderData.orderId}`;
+      }, 1500);
 
-      // Store customer details in sessionStorage for payment page
-      const customerDetails = {
-        name: formData.fullName,
-        email: formData.email,
-        phone: formData.phone,
-        speciality: formData.speciality,
-        hospital: formData.hospital,
-        city: formData.city,
-        notes: formData.notes,
-        tierLabel: tier.label,
-        baseAmount: orderData.baseAmount,
-        gstAmount: orderData.gstAmount,
-        totalAmount: orderData.totalAmount,
-        orderNumber: orderData.orderNumber
-      };
-      
-      sessionStorage.setItem('customerDetails', JSON.stringify(customerDetails));
-      
-      // Redirect to payment instructions page with minimal parameters
-      const params = new URLSearchParams({
-        orderId: orderData.orderId,
-        amount: orderData.totalAmount.toString()
-      });
-      
-      window.location.href = `/payment-instructions?${params.toString()}`;
     } catch (error: any) {
-      console.error('Error in payment process:', error);
-      toast.error(error.message || 'Error creating order. Please try again.');
+      console.error('Payment processing error:', error);
+      
+      if (error.message === 'Payment cancelled by user') {
+        toast.error("Payment was cancelled. Please try again when ready.");
+      } else {
+        toast.error(error.message || "Payment processing failed. Please try again.");
+      }
     } finally {
       setIsProcessing(false);
     }

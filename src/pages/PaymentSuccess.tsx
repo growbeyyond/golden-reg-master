@@ -48,7 +48,7 @@ const PaymentSuccess = () => {
 
       try {
         // Confirm payment with backend
-        const { data, error } = await supabase.functions.invoke("confirm-payment", {
+        const { data, error } = await supabase.functions.invoke("verify-razorpay-payment", {
           body: {
             razorpay_order_id,
             razorpay_payment_id,
@@ -62,7 +62,7 @@ const PaymentSuccess = () => {
           return;
         }
 
-        setOrder(data.order);
+        setOrder(data);
         toast.success("Payment confirmed successfully!");
         
       } catch (error) {

@@ -45,6 +45,7 @@ export const createRazorpayOrder = async (orderData: {
   amount: number;
   currency: string;
   orderId: string;
+  key: string;
   customerDetails: {
     name: string;
     email: string;
@@ -58,7 +59,7 @@ export const createRazorpayOrder = async (orderData: {
   }
 
   const options: RazorpayOptions = {
-    key: 'rzp_test_R7Y0EO9dkheiJ7', // Using the provided key
+    key: orderData.key, // Use the key from server
     amount: orderData.amount * 100, // Convert to paise
     currency: orderData.currency,
     name: 'ISTA Media',

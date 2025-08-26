@@ -200,6 +200,7 @@ export default function LandingPage() {
         amount: orderData.amount,
         currency: orderData.currency,
         orderId: orderData.razorpayOrderId,
+        key: orderData.key,
         customerDetails: {
           name: formData.fullName,
           email: formData.email,

@@ -137,7 +137,20 @@ Customer can now use their QR code for event entry.`;
 
     return new Response(JSON.stringify({ 
       success: true, 
-      orderId: order.id,
+      id: order.id,
+      full_name: order.full_name,
+      email: order.email,
+      phone: order.phone,
+      amount: order.amount,
+      currency: order.currency,
+      tier_label: order.tier_label,
+      speciality: order.speciality,
+      hospital: order.hospital,
+      city: order.city,
+      notes: order.notes,
+      razorpay_payment_id: razorpay_payment_id,
+      status: "paid",
+      created_at: order.created_at,
       ticketId: ticket?.id,
       qrCode: qrCode
     }), {

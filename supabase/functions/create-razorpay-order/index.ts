@@ -1,8 +1,9 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
+// Restricted CORS headers for security
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": "https://vnccezzqcohvgzkwojqz.supabase.co",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
@@ -159,7 +160,14 @@ serve(async (req) => {
       payment_method: "razorpay"
     };
 
-    console.log('Order data for database:', JSON.stringify(orderData, null, 2));
+    console.log('Order data for database:', {
+      amount: totalAmount,
+      currency: currency,
+      attendee: formData.fullName ? 'name_present' : 'no_name',
+      hasEmail: !!formData.email,
+      hasPhone: !!formData.phone,
+      tier: tierLabel
+    });
 
     const { data: order, error: orderError } = await supabase
       .from("orders")

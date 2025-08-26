@@ -1,8 +1,9 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
+// Restricted CORS headers for security  
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": "https://vnccezzqcohvgzkwojqz.supabase.co",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
@@ -179,7 +180,14 @@ serve(async (req) => {
       throw new Error("Failed to check in ticket");
     }
 
-    console.log('Ticket checked in successfully:', ticketData.id);
+    console.log('Ticket checked in successfully:', {
+      ticketId: ticketData.id,
+      qrCode: qrCode,
+      attendee: order.full_name ? 'name_present' : 'no_name',
+      hasEmail: !!order.email,
+      hasPhone: !!order.phone,
+      tier: order.tier_label
+    });
 
     return new Response(
       JSON.stringify({

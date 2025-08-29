@@ -474,7 +474,7 @@ export default function LandingPage() {
              </p>
              <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
                <Badge variant="outline" className="gold-pill">📍 JRC Convention, Hyderabad</Badge>
-               <Badge variant="outline" className="gold-pill">🗓️ Sunday, 14 September 2025</Badge>
+               <Badge variant="outline" className="gold-pill">🗓️ Sunday, 28 September 2025</Badge>
                <Badge variant="outline" className="gold-pill">⏰ 6:00 PM onwards</Badge>
              </div>
               <div className="mt-8 flex flex-wrap justify-center gap-4">
@@ -667,7 +667,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-4xl px-4">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold gold-glow">Event Flow</h2>
-            <p className="text-muted-foreground">Sunday, 14 September 2025 • JRC Convention, Hyderabad</p>
+            <p className="text-muted-foreground">Sunday, 28 September 2025 • JRC Convention, Hyderabad</p>
           </div>
           <div className="space-y-4 max-w-3xl mx-auto">
             <div className="bg-card/50 rounded-lg p-4 gold-border">
@@ -1289,7 +1289,7 @@ export default function LandingPage() {
             <div>
               <div className="font-semibold text-primary">Event Details</div>
               <div className="text-sm text-muted-foreground mt-2 space-y-1">
-                <div>📅 Sunday, 14 September 2025</div>
+                <div>📅 Sunday, 28 September 2025</div>
                 <div>⏰ 6:00 PM onwards</div>
                 <div>📍 JRC Convention, Hyderabad</div>
               </div>

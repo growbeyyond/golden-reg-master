@@ -10,6 +10,9 @@ import { Badge } from './ui/badge';
 import { MessageCircle } from 'lucide-react';
 import { openWhatsAppWithMessage, openWhatsApp } from '@/lib/whatsapp';
 
+// Helper to ensure images work in all environments (dev and live)
+const assetUrl = (path: string) => `${import.meta.env.BASE_URL.replace(/\/$/, '')}/${path.replace(/^\//, '')}`;
+
 // Types and Config
 interface TierInfo {
   label: string;
@@ -17,88 +20,91 @@ interface TierInfo {
   until: number | null;
 }
 
+// MODIFIED: Updated deadlines - early bird till Sept 14, standard till Sept 27 (day before event)
 const DEADLINES = {
-  early: Date.parse("2025-09-04T18:29:59Z"), // Sept 4th 23:59:59 IST
-  std: Date.parse("2025-09-14T18:29:59Z"), // Sept 14th 23:59:59 IST
+  early: Date.parse("2025-09-14T18:29:59Z"), // Sept 14th 23:59:59 IST
+  std: Date.parse("2025-09-27T18:29:59Z"), // Sept 27th 23:59:59 IST
 };
 
+// MODIFIED: Updated with assetUrl helper to fix live image display
 const CHIEF_GUESTS = [
   {
     name: "Sri. Jishnu Dev Varma Garu", 
     designation: "Governor of Telangana",
-    image: "/lovable-uploads/07095247-9d5e-4433-aa60-1b2377dc2836.png",
+    image: assetUrl("/lovable-uploads/07095247-9d5e-4433-aa60-1b2377dc2836.png"),
     quote: "The noble work of ISTA in honoring our healthcare heroes deserves appreciation from every section of society."
   },
   {
     name: "Sri. Damodar Rajanarasimha Garu",
     designation: "Health Minister of Telangana",
-    image: "/lovable-uploads/632d5279-ccad-4a29-a60d-cfcea9b52d67.png",
+    image: assetUrl("/lovable-uploads/632d5279-ccad-4a29-a60d-cfcea9b52d67.png"),
     quote: "ISTA has consistently created a platform where the medical fraternity feels celebrated and recognized for their selfless service to humanity."
   },
   {
     name: "Sri. Madavaneni Raghunandan Rao Garu",
     designation: "Member of Parliament Medak constituency",
-    image: "/lovable-uploads/af60150e-f4be-4cc5-a06e-be8e25dd77c2.png", 
+    image: assetUrl("/lovable-uploads/af60150e-f4be-4cc5-a06e-be8e25dd77c2.png"), 
     quote: "ISTA's commitment to celebrating medical excellence sets a benchmark for honoring our healthcare professionals."
   },
   {
     name: "Sri. V. V. Lakshminarayana Garu",
     designation: "Ex CBI Joint Director, Agriculturist, Social worker", 
-    image: "/lovable-uploads/1c0d8019-a6fd-402d-9278-8fa452533b98.png",
+    image: assetUrl("/lovable-uploads/1c0d8019-a6fd-402d-9278-8fa452533b98.png"),
     quote: "Through ISTA's initiatives, we witness the true spirit of recognizing those who dedicate their lives to healing others."
   },
   {
     name: "Smt. Nerella Sharada Garu",
     designation: "Chairperson, Telangana State Commission for Women",
-    image: "/lovable-uploads/8c22de2b-6c41-4d04-8a4e-a2692e4970f0.png",
+    image: assetUrl("/lovable-uploads/8c22de2b-6c41-4d04-8a4e-a2692e4970f0.png"),
     quote: "The recognition provided by ISTA to our medical community is both timely and necessary for society's wellbeing."
   }
 ];
 
+// MODIFIED: Updated with assetUrl helper to fix live image display
 const DOCTORS = [
   {
     name: "Dr Gopala Krishna Gokule",
-    image: "/lovable-uploads/a3a07d30-4e07-4ffe-bf02-0a8a5400aee5.png",
+    image: assetUrl("/lovable-uploads/a3a07d30-4e07-4ffe-bf02-0a8a5400aee5.png"),
     quote: "ISTA transforms our profession by celebrating the human stories behind medical excellence. Every doctor deserves recognition for their dedication and sacrifice. This platform beautifully captures our journey and inspires the next generation of healers."
   },
   {
     name: "Dr Seetharam Buddavarapu", 
-    image: "/lovable-uploads/afb48efd-93ea-4e54-a46b-3fd49aa5b4e0.png",
+    image: assetUrl("/lovable-uploads/afb48efd-93ea-4e54-a46b-3fd49aa5b4e0.png"),
     quote: "Through ISTA, I've witnessed doctors rediscover their passion for medicine. The organization doesn't just honor achievements—it honors the heart of healing. Every event reminds us why we chose this noble calling."
   },
   {
     name: "Dr Manjula Anagani",
-    image: "/lovable-uploads/ac9f74f5-2c35-4213-a8f7-8b47e00b3b65.png",
+    image: assetUrl("/lovable-uploads/ac9f74f5-2c35-4213-a8f7-8b47e00b3b65.png"),
     quote: "ISTA's approach to celebrating doctors is refreshingly authentic. They don't just showcase our degrees—they honor our dedication, our sleepless nights, and our unwavering commitment to saving lives."
   },
   {
     name: "Dr KVNN Santosh Murthy",
-    image: "/lovable-uploads/d0daa190-d243-44cb-bf66-fd91e5f3cd9f.png",
+    image: assetUrl("/lovable-uploads/d0daa190-d243-44cb-bf66-fd91e5f3cd9f.png"),
     quote: "ISTA provides a unique platform where medical professionals can connect, share experiences, and celebrate our collective commitment to healthcare excellence and patient care."
   },
   {
     name: "Dr Rajeswari Reddy",
-    image: "/lovable-uploads/c29b9f5f-fffd-4b5d-80b7-d23f6610d686.png",
+    image: assetUrl("/lovable-uploads/c29b9f5f-fffd-4b5d-80b7-d23f6610d686.png"),
     quote: "In my years of practice, I've rarely found a platform that truly understands doctors. ISTA bridges the gap between our professional achievements and personal stories, creating a legacy worth preserving."
   },
   {
     name: "Dr Samatha Tulla",
-    image: "/lovable-uploads/8b105df3-8298-4a1c-8ecb-0f4b4bbe7ae9.png",
+    image: assetUrl("/lovable-uploads/8b105df3-8298-4a1c-8ecb-0f4b4bbe7ae9.png"),
     quote: "What sets ISTA apart is its genuine understanding of a doctor's journey. Beyond the clinical expertise, they recognize our emotional investment in every patient. This recognition fuels our commitment to excellence."
   },
   {
     name: "Dr Hari Chekuri",
-    image: "/lovable-uploads/5f6511ad-b869-47d1-ac4f-baa8aa3f2fa1.png",
+    image: assetUrl("/lovable-uploads/5f6511ad-b869-47d1-ac4f-baa8aa3f2fa1.png"),
     quote: "ISTA creates meaningful connections within the medical community, fostering an environment where doctors can share knowledge, experiences, and support each other in our noble profession."
   },
   {
     name: "Dr Preeti Challa",
-    image: "/lovable-uploads/preeti-challa-full-head.png",
+    image: assetUrl("/lovable-uploads/preeti-challa-full-head.png"),
     quote: "Being part of the ISTA community means being recognized not just as a medical professional, but as a human being dedicated to healing and caring for others with compassion and expertise."
   },
   {
     name: "Dr Vani Veggalam",
-    image: "/lovable-uploads/2592ccd1-42f2-4ac5-8e68-7de3b2422e65.png",
+    image: assetUrl("/lovable-uploads/2592ccd1-42f2-4ac5-8e68-7de3b2422e65.png"),
     quote: "ISTA creates a sanctuary where doctors can share their vulnerabilities and victories. In a profession where we give so much, this platform gives back by amplifying our voices and celebrating our humanity."
   }
 ];
@@ -454,7 +460,7 @@ export default function LandingPage() {
           {/* Logo at Top */}
           <div className="flex flex-col items-center mb-6">
             <img 
-              src="/lovable-uploads/4a2d89c1-89fa-4016-9f29-00667be90c01.png" 
+              src={assetUrl("/lovable-uploads/4a2d89c1-89fa-4016-9f29-00667be90c01.png")}
               alt="ISTA Media Logo" 
               className="h-40 md:h-52 lg:h-60 w-auto filter drop-shadow-lg cursor-pointer"
               style={{ filter: 'drop-shadow(0 0 20px rgba(212, 175, 55, 0.4))' }}
@@ -603,22 +609,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 2025 Guest of Honour */}
-      <section className="section-padding section-bg">
-        <div className="mx-auto max-w-4xl px-4 text-center">
-          <h2 className="text-3xl font-bold gold-glow">2025 Guest of Honour</h2>
-          <p className="text-muted-foreground mt-2">A distinguished personality to be announced soon</p>
-          <Card className="mt-8 gold-border bg-card/50 max-w-md mx-auto">
-            <CardContent className="p-8">
-              <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-primary/20 flex items-center justify-center text-4xl font-bold text-primary">
-                TBD
-              </div>
-              <h3 className="text-xl font-semibold mb-2">To Be Announced</h3>
-              <p className="text-sm text-muted-foreground italic">We are honored to have a distinguished guest who will inspire and celebrate our medical community. Stay tuned for the big reveal!</p>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
+      {/* REMOVED: 2025 Guest of Honour section as requested */}
 
       {/* 2025 Event Highlights */}
       <section className="section-padding">
@@ -761,16 +752,16 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-2 gap-6">
             <Card className="gold-border bg-card/50">
               <CardContent className="p-6">
-                <div className="kicker mb-2">Till Sep 4</div>
+                <div className="kicker mb-2">Till Sep 14</div>
                 <div className="text-4xl font-extrabold">₹10,000</div>
-                <p className="mt-2 text-sm text-muted-foreground">Early Bird — ends Sep 4, 23:59 IST</p>
+                <p className="mt-2 text-sm text-muted-foreground">Early Bird — ₹10,000 + GST (18%) = ₹11,800 total</p>
               </CardContent>
             </Card>
             <Card className="gold-border bg-card/50">
               <CardContent className="p-6">
-                <div className="kicker mb-2">Sep 5 – Sep 14</div>
+                <div className="kicker mb-2">From Sep 15</div>
                 <div className="text-4xl font-extrabold">₹20,000</div>
-                <p className="mt-2 text-sm text-muted-foreground">Standard — ends Sep 14, 23:59 IST</p>
+                <p className="mt-2 text-sm text-muted-foreground">Standard — ₹20,000 + GST (18%) = ₹23,600 total</p>
               </CardContent>
             </Card>
           </div>
@@ -934,20 +925,41 @@ export default function LandingPage() {
                     />
                     I agree to be contacted via WhatsApp/Email for confirmation and print proof.
                   </label>
-                   <Button 
-                     type="submit" 
-                     className="gold-gradient text-primary-foreground w-full relative"
-                     disabled={isProcessing}
-                   >
-                     {isProcessing ? (
-                       <div className="flex items-center gap-2">
-                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                         {paymentStep || 'Processing Payment...'}
+                     <Button 
+                      type="submit" 
+                      className="gold-gradient text-primary-foreground w-full relative"
+                      disabled={isProcessing}
+                    >
+                      {isProcessing ? (
+                        <div className="flex items-center gap-2">
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                          {paymentStep || 'Processing Payment...'}
+                        </div>
+                      ) : (
+                        `Register Now - ₹${tier.amount.toLocaleString('en-IN')} + GST (Total: ₹${Math.round(tier.amount * 1.18).toLocaleString('en-IN')})`
+                      )}
+                     </Button>
+                     
+                     {/* NEW: Already registered status check note */}
+                     <div className="mt-4 p-3 bg-card/30 rounded-lg border border-primary/20 text-center">
+                       <p className="text-sm text-muted-foreground mb-2">
+                         <strong>Already registered?</strong> To check payment/registration status, contact support.
+                       </p>
+                       <div className="flex justify-center gap-4 text-xs">
+                         <a href="mailto:contact@istamedia.com" className="text-primary hover:underline">
+                           📧 contact@istamedia.com
+                         </a>
+                         <Button 
+                           variant="ghost" 
+                           size="sm"
+                           onClick={() => openWhatsAppWithMessage("Hi! I want to check my registration status for the ISTA Anniversary Edition 2025.")}
+                           className="text-primary hover:underline p-0 h-auto text-xs"
+                         >
+                           💬 WhatsApp Support
+                         </Button>
                        </div>
-                     ) : (
-                       `Register Now - ₹${tier.amount.toLocaleString('en-IN')} + GST (Total: ₹${Math.round(tier.amount * 1.18).toLocaleString('en-IN')})`
-                     )}
-                    </Button>
+                       <p className="text-xs text-muted-foreground mt-1">Automated lookup feature coming soon.</p>
+                     </div>
                     
                     {showFallbackOptions && (
                       <div className="mt-4 space-y-2">
@@ -1202,7 +1214,7 @@ export default function LandingPage() {
       </section>
 
 
-      {/* FAQ */}
+      {/* FAQ - MODIFIED: Expanded with real answers */}
       <section className="section-padding section-bg">
         <div className="mx-auto max-w-5xl px-4">
           <h2 className="text-3xl font-bold gold-glow text-center">FAQ</h2>
@@ -1210,22 +1222,62 @@ export default function LandingPage() {
             <details className="gold-pill p-4">
               <summary className="cursor-pointer font-semibold">How do I pay?</summary>
               <p className="mt-2 text-muted-foreground">
-                After submitting your registration, a secure Razorpay modal opens with the active tier amount. You'll receive a payment confirmation instantly.
+                After submitting your registration, a secure Razorpay payment gateway opens with the current tier amount. Multiple payment options available (cards, UPI, net banking). You'll receive instant confirmation via email and WhatsApp.
               </p>
             </details>
             <details className="gold-pill p-4">
               <summary className="cursor-pointer font-semibold">What do I get for the fee?</summary>
               <p className="mt-2 text-muted-foreground">
-                A premium profile in the Anniversary Souvenir, recognition on stage, and digital amplification on ISTA channels.
+                Premium profile in the Anniversary Souvenir (print + digital), on-stage recognition ceremony, networking with 200+ medical professionals, digital amplification across ISTA channels, certificates, and access to exclusive event activities.
               </p>
             </details>
             <details className="gold-pill p-4">
               <summary className="cursor-pointer font-semibold">Can I edit my details later?</summary>
               <p className="mt-2 text-muted-foreground">
-                Yes, until the editorial cut-off communicated via email/WhatsApp.
+                Yes, you can contact our support team to edit your details up to 5 days before the event. After that, changes may not be possible due to print production deadlines.
+              </p>
+            </details>
+            <details className="gold-pill p-4">
+              <summary className="cursor-pointer font-semibold">Is my payment refundable?</summary>
+              <p className="mt-2 text-muted-foreground">
+                Registration fees are non-refundable except in the event of cancellation by ISTA Digital Media. In case of event cancellation, full refunds will be processed within 7-10 business days.
+              </p>
+            </details>
+            <details className="gold-pill p-4">
+              <summary className="cursor-pointer font-semibold">How do I check my payment/registration status?</summary>
+              <p className="mt-2 text-muted-foreground">
+                Contact our support team via email (contact@istamedia.com) or WhatsApp (+91 9948999001) with your registration details. An automated status lookup feature is coming soon.
               </p>
             </details>
           </div>
+        </div>
+      </section>
+
+      {/* NEW: Refund & Edit Policy Section */}
+      <section className="section-padding">
+        <div className="mx-auto max-w-4xl px-4">
+          <Card className="gold-border bg-card/50">
+            <CardContent className="p-8 text-center">
+              <h2 className="text-2xl font-bold gold-glow mb-4">Refund & Edit Policy</h2>
+              <p className="text-muted-foreground mb-6">
+                Registration fees are non-refundable except in case of event cancellation. Contact support for detail edits up to 5 days before the event.
+              </p>
+              <div className="flex flex-wrap justify-center gap-4">
+                <a href="mailto:contact@istamedia.com" className="flex items-center gap-2 text-primary hover:underline">
+                  📧 contact@istamedia.com
+                </a>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => openWhatsAppWithMessage("Hi! I have a question about the refund policy for ISTA Anniversary Edition 2025.")}
+                  className="flex items-center gap-2"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  WhatsApp Support
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
@@ -1263,10 +1315,10 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* Footer - MODIFIED: Added data security and accessibility notices */}
       <footer className="border-t border-primary/25 py-8">
         <div className="mx-auto max-w-7xl px-4">
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-4 gap-8">
             <div>
               <div className="font-semibold text-primary">ISTA Digital Media</div>
               <p className="text-sm text-muted-foreground mt-2">Celebrating healthcare excellence through impactful storytelling and prestigious recognition programs.</p>
@@ -1294,9 +1346,19 @@ export default function LandingPage() {
                 <div>📍 JRC Convention, Hyderabad</div>
               </div>
             </div>
+            <div>
+              <div className="font-semibold text-primary">Security & Access</div>
+              <div className="text-sm text-muted-foreground mt-2 space-y-1">
+                <div>🔒 SSL-protected data transmission</div>
+                <div>📱 Mobile-optimized experience</div>
+                <div>♿ Accessible venue & site design</div>
+                <div>🛡️ Data never shared with third parties</div>
+              </div>
+            </div>
           </div>
           <div className="border-t border-primary/25 mt-8 pt-6 text-center text-sm text-muted-foreground">
             <p>&copy; 2025 ISTA Digital Media. All rights reserved. | Celebrating medical excellence with dignity and respect.</p>
+            <p className="mt-2">Your privacy is protected with SSL encryption. Data shared only with authorized payment partners.</p>
           </div>
         </div>
       </footer>

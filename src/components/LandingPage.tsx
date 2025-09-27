@@ -750,7 +750,7 @@ export default function LandingPage() {
           <div className="flex justify-center">
             <Card className="gold-border bg-card/50">
               <CardContent className="p-6">
-                <div className="kicker mb-2">Until Oct 19</div>
+                <div className="kicker mb-2">Until Oct 15th</div>
                 <div className="text-4xl font-extrabold">₹10,000</div>
                 <p className="mt-2 text-sm text-muted-foreground">Registration Fee — ₹10,000 + GST (18%) = ₹11,800 total</p>
               </CardContent>

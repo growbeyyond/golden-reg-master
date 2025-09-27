@@ -20,10 +20,10 @@ interface TierInfo {
   until: number | null;
 }
 
-// MODIFIED: Updated deadlines - early bird till Sept 14, standard till Sept 27 (day before event)
+// MODIFIED: Updated deadlines - early bird till Sept 14, standard till Oct 18 (day before event)
 const DEADLINES = {
   early: Date.parse("2025-09-14T18:29:59Z"), // Sept 14th 23:59:59 IST
-  std: Date.parse("2025-09-27T18:29:59Z"), // Sept 27th 23:59:59 IST
+  std: Date.parse("2025-10-18T18:29:59Z"), // Oct 18th 23:59:59 IST
 };
 
 // MODIFIED: Updated with assetUrl helper to fix live image display
@@ -122,7 +122,7 @@ const formatTime = (ms: number): string => {
 
 const getActiveTier = (ts = Date.now()): TierInfo => {
   const earlyAmount = 10000; // Early Bird amount
-  const standardAmount = 20000; // Standard amount
+  const standardAmount = 10000; // Standard amount (same as early bird now)
   
   if (ts <= DEADLINES.early) return { label: "Early Bird", amount: earlyAmount, until: DEADLINES.early };
   if (ts <= DEADLINES.std) return { label: "Standard", amount: standardAmount, until: DEADLINES.std };
@@ -480,7 +480,7 @@ export default function LandingPage() {
              </p>
              <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
                <Badge variant="outline" className="gold-pill">📍 JRC Convention, Hyderabad</Badge>
-               <Badge variant="outline" className="gold-pill">🗓️ Sunday, 28 September 2025</Badge>
+               <Badge variant="outline" className="gold-pill">🗓️ Sunday, 19 October 2025</Badge>
                <Badge variant="outline" className="gold-pill">⏰ 6:00 PM onwards</Badge>
              </div>
               <div className="mt-8 flex flex-wrap justify-center gap-4">
@@ -658,7 +658,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-4xl px-4">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold gold-glow">Event Flow</h2>
-            <p className="text-muted-foreground">Sunday, 28 September 2025 • JRC Convention, Hyderabad</p>
+            <p className="text-muted-foreground">Sunday, 19 October 2025 • JRC Convention, Hyderabad</p>
           </div>
           <div className="space-y-4 max-w-3xl mx-auto">
             <div className="bg-card/50 rounded-lg p-4 gold-border">
@@ -760,8 +760,8 @@ export default function LandingPage() {
             <Card className="gold-border bg-card/50">
               <CardContent className="p-6">
                 <div className="kicker mb-2">From Sep 15</div>
-                <div className="text-4xl font-extrabold">₹20,000</div>
-                <p className="mt-2 text-sm text-muted-foreground">Standard — ₹20,000 + GST (18%) = ₹23,600 total</p>
+                <div className="text-4xl font-extrabold">₹10,000</div>
+                <p className="mt-2 text-sm text-muted-foreground">Standard — ₹10,000 + GST (18%) = ₹11,800 total</p>
               </CardContent>
             </Card>
           </div>

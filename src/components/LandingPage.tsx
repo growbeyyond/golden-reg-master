@@ -20,9 +20,9 @@ interface TierInfo {
   until: number | null;
 }
 
-// MODIFIED: Updated deadlines - early bird till Sept 14, standard till Oct 18 (day before event)
+// MODIFIED: Updated deadlines - registration open until Oct 18 (day before event)
 const DEADLINES = {
-  early: Date.parse("2025-09-14T18:29:59Z"), // Sept 14th 23:59:59 IST
+  early: Date.parse("2025-10-18T18:29:59Z"), // Oct 18th 23:59:59 IST (day before event)
   std: Date.parse("2025-10-18T18:29:59Z"), // Oct 18th 23:59:59 IST
 };
 
@@ -121,12 +121,10 @@ const formatTime = (ms: number): string => {
 };
 
 const getActiveTier = (ts = Date.now()): TierInfo => {
-  const earlyAmount = 10000; // Early Bird amount
-  const standardAmount = 10000; // Standard amount (same as early bird now)
+  const registrationAmount = 10000; // Registration amount
   
-  if (ts <= DEADLINES.early) return { label: "Early Bird", amount: earlyAmount, until: DEADLINES.early };
-  if (ts <= DEADLINES.std) return { label: "Standard", amount: standardAmount, until: DEADLINES.std };
-  return { label: "Final/On-spot", amount: standardAmount, until: null };
+  if (ts <= DEADLINES.early) return { label: "Registration Open", amount: registrationAmount, until: DEADLINES.early };
+  return { label: "Registration Closed", amount: registrationAmount, until: null };
 };
 
 
@@ -749,19 +747,12 @@ export default function LandingPage() {
             <h2 className="text-3xl font-bold gold-glow">Limited-Time Offer Pricing</h2>
             <p className="text-muted-foreground">Auto-updates by date (IST). Pay securely via Razorpay.</p>
           </div>
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="flex justify-center">
             <Card className="gold-border bg-card/50">
               <CardContent className="p-6">
-                <div className="kicker mb-2">Till Sep 14</div>
+                <div className="kicker mb-2">Until Oct 19</div>
                 <div className="text-4xl font-extrabold">₹10,000</div>
-                <p className="mt-2 text-sm text-muted-foreground">Early Bird — ₹10,000 + GST (18%) = ₹11,800 total</p>
-              </CardContent>
-            </Card>
-            <Card className="gold-border bg-card/50">
-              <CardContent className="p-6">
-                <div className="kicker mb-2">From Sep 15</div>
-                <div className="text-4xl font-extrabold">₹10,000</div>
-                <p className="mt-2 text-sm text-muted-foreground">Standard — ₹10,000 + GST (18%) = ₹11,800 total</p>
+                <p className="mt-2 text-sm text-muted-foreground">Registration Fee — ₹10,000 + GST (18%) = ₹11,800 total</p>
               </CardContent>
             </Card>
           </div>
@@ -1341,7 +1332,7 @@ export default function LandingPage() {
             <div>
               <div className="font-semibold text-primary">Event Details</div>
               <div className="text-sm text-muted-foreground mt-2 space-y-1">
-                <div>📅 Sunday, 28 September 2025</div>
+                <div>📅 Sunday, 19 October 2025</div>
                 <div>⏰ 6:00 PM onwards</div>
                 <div>📍 JRC Convention, Hyderabad</div>
               </div>

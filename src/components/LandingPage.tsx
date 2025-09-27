@@ -20,10 +20,10 @@ interface TierInfo {
   until: number | null;
 }
 
-// MODIFIED: Updated deadlines - registration open until Oct 18 (day before event)
+// MODIFIED: Updated deadlines - registration open until Oct 15th
 const DEADLINES = {
-  early: Date.parse("2025-10-18T18:29:59Z"), // Oct 18th 23:59:59 IST (day before event)
-  std: Date.parse("2025-10-18T18:29:59Z"), // Oct 18th 23:59:59 IST
+  early: Date.parse("2025-10-15T18:29:59Z"), // Oct 15th 23:59:59 IST
+  std: Date.parse("2025-10-15T18:29:59Z"), // Oct 15th 23:59:59 IST
 };
 
 // MODIFIED: Updated with assetUrl helper to fix live image display
@@ -1225,7 +1225,7 @@ export default function LandingPage() {
             <details className="gold-pill p-4">
               <summary className="cursor-pointer font-semibold">Can I edit my details later?</summary>
               <p className="mt-2 text-muted-foreground">
-                Yes, you can contact our support team to edit your details up to 5 days before the event. After that, changes may not be possible due to print production deadlines.
+                Yes, you can contact our support team to edit your details up to October 15th (registration deadline). After that, changes may not be possible due to print production deadlines.
               </p>
             </details>
             <details className="gold-pill p-4">
@@ -1251,7 +1251,7 @@ export default function LandingPage() {
             <CardContent className="p-8 text-center">
               <h2 className="text-2xl font-bold gold-glow mb-4">Refund & Edit Policy</h2>
               <p className="text-muted-foreground mb-6">
-                Registration fees are non-refundable except in case of event cancellation. Contact support for detail edits up to 5 days before the event.
+                Registration fees are non-refundable except in case of event cancellation. Contact support for detail edits until October 15th (registration deadline).
               </p>
               <div className="flex flex-wrap justify-center gap-4">
                 <a href="mailto:contact@istamedia.com" className="flex items-center gap-2 text-primary hover:underline">

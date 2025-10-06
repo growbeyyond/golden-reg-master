@@ -20,10 +20,10 @@ interface TierInfo {
   until: number | null;
 }
 
-// MODIFIED: Updated deadlines - registration open until Oct 15th
+// MODIFIED: Updated deadlines - registration open until Oct 26th
 const DEADLINES = {
-  early: Date.parse("2025-10-15T18:29:59Z"), // Oct 15th 23:59:59 IST
-  std: Date.parse("2025-10-15T18:29:59Z"), // Oct 15th 23:59:59 IST
+  early: Date.parse("2025-10-26T18:29:59Z"), // Oct 26th 23:59:59 IST
+  std: Date.parse("2025-10-26T18:29:59Z"), // Oct 26th 23:59:59 IST
 };
 
 // MODIFIED: Updated with assetUrl helper to fix live image display
@@ -121,7 +121,7 @@ const formatTime = (ms: number): string => {
 };
 
 const getActiveTier = (ts = Date.now()): TierInfo => {
-  const registrationAmount = 10000; // Registration amount
+  const registrationAmount = 20000; // Registration amount
   
   if (ts <= DEADLINES.early) return { label: "Registration Open", amount: registrationAmount, until: DEADLINES.early };
   return { label: "Registration Closed", amount: registrationAmount, until: null };
@@ -476,11 +476,11 @@ export default function LandingPage() {
              <p className="mt-4 text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
                Be featured in the prestigious Doctors' Souvenir by ISTA Digital Media. A black-and-gold cinematic edition that honors your journey and amplifies your impact.
              </p>
-             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-               <Badge variant="outline" className="gold-pill">📍 JRC Convention, Hyderabad</Badge>
-               <Badge variant="outline" className="gold-pill">🗓️ Sunday, 19 October 2025</Badge>
-               <Badge variant="outline" className="gold-pill">⏰ 6:00 PM onwards</Badge>
-             </div>
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+                <Badge variant="outline" className="gold-pill">📍 JRC Convention, Hyderabad</Badge>
+                <Badge variant="outline" className="gold-pill">🗓️ Sunday, 26 October 2025</Badge>
+                <Badge variant="outline" className="gold-pill">⏰ 6:00 PM onwards</Badge>
+              </div>
               <div className="mt-8 flex flex-wrap justify-center gap-4">
                 <Button className="gold-gradient text-primary-foreground" size="lg" onClick={scrollToRegister}>Register Now</Button>
                 <Button variant="outline" size="lg" onClick={() => setShowModal(true)}>
@@ -656,7 +656,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-4xl px-4">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold gold-glow">Event Flow</h2>
-            <p className="text-muted-foreground">Sunday, 19 October 2025 • JRC Convention, Hyderabad</p>
+            <p className="text-muted-foreground">Sunday, 26 October 2025 • JRC Convention, Hyderabad</p>
           </div>
           <div className="space-y-4 max-w-3xl mx-auto">
             <div className="bg-card/50 rounded-lg p-4 gold-border">
@@ -750,9 +750,9 @@ export default function LandingPage() {
           <div className="flex justify-center">
             <Card className="gold-border bg-card/50">
               <CardContent className="p-6">
-                <div className="kicker mb-2">Until Oct 15th</div>
-                <div className="text-4xl font-extrabold">₹10,000</div>
-                <p className="mt-2 text-sm text-muted-foreground">Registration Fee — ₹10,000 + GST (18%) = ₹11,800 total</p>
+                <div className="kicker mb-2">Until Oct 26th</div>
+                <div className="text-4xl font-extrabold">₹20,000</div>
+                <p className="mt-2 text-sm text-muted-foreground">Registration Fee — ₹20,000 + GST (18%) = ₹23,600 total</p>
               </CardContent>
             </Card>
           </div>
@@ -1225,7 +1225,7 @@ export default function LandingPage() {
             <details className="gold-pill p-4">
               <summary className="cursor-pointer font-semibold">Can I edit my details later?</summary>
               <p className="mt-2 text-muted-foreground">
-                Yes, you can contact our support team to edit your details up to October 15th (registration deadline). After that, changes may not be possible due to print production deadlines.
+                Yes, you can contact our support team to edit your details up to October 26th (registration deadline). After that, changes may not be possible due to print production deadlines.
               </p>
             </details>
             <details className="gold-pill p-4">
@@ -1251,7 +1251,7 @@ export default function LandingPage() {
             <CardContent className="p-8 text-center">
               <h2 className="text-2xl font-bold gold-glow mb-4">Refund & Edit Policy</h2>
               <p className="text-muted-foreground mb-6">
-                Registration fees are non-refundable except in case of event cancellation. Contact support for detail edits until October 15th (registration deadline).
+                Registration fees are non-refundable except in case of event cancellation. Contact support for detail edits until October 26th (registration deadline).
               </p>
               <div className="flex flex-wrap justify-center gap-4">
                 <a href="mailto:contact@istamedia.com" className="flex items-center gap-2 text-primary hover:underline">
